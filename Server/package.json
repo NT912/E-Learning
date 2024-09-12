@@ -1,0 +1,7 @@
+{
+  "name": "Server",
+  "version": "1.0.0",
+  "description": "This is the server in this project is E-learning",
+  "main": "server.js",
+  "license": "MIT"
+}

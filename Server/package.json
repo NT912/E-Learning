@@ -5,7 +5,8 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "set NODE_ENV=development&& nodemon app.js",
+    "prod": "set NODE_ENV=production&& nodemon app.js"
   },
   "dependencies": {
     "babel-node": "^0.0.1-security",

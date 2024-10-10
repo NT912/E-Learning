@@ -28,10 +28,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `Answer` (
-  `AnswerID` int(11) NOT NULL,
+  `AnswerID` int(11) NOT NULL AUTO_INCREMENT,
   `QuestionID` int(11) DEFAULT NULL,
   `Content` text DEFAULT NULL,
-  `Score` float DEFAULT NULL
+  `Score` float DEFAULT NULL,
+  PRIMARY KEY (`AnswerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -41,9 +42,10 @@ CREATE TABLE `Answer` (
 --
 
 CREATE TABLE `Category` (
-  `CategoryID` int(11) NOT NULL,
+  `CategoryID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` text DEFAULT NULL,
-  `Description` text DEFAULT NULL
+  `Description` text DEFAULT NULL,
+  PRIMARY KEY (`CategoryID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -53,11 +55,12 @@ CREATE TABLE `Category` (
 --
 
 CREATE TABLE `Chapter` (
-  `ChapterID` int(11) NOT NULL,
+  `ChapterID` int(11) NOT NULL AUTO_INCREMENT,
   `CourseID` int(11) DEFAULT NULL,
   `OrderNumber` int(11) DEFAULT NULL,
   `Title` text DEFAULT NULL,
-  `Description` text DEFAULT NULL
+  `Description` text DEFAULT NULL,
+  PRIMARY KEY (`ChapterID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -67,9 +70,10 @@ CREATE TABLE `Chapter` (
 --
 
 CREATE TABLE `ContentCourse` (
-  `ContentCourseID` int(11) NOT NULL,
+  `ContentCourseID` int(11) NOT NULL AUTO_INCREMENT,
   `CourseID` int(11) DEFAULT NULL,
-  `Content` text DEFAULT NULL
+  `Content` text DEFAULT NULL,
+  PRIMARY KEY (`ContentCourseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -79,7 +83,7 @@ CREATE TABLE `ContentCourse` (
 --
 
 CREATE TABLE `Course` (
-  `CourseID` int(11) NOT NULL,
+  `CourseID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) DEFAULT NULL,
   `Name` text DEFAULT NULL,
   `PictureLink` text DEFAULT NULL,
@@ -89,7 +93,8 @@ CREATE TABLE `Course` (
   `ParentID` int(11) DEFAULT NULL,
   `State` enum('public','wait','pending','rejected') DEFAULT NULL,
   `CategoryID` int(11) DEFAULT NULL,
-  `Cost` float DEFAULT NULL
+  `Cost` float DEFAULT NULL,
+  PRIMARY KEY (`CourseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -99,10 +104,11 @@ CREATE TABLE `Course` (
 --
 
 CREATE TABLE `CourseDepend` (
-  `CourseDependID` int(11) NOT NULL,
+  `CourseDependID` int(11) NOT NULL AUTO_INCREMENT,
   `CourseID` int(11) DEFAULT NULL,
   `DependOnCourseID` int(11) DEFAULT NULL,
-  `IsRequire` tinyint(1) DEFAULT NULL
+  `IsRequire` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`CourseDependID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -112,13 +118,14 @@ CREATE TABLE `CourseDepend` (
 --
 
 CREATE TABLE `Discussion` (
-  `DiscussionID` int(11) NOT NULL,
+  `DiscussionID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) DEFAULT NULL,
   `VideoID` int(11) DEFAULT NULL,
   `CourseID` int(11) DEFAULT NULL,
   `ParentID` int(11) DEFAULT NULL,
   `Content` text DEFAULT NULL,
-  `CreateAt` datetime DEFAULT NULL
+  `CreateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`DiscussionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -128,9 +135,10 @@ CREATE TABLE `Discussion` (
 --
 
 CREATE TABLE `Enrollment` (
-  `EnrollmentID` int(11) NOT NULL,
+  `EnrollmentID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) DEFAULT NULL,
-  `CourseID` int(11) DEFAULT NULL
+  `CourseID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`EnrollmentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -140,12 +148,13 @@ CREATE TABLE `Enrollment` (
 --
 
 CREATE TABLE `File` (
-  `FileID` int(11) NOT NULL,
+  `FileID` int(11) NOT NULL AUTO_INCREMENT,
   `VideoID` int(11) DEFAULT NULL,
   `ChapterID` int(11) DEFAULT NULL,
   `CourseID` int(11) DEFAULT NULL,
   `DiscussionID` int(11) DEFAULT NULL,
-  `FileLink` text DEFAULT NULL
+  `FileLink` text DEFAULT NULL,
+  PRIMARY KEY (`FileID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -155,9 +164,10 @@ CREATE TABLE `File` (
 --
 
 CREATE TABLE `Note` (
-  `NoteID` int(11) NOT NULL,
+  `NoteID` int(11) NOT NULL AUTO_INCREMENT,
   `ProgressID` int(11) DEFAULT NULL,
-  `Content` text DEFAULT NULL
+  `Content` text DEFAULT NULL,
+  PRIMARY KEY (`NoteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -167,7 +177,7 @@ CREATE TABLE `Note` (
 --
 
 CREATE TABLE `Payment` (
-  `PaymentID` int(11) NOT NULL,
+  `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) DEFAULT NULL,
   `CourseID` int(11) DEFAULT NULL,
   `PaymentCode` text DEFAULT NULL,
@@ -176,7 +186,8 @@ CREATE TABLE `Payment` (
   `Status` enum('pending','success','error') DEFAULT NULL,
   `CreateAt` datetime DEFAULT NULL,
   `ExpireAt` datetime DEFAULT NULL,
-  `UpdateAt` datetime DEFAULT NULL
+  `UpdateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`PaymentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -186,10 +197,11 @@ CREATE TABLE `Payment` (
 --
 
 CREATE TABLE `Progress` (
-  `ProgressID` int(11) NOT NULL,
+  `ProgressID` int(11) NOT NULL AUTO_INCREMENT,
   `EnrollmentID` int(11) DEFAULT NULL,
   `VideoID` int(11) DEFAULT NULL,
-  `ProgressTime` int(11) DEFAULT NULL
+  `ProgressTime` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ProgressID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -199,10 +211,11 @@ CREATE TABLE `Progress` (
 --
 
 CREATE TABLE `Question` (
-  `QuestionID` int(11) NOT NULL,
+  `QuestionID` int(11) NOT NULL AUTO_INCREMENT,
   `QuizzID` int(11) DEFAULT NULL,
   `Content` text DEFAULT NULL,
-  `Picture` text DEFAULT NULL
+  `Picture` text DEFAULT NULL,
+  PRIMARY KEY (`QuestionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -212,8 +225,9 @@ CREATE TABLE `Question` (
 --
 
 CREATE TABLE `Quizz` (
-  `QuizzID` int(11) NOT NULL,
-  `Title` text DEFAULT NULL
+  `QuizzID` int(11) NOT NULL AUTO_INCREMENT,
+  `Title` text DEFAULT NULL,
+  PRIMARY KEY (`QuizzID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -223,11 +237,12 @@ CREATE TABLE `Quizz` (
 --
 
 CREATE TABLE `RateCourse` (
-  `RateCourseID` int(11) NOT NULL,
+  `RateCourseID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) DEFAULT NULL,
   `CourseID` int(11) DEFAULT NULL,
   `StarNumber` int(11) DEFAULT NULL,
-  `Comment` text DEFAULT NULL
+  `Comment` text DEFAULT NULL,
+  PRIMARY KEY (`RateCourseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -237,11 +252,12 @@ CREATE TABLE `RateCourse` (
 --
 
 CREATE TABLE `Submit` (
-  `SubmitID` int(11) NOT NULL,
+  `SubmitID` int(11) NOT NULL AUTO_INCREMENT,
   `QuizzID` int(11) DEFAULT NULL,
   `UserID` int(11) DEFAULT NULL,
   `Score` float DEFAULT NULL,
-  `CreateAt` datetime DEFAULT NULL
+  `CreateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`SubmitID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -251,7 +267,7 @@ CREATE TABLE `Submit` (
 --
 
 CREATE TABLE `SystemTransaction` (
-  `SystemTransactionID` int(11) NOT NULL,
+  `SystemTransactionID` int(11) NOT NULL AUTO_INCREMENT,
   `PaymentID` int(11) DEFAULT NULL,
   `Amount` float DEFAULT NULL,
   `Message` text DEFAULT NULL,
@@ -259,7 +275,8 @@ CREATE TABLE `SystemTransaction` (
   `BankName` text DEFAULT NULL,
   `BankAccountNumber` text DEFAULT NULL,
   `Status` enum('pending','success','error') DEFAULT NULL,
-  `CreateAt` datetime DEFAULT NULL
+  `CreateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`SystemTransactionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -269,7 +286,7 @@ CREATE TABLE `SystemTransaction` (
 --
 
 CREATE TABLE `User` (
-  `UserID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `Email` text DEFAULT NULL,
   `HashPassword` text DEFAULT NULL,
   `PhoneNumber` text DEFAULT NULL,
@@ -278,7 +295,8 @@ CREATE TABLE `User` (
   `BankName` text DEFAULT NULL,
   `BankAccountNumber` text DEFAULT NULL,
   `CreateAt` datetime DEFAULT NULL,
-  `IsPremium` datetime DEFAULT NULL
+  `IsPremium` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -288,9 +306,10 @@ CREATE TABLE `User` (
 --
 
 CREATE TABLE `UserAnswer` (
-  `UserAnswerID` int(11) NOT NULL,
+  `UserAnswerID` int(11) NOT NULL AUTO_INCREMENT,
   `SubmitID` int(11) DEFAULT NULL,
-  `AnswerID` int(11) DEFAULT NULL
+  `AnswerID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`UserAnswerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -300,13 +319,14 @@ CREATE TABLE `UserAnswer` (
 --
 
 CREATE TABLE `UserTransaction` (
-  `UserTransactionID` int(11) NOT NULL,
+  `UserTransactionID` int(11) NOT NULL AUTO_INCREMENT,
   `PaymentID` int(11) DEFAULT NULL,
   `Amount` float DEFAULT NULL,
   `Message` text DEFAULT NULL,
   `Bank` text DEFAULT NULL,
   `BankAccountNumber` text DEFAULT NULL,
-  `CreateAt` datetime DEFAULT NULL
+  `CreateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserTransactionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -316,308 +336,13 @@ CREATE TABLE `UserTransaction` (
 --
 
 CREATE TABLE `Video` (
-  `VideoID` int(11) NOT NULL,
+  `VideoID` int(11) NOT NULL AUTO_INCREMENT,
   `ChapterID` int(11) DEFAULT NULL,
   `Title` text DEFAULT NULL,
   `VideoLink` text DEFAULT NULL,
   `Time` int(11) DEFAULT NULL,
   `Description` text DEFAULT NULL,
   `PictureLink` text DEFAULT NULL,
-  `IsAllowDemo` tinyint(1) DEFAULT NULL
+  `IsAllowDemo` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`VideoID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `Answer`
---
-ALTER TABLE `Answer`
-  ADD PRIMARY KEY (`AnswerID`),
-  ADD KEY `QuestionID` (`QuestionID`);
-
---
--- Indexes for table `Category`
---
-ALTER TABLE `Category`
-  ADD PRIMARY KEY (`CategoryID`);
-
---
--- Indexes for table `Chapter`
---
-ALTER TABLE `Chapter`
-  ADD PRIMARY KEY (`ChapterID`),
-  ADD KEY `CourseID` (`CourseID`);
-
---
--- Indexes for table `ContentCourse`
---
-ALTER TABLE `ContentCourse`
-  ADD PRIMARY KEY (`ContentCourseID`),
-  ADD KEY `CourseID` (`CourseID`);
-
---
--- Indexes for table `Course`
---
-ALTER TABLE `Course`
-  ADD PRIMARY KEY (`CourseID`),
-  ADD KEY `UserID` (`UserID`),
-  ADD KEY `CategoryID` (`CategoryID`);
-
---
--- Indexes for table `CourseDepend`
---
-ALTER TABLE `CourseDepend`
-  ADD PRIMARY KEY (`CourseDependID`),
-  ADD KEY `CourseID` (`CourseID`),
-  ADD KEY `DependOnCourseID` (`DependOnCourseID`);
-
---
--- Indexes for table `Discussion`
---
-ALTER TABLE `Discussion`
-  ADD PRIMARY KEY (`DiscussionID`),
-  ADD KEY `UserID` (`UserID`),
-  ADD KEY `VideoID` (`VideoID`),
-  ADD KEY `CourseID` (`CourseID`),
-  ADD KEY `ParentID` (`ParentID`);
-
---
--- Indexes for table `Enrollment`
---
-ALTER TABLE `Enrollment`
-  ADD PRIMARY KEY (`EnrollmentID`),
-  ADD KEY `UserID` (`UserID`),
-  ADD KEY `CourseID` (`CourseID`);
-
---
--- Indexes for table `File`
---
-ALTER TABLE `File`
-  ADD PRIMARY KEY (`FileID`),
-  ADD KEY `VideoID` (`VideoID`),
-  ADD KEY `ChapterID` (`ChapterID`),
-  ADD KEY `CourseID` (`CourseID`),
-  ADD KEY `DiscussionID` (`DiscussionID`);
-
---
--- Indexes for table `Note`
---
-ALTER TABLE `Note`
-  ADD PRIMARY KEY (`NoteID`),
-  ADD KEY `ProgressID` (`ProgressID`);
-
---
--- Indexes for table `Payment`
---
-ALTER TABLE `Payment`
-  ADD PRIMARY KEY (`PaymentID`),
-  ADD UNIQUE KEY `PaymentCode` (`PaymentCode`) USING HASH,
-  ADD KEY `UserID` (`UserID`),
-  ADD KEY `CourseID` (`CourseID`);
-
---
--- Indexes for table `Progress`
---
-ALTER TABLE `Progress`
-  ADD PRIMARY KEY (`ProgressID`),
-  ADD KEY `EnrollmentID` (`EnrollmentID`),
-  ADD KEY `VideoID` (`VideoID`);
-
---
--- Indexes for table `Question`
---
-ALTER TABLE `Question`
-  ADD PRIMARY KEY (`QuestionID`),
-  ADD KEY `QuizzID` (`QuizzID`);
-
---
--- Indexes for table `Quizz`
---
-ALTER TABLE `Quizz`
-  ADD PRIMARY KEY (`QuizzID`);
-
---
--- Indexes for table `RateCourse`
---
-ALTER TABLE `RateCourse`
-  ADD PRIMARY KEY (`RateCourseID`),
-  ADD KEY `UserID` (`UserID`),
-  ADD KEY `CourseID` (`CourseID`);
-
---
--- Indexes for table `Submit`
---
-ALTER TABLE `Submit`
-  ADD PRIMARY KEY (`SubmitID`),
-  ADD KEY `QuizzID` (`QuizzID`),
-  ADD KEY `UserID` (`UserID`);
-
---
--- Indexes for table `SystemTransaction`
---
-ALTER TABLE `SystemTransaction`
-  ADD PRIMARY KEY (`SystemTransactionID`),
-  ADD KEY `PaymentID` (`PaymentID`),
-  ADD KEY `UserID` (`UserID`);
-
---
--- Indexes for table `User`
---
-ALTER TABLE `User`
-  ADD PRIMARY KEY (`UserID`);
-
---
--- Indexes for table `UserAnswer`
---
-ALTER TABLE `UserAnswer`
-  ADD PRIMARY KEY (`UserAnswerID`),
-  ADD KEY `SubmitID` (`SubmitID`),
-  ADD KEY `AnswerID` (`AnswerID`);
-
---
--- Indexes for table `UserTransaction`
---
-ALTER TABLE `UserTransaction`
-  ADD PRIMARY KEY (`UserTransactionID`),
-  ADD KEY `PaymentID` (`PaymentID`);
-
---
--- Indexes for table `Video`
---
-ALTER TABLE `Video`
-  ADD PRIMARY KEY (`VideoID`),
-  ADD KEY `ChapterID` (`ChapterID`);
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `Answer`
---
-ALTER TABLE `Answer`
-  ADD CONSTRAINT `answer_ibfk_1` FOREIGN KEY (`QuestionID`) REFERENCES `Question` (`QuestionID`);
-
---
--- Constraints for table `Chapter`
---
-ALTER TABLE `Chapter`
-  ADD CONSTRAINT `chapter_ibfk_1` FOREIGN KEY (`CourseID`) REFERENCES `Course` (`CourseID`);
-
---
--- Constraints for table `ContentCourse`
---
-ALTER TABLE `ContentCourse`
-  ADD CONSTRAINT `contentcourse_ibfk_1` FOREIGN KEY (`CourseID`) REFERENCES `Course` (`CourseID`);
-
---
--- Constraints for table `Course`
---
-ALTER TABLE `Course`
-  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`UserID`),
-  ADD CONSTRAINT `course_ibfk_2` FOREIGN KEY (`CategoryID`) REFERENCES `Category` (`CategoryID`);
-
---
--- Constraints for table `CourseDepend`
---
-ALTER TABLE `CourseDepend`
-  ADD CONSTRAINT `coursedepend_ibfk_1` FOREIGN KEY (`CourseID`) REFERENCES `Course` (`CourseID`),
-  ADD CONSTRAINT `coursedepend_ibfk_2` FOREIGN KEY (`DependOnCourseID`) REFERENCES `Course` (`CourseID`);
-
---
--- Constraints for table `Discussion`
---
-ALTER TABLE `Discussion`
-  ADD CONSTRAINT `discussion_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`UserID`),
-  ADD CONSTRAINT `discussion_ibfk_2` FOREIGN KEY (`VideoID`) REFERENCES `Video` (`VideoID`),
-  ADD CONSTRAINT `discussion_ibfk_3` FOREIGN KEY (`CourseID`) REFERENCES `Course` (`CourseID`),
-  ADD CONSTRAINT `discussion_ibfk_4` FOREIGN KEY (`ParentID`) REFERENCES `Discussion` (`DiscussionID`);
-
---
--- Constraints for table `Enrollment`
---
-ALTER TABLE `Enrollment`
-  ADD CONSTRAINT `enrollment_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`UserID`),
-  ADD CONSTRAINT `enrollment_ibfk_2` FOREIGN KEY (`CourseID`) REFERENCES `Course` (`CourseID`);
-
---
--- Constraints for table `File`
---
-ALTER TABLE `File`
-  ADD CONSTRAINT `file_ibfk_1` FOREIGN KEY (`VideoID`) REFERENCES `Video` (`VideoID`),
-  ADD CONSTRAINT `file_ibfk_2` FOREIGN KEY (`ChapterID`) REFERENCES `Chapter` (`ChapterID`),
-  ADD CONSTRAINT `file_ibfk_3` FOREIGN KEY (`CourseID`) REFERENCES `Course` (`CourseID`),
-  ADD CONSTRAINT `file_ibfk_4` FOREIGN KEY (`DiscussionID`) REFERENCES `Discussion` (`DiscussionID`);
-
---
--- Constraints for table `Note`
---
-ALTER TABLE `Note`
-  ADD CONSTRAINT `note_ibfk_1` FOREIGN KEY (`ProgressID`) REFERENCES `Progress` (`ProgressID`);
-
---
--- Constraints for table `Payment`
---
-ALTER TABLE `Payment`
-  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`UserID`),
-  ADD CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`CourseID`) REFERENCES `Course` (`CourseID`);
-
---
--- Constraints for table `Progress`
---
-ALTER TABLE `Progress`
-  ADD CONSTRAINT `progress_ibfk_1` FOREIGN KEY (`EnrollmentID`) REFERENCES `Enrollment` (`EnrollmentID`),
-  ADD CONSTRAINT `progress_ibfk_2` FOREIGN KEY (`VideoID`) REFERENCES `Video` (`VideoID`);
-
---
--- Constraints for table `Question`
---
-ALTER TABLE `Question`
-  ADD CONSTRAINT `question_ibfk_1` FOREIGN KEY (`QuizzID`) REFERENCES `Quizz` (`QuizzID`);
-
---
--- Constraints for table `RateCourse`
---
-ALTER TABLE `RateCourse`
-  ADD CONSTRAINT `ratecourse_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`UserID`),
-  ADD CONSTRAINT `ratecourse_ibfk_2` FOREIGN KEY (`CourseID`) REFERENCES `Course` (`CourseID`);
-
---
--- Constraints for table `Submit`
---
-ALTER TABLE `Submit`
-  ADD CONSTRAINT `submit_ibfk_1` FOREIGN KEY (`QuizzID`) REFERENCES `Quizz` (`QuizzID`),
-  ADD CONSTRAINT `submit_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `User` (`UserID`);
-
---
--- Constraints for table `SystemTransaction`
---
-ALTER TABLE `SystemTransaction`
-  ADD CONSTRAINT `systemtransaction_ibfk_1` FOREIGN KEY (`PaymentID`) REFERENCES `Payment` (`PaymentID`),
-  ADD CONSTRAINT `systemtransaction_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `User` (`UserID`);
-
---
--- Constraints for table `UserAnswer`
---
-ALTER TABLE `UserAnswer`
-  ADD CONSTRAINT `useranswer_ibfk_1` FOREIGN KEY (`SubmitID`) REFERENCES `Submit` (`SubmitID`),
-  ADD CONSTRAINT `useranswer_ibfk_2` FOREIGN KEY (`AnswerID`) REFERENCES `Answer` (`AnswerID`);
-
---
--- Constraints for table `UserTransaction`
---
-ALTER TABLE `UserTransaction`
-  ADD CONSTRAINT `usertransaction_ibfk_1` FOREIGN KEY (`PaymentID`) REFERENCES `Payment` (`PaymentID`);
-
---
--- Constraints for table `Video`
---
-ALTER TABLE `Video`
-  ADD CONSTRAINT `video_ibfk_1` FOREIGN KEY (`ChapterID`) REFERENCES `Chapter` (`ChapterID`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

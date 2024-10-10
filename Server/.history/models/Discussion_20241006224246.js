@@ -1,4 +1,4 @@
-import { db } from "../config/db";
+const db = require("../config/db");
 
 const Discussion = {
   create: (discussionData, callback) => {
@@ -21,6 +21,4 @@ const Discussion = {
   },
 };
 
-export const Discussion = {
-  Discussion,
-};
+module.exports = Discussion;

@@ -1,5 +1,7 @@
-import { sql } from "mssql";
-import { dotenv } from "dotenv";
+const sql = require("mssql");
+const dotenv = require("dotenv");
+
+import {mssql} from
 
 dotenv.config();
 

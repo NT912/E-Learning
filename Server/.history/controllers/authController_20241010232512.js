@@ -13,8 +13,3 @@ const login = (req, res) => {
     res.status(200).json({ token });
   });
 };
-
-export authController = {
-  signup,
-  login
-}

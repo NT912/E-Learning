@@ -12,5 +12,5 @@ const verifyToken = (req, res, next) => {
 };
 
 export authMiddleware = {
-  verifyToken,
+  verifyToken
 }

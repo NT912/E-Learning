@@ -1,3 +1,6 @@
+const sql = require("mssql");
+const dotenv = require("dotenv");
+
 import { sql } from "mssql";
 import { dotenv } from "dotenv";
 

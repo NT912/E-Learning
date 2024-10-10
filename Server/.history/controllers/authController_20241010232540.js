@@ -16,5 +16,5 @@ const login = (req, res) => {
 
 export authController = {
   signup,
-  login
+  login,
 }

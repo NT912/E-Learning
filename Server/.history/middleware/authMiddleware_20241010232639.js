@@ -10,7 +10,3 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
-
-export authMiddleware = {
-  verifyToken,
-}

@@ -1,18 +1,14 @@
-const Course = require("../models/Course");
+const courseService = require("../services/courseService");
 
 exports.createCourse = (req, res) => {
-  const { name, description, cost, categoryID, userID } = req.body;
-  Course.create(
-    { name, description, cost, categoryID, userID },
-    (err, result) => {
-      if (err) return res.status(400).send("Error creating course");
-      res.status(201).send("Course created");
-    }
-  );
+  courseService.createCourse(req.body, (err, result) => {
+    if (err) return res.status(400).send(err);
+    res.status(201).send(result);
+  });
 };
 
 exports.getCourses = (req, res) => {
-  Course.getAll((err, courses) => {
+  courseService.getCourses((err, courses) => {
     if (err) return res.status(500).send("Error fetching courses");
     res.status(200).json(courses);
   });

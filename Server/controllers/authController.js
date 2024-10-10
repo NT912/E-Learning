@@ -1,31 +1,15 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const User = require("../models/User");
+const authService = require("../services/authService");
 
 exports.signup = (req, res) => {
-  const { email, password, role } = req.body;
-  bcrypt.hash(password, 10, (err, hash) => {
-    if (err) return res.status(500).send("Server error");
-    User.create({ email, password: hash, role }, (err, result) => {
-      if (err) return res.status(400).send("Error creating user");
-      res.status(201).send("User created");
-    });
+  authService.signup(req.body, (err, result) => {
+    if (err) return res.status(400).send(err);
+    res.status(201).send(result);
   });
 };
 
 exports.login = (req, res) => {
-  const { email, password } = req.body;
-  User.findByEmail(email, (err, users) => {
-    const user = users[0];
-    if (err || !user) return res.status(404).send("User not found");
-    bcrypt.compare(password, user.HashPassword, (err, isMatch) => {
-      if (!isMatch) return res.status(401).send("Invalid password");
-      const token = jwt.sign(
-        { id: user.UserID, role: user.Role },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-      res.status(200).json({ token });
-    });
+  authService.login(req.body, (err, token) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).json({ token });
   });
 };

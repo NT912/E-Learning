@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../models/UserModel");
 
 exports.getUserProfile = (req, res) => {
   const userId = req.user.id;

@@ -4,9 +4,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const config = {
+  server: process.env.DB_HOST,
   user: process.env.DB_USER, 
   password: process.env.DB_PASSWORD, 
-  server: process.env.DB_HOST,
   database: process.env.DB_NAME, 
   options: {
     encrypt: true, 
@@ -22,5 +22,6 @@ sql.connect(config)
   .catch(err => {
     console.error("Error connecting to SQL Server:", err);
   });
+
 
 module.exports = sql;

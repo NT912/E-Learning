@@ -4,10 +4,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const config = {
-  server: process.env.DB_HOST,
-  user: process.env.DB_USER, 
-  password: process.env.DB_PASSWORD, 
-  database: process.env.DB_NAME, 
+  user: 'lamnino', 
+  password: 'Lam12345@', 
+  server: 'lamnino.database.windows.net',
+  database: 'E-LEARNING', 
   options: {
     encrypt: true, 
     trustServerCertificate: false 
@@ -22,6 +22,5 @@ sql.connect(config)
   .catch(err => {
     console.error("Error connecting to SQL Server:", err);
   });
-
 
 module.exports = sql;

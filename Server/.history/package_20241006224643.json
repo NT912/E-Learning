@@ -1,0 +1,19 @@
+{
+  "name": "Flex-learning",
+  "version": "1.0.0",
+  "description": "This is server of laerning web-app",
+  "main": "app.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec babel-node ./src/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.9.15",
+    "stripe": "^17.1.0"
+  }
+}

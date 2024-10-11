@@ -1,24 +1,35 @@
-import { db } from "../config/db";
+import sql from "mssql";
+import { db } from "~/config/db";
 
-const User = () => ({
-  create: (userData, callback) => {
-    const sql = `INSERT INTO User (Email, HashPassword, Role, CreateAt) VALUES (?, ?, ?, ?)`;
-    db.query(
-      sql,
-      [userData.email, userData.password, userData.role, new Date()],
-      callback
-    );
+export const User = {
+  create: async (userData) => {
+    try {
+      const request = new sql.Request();
+      const result = await request
+        .input("Email", sql.NVarChar, userData.email)
+        .input("HashPassword", sql.NVarChar, userData.password)
+        .input("Role", sql.NVarChar, userData.role)
+        .input("CreateAt", sql.DateTime, new Date())
+        .query(
+          `INSERT INTO Users (Email, HashPassword, Role, CreateAt)
+          VALUES (@Email, @HashPassword, @Role, @CreateAt)`
+        );
+      return result;
+    } catch (err) {
+      console.log("SQL Error:", err);
+      throw new Error("Error creating user");
+    }
   },
-  findByEmail: (email, callback) => {
-    const sql = `SELECT * FROM User WHERE Email = ?`;
-    db.query(sql, [email], callback);
-  },
-  findById: (id, callback) => {
-    const sql = `SELECT * FROM User WHERE UserID = ?`;
-    db.query(sql, [id], callback);
-  },
-});
 
-export const user = {
-  User,
+  findByEmail: async (email) => {
+    try {
+      const request = new sql.Request();
+      const result = await request
+        .input("Email", sql.NVarChar, email)
+        .query(`SELECT * FROM Users WHERE Email = @Email`);
+      return result.recordset[0];
+    } catch (err) {
+      throw new Error("Error fetching user by email");
+    }
+  },
 };

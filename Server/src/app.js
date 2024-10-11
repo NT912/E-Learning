@@ -7,6 +7,8 @@ import courseRoutes from "~/routes/courseRoutes";
 import paymentRoutes from "~/routes/paymentRoutes";
 import discussionRoutes from "~/routes/discussionRoutes";
 
+dotenv.config({ path: ".env.dev" });
+
 const app = express();
 app.use(express.json());
 

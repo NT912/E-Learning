@@ -1,0 +1,22 @@
+{
+    "course": {
+      "creationError": {
+        "title": "Error creating course. Please try again later.",
+        "description": {
+            "noUserID": "There are no user has ID like you provide"
+        }
+      },
+      "userIdMissing": {
+        "title": "Missing userID. Please provide a valid user ID.",
+        "description": "The userID parameter is required but was not provided in the request."
+      } 
+    },
+    "auth": {
+      "loginFailed": "Login failed. Please check your credentials.",
+      "unauthorized": "You are not authorized to perform this action."
+    },
+    "general": {
+      "internalServerError": "An unexpected error occurred. Please try again later."
+    }
+  }
+  

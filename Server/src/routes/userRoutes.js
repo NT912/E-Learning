@@ -1,9 +1,9 @@
-import express from "express";
-import { userController } from "~/controllers/userController";
-import { verifyToken } from "~/middleware/authMiddleware";
+const express = require("express");
+const userController = require("../controllers/userController");
+const { verifyToken } = require("~/middleware/authMiddleware");
 
 const router = express.Router();
 
-router.get("/profile", verifyToken, userController.getUserProfile);
+router.get("/profile", userController.getUserProfile);
 
-export default router;
+module.exports = router;

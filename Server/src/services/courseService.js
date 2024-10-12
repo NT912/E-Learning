@@ -1,7 +1,8 @@
 // services/CourseService.js
+import path from "path";
 const CourseModel = require("../models/CourseModel");
 const UserModel = require("../models/UserModel");
-const message = require("../config/message.json");
+const messages = require(path.resolve(__dirname, '../config/message.json'));
 
 exports.create = (userID) => {
   return new Promise((resolve, reject) => {

@@ -1,10 +1,10 @@
-import express from "express";
-import { courseController } from "~/controllers/courseController";
-import { verifyToken } from "~/middleware/authMiddleware";
+const express = require("express");
+const courseController = require("~/controllers/courseController");
+const { verifyToken } = require("~/middleware/authMiddleware");
 
 const router = express.Router();
 
 router.post("/create", courseController.createCourse);
-router.post("/update/title", courseController.createCourse);
+router.post("/update/title", courseController.updateCourseTitle);
 
-export default router;
+module.exports = router;

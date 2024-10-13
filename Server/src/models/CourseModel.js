@@ -1,36 +1,30 @@
-const sql = require("mssql");
-const db = require("../config/db");
+const { connection } = require("../config/db");
 
 const Course = {
   createCourse: (params, callback) => {
     const query = `
-        INSERT INTO Course (UserID, CreateAt)
-        VALUES (@UserID, @CreateAt);
-        SELECT SCOPE_IDENTITY() AS CourseID;
+      INSERT INTO Course (UserID, CreateAt)
+      VALUES (?, ?);
     `;
 
-    const request = new sql.Request();
-    request.input("UserID", sql.Int, params[0]);
-    request.input("CreateAt", sql.DateTime, params[1]);
-
-    request.query(query, (err, result) => {
+    connection.query(query, params, (err, result) => {
       if (err) {
+        console.log(`Fail to create a course with UserID: ${err}`)
         return callback(err, null);
       }
-      const insertedId = result.recordset[0].CourseID;
+      const insertedId = result.insertId; 
       callback(null, insertedId);
     });
   },
 
   findById: (courseID, callback) => {
-    const query = `SELECT * FROM Course WHERE CourseID = @CourseID`;
+    const query = `SELECT * FROM Course WHERE CourseID = ?`;
 
-    const request = new sql.Request();
-    request.input("CourseID", sql.Int, courseID);
-
-    request.query(query, (err, result) => {
-      if (err) return callback(err, null);
-      const course = result.recordset[0];
+    connection.query(query, [courseID], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      const course = results[0]; // Get the first record
       callback(null, course);
     });
   },
@@ -38,16 +32,14 @@ const Course = {
   updateName: (courseID, name, callback) => {
     const query = `
       UPDATE Course
-      SET Name = @Name
-      WHERE CourseID = @CourseID
+      SET Name = ?
+      WHERE CourseID = ?
     `;
 
-    const request = new sql.Request();
-    request.input("Name", sql.NVarChar, name);
-    request.input("CourseID", sql.Int, courseID);
-
-    request.query(query, (err) => {
-      if (err) return callback(err);
+    connection.query(query, [name, courseID], (err, result) => {
+      if (err) {
+        return callback(err);
+      }
       callback(null);
     });
   },

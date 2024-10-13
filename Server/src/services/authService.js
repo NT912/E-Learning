@@ -1,8 +1,8 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { User } from "~/models/User";
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { User } = require("../models/UserModel");
 
-export const authService = {
+const authService = {
   signup: async (userData) => {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     userData.password = hashedPassword;
@@ -25,3 +25,5 @@ export const authService = {
     return token;
   },
 };
+
+module.exports = authService;

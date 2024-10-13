@@ -9,9 +9,10 @@ const Course = {
 
     connection.query(query, params, (err, result) => {
       if (err) {
+        console.log(`Fail to create a course with UserID: ${err}`)
         return callback(err, null);
       }
-      const insertedId = result.insertId; // MySQL returns the inserted ID
+      const insertedId = result.insertId; 
       callback(null, insertedId);
     });
   },

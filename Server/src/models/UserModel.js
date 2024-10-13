@@ -30,6 +30,19 @@ const User = {
       throw new Error("Error fetching user by email");
     }
   },
+
+  // Lam Be viet dung xoa nha
+  findById: (courseID, callback) => {
+    const query = `SELECT * FROM user WHERE User = ?`;
+
+    connection.query(query, [courseID], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      const course = results[0]; // Get the first record
+      callback(null, course);
+    });
+  },
 };
 
 module.exports = User;

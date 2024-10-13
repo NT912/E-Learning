@@ -3,7 +3,8 @@
       "creationError": {
         "title": "Error creating course. Please try again later.",
         "description": {
-            "noUserID": "There are no user has ID like you provide"
+            "noUserID": "There are no user has ID like you provide",
+            "failed": "Fail to create a new course with userID"
         }
       },
       "userIdMissing": {

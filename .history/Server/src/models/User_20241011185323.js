@@ -24,18 +24,24 @@ export const User = {
   findByEmail: async (email) => {
     try {
       const request = new sql.Request();
+      console.log("Email being searched:", email); // Log email
       const result = await request
         .input("Email", sql.NVarChar, email)
         .query(`SELECT * FROM [Users] WHERE Email = @Email`);
 
-      // Kiểm tra xem recordset có dữ liệu không
-      if (result.recordset.length === 0) {
-        return null; // Nếu không có user nào, trả về null
+      // Log kết quả truy vấn
+      console.log("SQL Query Result:", result);
+
+      // Sửa lại đoạn kiểm tra kết quả trả về
+      if (!result.recordset || result.recordset.length === 0) {
+        console.log("No user found for email:", email);
+        throw new Error("User not found");
       }
 
-      return result.recordset[0]; // Trả về user đầu tiên
+      // Trả về người dùng nếu tìm thấy
+      return result.recordset[0];
     } catch (err) {
-      console.error("SQL Error:", err);
+      console.error("SQL Error:", err); // Log chi tiết lỗi
       throw new Error("Error fetching user by email");
     }
   },

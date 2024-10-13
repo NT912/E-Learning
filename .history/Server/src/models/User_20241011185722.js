@@ -24,16 +24,12 @@ export const User = {
   findByEmail: async (email) => {
     try {
       const request = new sql.Request();
+      console.log("Email being searched:", email);
       const result = await request
         .input("Email", sql.NVarChar, email)
         .query(`SELECT * FROM [Users] WHERE Email = @Email`);
 
-      // Kiểm tra xem recordset có dữ liệu không
-      if (result.recordset.length === 0) {
-        return null; // Nếu không có user nào, trả về null
-      }
-
-      return result.recordset[0]; // Trả về user đầu tiên
+      console.log("SQL Query Result:", result);
     } catch (err) {
       console.error("SQL Error:", err);
       throw new Error("Error fetching user by email");

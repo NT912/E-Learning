@@ -27,13 +27,7 @@ export const User = {
       const result = await request
         .input("Email", sql.NVarChar, email)
         .query(`SELECT * FROM [Users] WHERE Email = @Email`);
-
-      // Kiểm tra xem recordset có dữ liệu không
-      if (result.recordset.length === 0) {
-        return null; // Nếu không có user nào, trả về null
-      }
-
-      return result.recordset[0]; // Trả về user đầu tiên
+      return result.recordset[0];
     } catch (err) {
       console.error("SQL Error:", err);
       throw new Error("Error fetching user by email");

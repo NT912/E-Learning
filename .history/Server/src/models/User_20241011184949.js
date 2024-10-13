@@ -28,14 +28,14 @@ export const User = {
         .input("Email", sql.NVarChar, email)
         .query(`SELECT * FROM [Users] WHERE Email = @Email`);
 
-      // Kiểm tra xem recordset có dữ liệu không
-      if (result.recordset.length === 0) {
-        return null; // Nếu không có user nào, trả về null
+      // Kiểm tra xem kết quả có tồn tại không
+      if (!result || !result.recordset || result.recordset.length === 0) {
+        throw new Error("User not found");
       }
 
-      return result.recordset[0]; // Trả về user đầu tiên
+      return result.recordset[0];
     } catch (err) {
-      console.error("SQL Error:", err);
+      console.error("SQL Error:", err); // Log thông tin lỗi từ SQL Server
       throw new Error("Error fetching user by email");
     }
   },

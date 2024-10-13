@@ -7,5 +7,4 @@ const router = express.Router();
 router.post("/create", courseController.createCourse);
 router.post("/update/title", courseController.createCourse);
 
-// Export trực tiếp router
 export default router;

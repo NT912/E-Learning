@@ -20,6 +20,4 @@ connection.connect((err) => {
   console.log("Connected to MySQL!");
 });
 
-export const db = {
-  connection,
-};
+module.exports = connection;

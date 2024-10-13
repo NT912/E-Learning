@@ -1,5 +1,5 @@
 // services/CourseService.js
-import path from "path";
+const path = require("path");
 const CourseModel = require("../models/CourseModel");
 const UserModel = require("../models/UserModel");
 const messages = require(path.resolve(__dirname, '../config/message.json'));

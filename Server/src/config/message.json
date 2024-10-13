@@ -1,23 +1,30 @@
 {
-    "course": {
-      "creationError": {
-        "title": "Error creating course. Please try again later.",
-        "description": {
-            "noUserID": "There are no user has ID like you provide",
-            "failed": "Fail to create a new course with userID"
-        }
-      },
-      "userIdMissing": {
-        "title": "Missing userID. Please provide a valid user ID.",
-        "description": "The userID parameter is required but was not provided in the request."
-      } 
+  "course": {
+    "creationError": {
+      "title": "Unable to Create Course. Please Try Again.",
+      "description": {
+        "noUserID": "No user found with the provided ID. Please check the ID and try again.",
+        "failed": "Course creation failed for the provided user ID. Please try again later.",
+        "userIdMissing": "The userID parameter is required and was not included in the request. Please provide it and try again."
+      }
     },
-    "auth": {
-      "loginFailed": "Login failed. Please check your credentials.",
-      "unauthorized": "You are not authorized to perform this action."
+
+    "creationSuccess": {
+      "title": "Success to create a new course"
     },
-    "general": {
-      "internalServerError": "An unexpected error occurred. Please try again later."
+
+    "updateError": {
+      "title": "Unable to change Course attribute. Please Try Again.",
+      "description": {
+        "missRequireInfor": "You did not provide enough parameter is required and was not included in the request. Please provide it and try again."
+      }
     }
+  },
+  "auth": {
+    "loginFailed": "Login unsuccessful. Please check your credentials and try again.",
+    "unauthorized": "You do not have permission to perform this action."
+  },
+  "general": {
+    "internalServerError": "Something went wrong. Please try again later."
   }
-  
+}

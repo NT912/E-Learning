@@ -150,6 +150,7 @@
 --   BankName TEXT,
 --   BankAccountNumber TEXT,
 --   CreateAt DATETIME,
+--   role ENUM('student', 'teacher', 'admin') NOT NULL DEFAULT 'student',
 --   IsPremium DATETIME
 -- );
 

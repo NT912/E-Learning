@@ -1,3 +1,4 @@
+const connection = require("~/config/db");
 
 const User = {
   create: async (userData) => {
@@ -32,10 +33,10 @@ const User = {
   },
 
   // Lam Be viet dung xoa nha
-  findById: (courseID, callback) => {
-    const query = `SELECT * FROM user WHERE User = ?`;
+  findById: (UserID, callback) => {
+    const query = `SELECT * FROM user WHERE UserID = ?`;
 
-    connection.query(query, [courseID], (err, results) => {
+    connection.query(query, UserID, (err, results) => {
       if (err) {
         return callback(err, null);
       }

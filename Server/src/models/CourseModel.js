@@ -1,4 +1,5 @@
-const { connection } = require("../config/db");
+const connection = require("~/config/db");
+
 
 const Course = {
   createCourse: (params, callback) => {
@@ -9,7 +10,7 @@ const Course = {
 
     connection.query(query, params, (err, result) => {
       if (err) {
-        console.log(`Fail to create a course with UserID: ${err}`)
+        console.log(` Model Fail to create a course with UserID: ${err}`)
         return callback(err, null);
       }
       const insertedId = result.insertId; 
@@ -22,9 +23,10 @@ const Course = {
 
     connection.query(query, [courseID], (err, results) => {
       if (err) {
+        console.log(`Model Fail to find D: ${err}`)
         return callback(err, null);
       }
-      const course = results[0]; // Get the first record
+      const course = results[0]; 
       callback(null, course);
     });
   },

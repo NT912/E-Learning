@@ -1,26 +1,27 @@
 // services/CourseService.js
-const path = require("path");
-const CourseModel = require("../models/CourseModel");
-const UserModel = require("../models/UserModel");
-const messages = require(path.resolve(__dirname, '../config/message.json'));
+const CourseModel = require('~/models/CourseModel');
+const UserModel = require('~/models/UserModel');
+const message = require('~/config/message.json');
 
 const course = {
   create: (userID) => {
     return new Promise((resolve, reject) => {
+      // Kiểm tra xem userID có tồn tại hay không
       UserModel.findById(userID, (err, user) => {
         if (err || !user) {
-          console.log(`Error Get User By Id: ${err}`);
+          console.log(`Error Get User By Id: ${err ? err : "NoIdUser"}`);
           return reject(message.course.creationError.description.noUserID);
         }
-      });
-  
-      const params = [userID, new Date()];
-  
-      CourseModel.createCourse(params, (err, courseID) => {
-        if (err) {
-          return reject(messages.course.creationError.description.failed);
-        }
-        resolve(courseID);
+
+        const params = [userID, new Date()];
+        
+        CourseModel.createCourse(params, (err, courseID) => {
+          if (err) {
+            console.log(`Fail to create course with UserID: ${userID}`);
+            return reject(message.course.creationError.description.failed);
+          }
+          resolve(courseID);
+        });
       });
     });
   },

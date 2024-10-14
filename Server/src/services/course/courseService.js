@@ -1,6 +1,6 @@
-const CourseModel = require('~/models/course/CourseModel');
-const UserModel = require('~/models/UserModel');
-const message = require('~/config/message.json');
+const CourseModel = require("~/models/course/CourseModel");
+const UserModel = require("~/models/UserModel");
+const message = require("~/config/message.json");
 
 const courseService = {
   /**
@@ -17,7 +17,7 @@ const courseService = {
           return reject(message.course.creationError.description.noUserID);
         }
 
-        if (user.Role === 'student') {
+        if (user.Role === "student") {
           return reject(message.course.creationError.description.noPermission);
         }
 
@@ -55,7 +55,9 @@ const courseService = {
 
       CourseModel.findByName(name, (err, course) => {
         if (err || course) {
-          return reject(message.course.updateError.description.nameNotAvailable);
+          return reject(
+            message.course.updateError.description.nameNotAvailable
+          );
         }
       });
 
@@ -66,7 +68,7 @@ const courseService = {
         resolve();
       });
     });
-  }
+  },
 };
 
 module.exports = courseService;

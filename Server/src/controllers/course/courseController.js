@@ -1,4 +1,4 @@
-const courseService = require("~/services/courseService");
+const courseService = require("~/services/course/courseService");
 const message = require('~/config/message.json');
 
 const sendResponse = (res, success, title, description = null) => {
@@ -18,9 +18,9 @@ const courseController = {
         res,
         false,
         message.course.creationError.title,  
-        message.course.creationError.description.userIdMissing
+        message.course.creationError.description.missRequireInfor
       );
-    }
+    } 
 
     courseService.create(userID)
       .then((result) => {
@@ -44,21 +44,33 @@ const courseController = {
   updateCourseName: (req, res) => {
     const courseID = req.body.courseID;
     const name = req.body.courseName;
+    const userID = req.body.userID;
 
-    if (!courseID || !name) {
+    if (!courseID || !name || !userID) {
       return sendResponse ( 
         res,
         false,
-        message.course.updateError.mis
+        message.course.updateError.title,
+        message.course.updateError.description.missRequireInfor
       )
     }
 
-    courseService.updateCourseName(courseID, name) 
+    courseService.updateCourseName(userID, courseID, name) 
       .then((result) => {
-
+        sendResponse(
+          res,
+          true,
+          message.course.updateSuccess.title,
+          null
+        );
       })
       .catch((err) => {
-
+        sendResponse(
+          res,
+          false,
+          message.course.updateError.title,
+          err
+        );
       }) ;
   }
 };

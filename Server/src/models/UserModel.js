@@ -40,7 +40,7 @@ const User = {
       if (err) {
         return callback(err, null);
       }
-      const course = results[0]; // Get the first record
+      const course = results[0]; 
       callback(null, course);
     });
   },

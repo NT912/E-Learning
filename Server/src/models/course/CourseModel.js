@@ -18,6 +18,19 @@ const Course = {
     });
   },
 
+  findByName: (courseName, callback) => {
+    const query = `SELECT * FROM Course WHERE name = ?`;
+
+    connection.query(query, [courseName], (err, results) => {
+      if (err) {
+        console.log(`Model Fail to find D: ${err}`)
+        return callback(err, null);
+      }
+      const course = results[0]; 
+      callback(null, course);
+    });
+  },
+
   findById: (courseID, callback) => {
     const query = `SELECT * FROM Course WHERE CourseID = ?`;
 
@@ -40,9 +53,10 @@ const Course = {
 
     connection.query(query, [name, courseID], (err, result) => {
       if (err) {
-        return callback(err);
+        console.log(err);
+        return callback(err, null);
       }
-      callback(null);
+      callback(null, result);
     });
   },
 };

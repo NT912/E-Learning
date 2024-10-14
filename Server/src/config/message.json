@@ -62,9 +62,25 @@
   },
 
   "auth": {
-    "loginFailed": "Login unsuccessful. Please check your credentials and try again.",
-    "unauthorized": "You do not have permission to perform this action."
+    "signup": {
+      "title": "Unable to signup. Please Try Again",
+      "description": {
+        "emailExists": "Email already exists. Please use a different email.",
+        "signupSuccess": "User created successfully.",
+        "signupFailed": "User registration failed. Please try again later."
+      }
+    },
+
+    "login": {
+      "title": "Unable to login. Please Try Again",
+      "description": {
+        "loginFailed": "Login unsuccessful. Please check your credentials and try again.",
+        "unauthorized": "You do not have permission to perform this action.",
+        "loginSuccess": "Login successful."
+      }
+    }
   },
+
   "general": {
     "internalServerError": "Something went wrong. Please try again later."
   }

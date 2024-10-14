@@ -1,6 +1,6 @@
-import { check, validationResult } from "express-validator";
+const { check, validationResult } = require("express-validator");
 
-export const validateSignup = [
+exports.validateSignup = [
   check("email", "Email is required").isEmail(),
   check("password", "Password is required").isLength({ min: 6 }),
   (req, res, next) => {
@@ -12,7 +12,7 @@ export const validateSignup = [
   },
 ];
 
-export const validateLogin = [
+exports.validateLogin = [
   check("email", "Email is required").isEmail(),
   check("password", "Password is required").isLength({ min: 6 }),
   (req, res, next) => {

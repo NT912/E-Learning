@@ -5,16 +5,6 @@ const sendResponse = require("../../helpers/sendResponse");
 const courseController = {
   createCourse: async (req, res) => {
     const userID = req.body.userID;
-
-    if (!userID) {
-      return sendResponse(
-        res,
-        false,
-        message.course.creationError.title,
-        message.course.creationError.description.missRequireInfor
-      );
-    }
-
     try {
       const result = await courseService.create(userID);
       sendResponse(res, true, message.course.creationSuccess.title, {

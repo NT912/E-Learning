@@ -67,7 +67,8 @@
       "description": {
         "emailExists": "Email already exists. Please use a different email.",
         "signupSuccess": "User created successfully.",
-        "signupFailed": "User registration failed. Please try again later."
+        "signupFailed": "User registration failed. Please try again later.",
+        "noneEmail": "Email is empty"
       }
     },
 

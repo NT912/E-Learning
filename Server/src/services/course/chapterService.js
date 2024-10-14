@@ -4,36 +4,57 @@ const message = require('~/config/message.json');
 
 const chapterService = {
   /**
-   * Tạo một chapter mới cho khóa học
+   * Tạo một chapter mới cho khóa học.
    * @param {Number} userID - ID của người dùng yêu cầu tạo chapter.
    * @param {Number} courseID - ID của khóa học mà chapter sẽ được thêm vào.
    * @param {String} chapterName - Tên của chapter mới.
    * @return {Promise<Number>} - Promise chứa ID của chapter mới tạo hoặc lỗi.
    */
-  createChapter: (userID, courseID, chapterName) => {
-    return new Promise((resolve, reject) => {
-      CourseModel.findById(courseID, (err, course) => {
-        if (err || !course) {
-          console.log(`Error Get Course By Id: ${err ? err : "NoCourseId"}`);
-          return reject(message.chapter.creationError.description.noCourseID);
-        }
+  createChapter: async (userID, courseID, chapterName) => {
+    // Tìm khóa học theo ID
+    const course = await CourseModel.findById(courseID);
+    if (!course) {
+      throw new Error(message.chapter.creationError.description.noCourseID);
+    }
 
-        if (userID !== course.UserID) {
-          return reject(message.chapter.creationError.description.noPermission);
-        }
+    if (userID !== course.UserID) {
+      throw new Error(message.chapter.creationError.description.noPermission);
+    }
 
-        const params = [courseID, chapterName];
-
-        ChapterModel.createChapter(params, (err, chapterID) => {
-          if (err) {
-            console.log(`Fail to create chapter for CourseID: ${courseID}`);
-            return reject(message.chapter.creationError.description.failed);
-          }
-          resolve(chapterID);
-        });
-      });
-    });
+    const params = [courseID, chapterName];
+    const chapterID = await ChapterModel.createChapter(params);
+    return chapterID;
   },
+
+  /**
+   * Cập nhật tên khóa học.
+   * @param {Number} userID - ID của người dùng yêu cầu cập nhật.
+   * @param {Number} courseID - ID của khóa học cần cập nhật.
+   * @param {String} name - Tên mới của khóa học.
+   * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
+   */
+  updateChapterName: async (userID, chapterID, name) => {
+    try {
+      const chapter = await ChapterModel.findById(chapterID);
+      if (!chapter) {
+        throw new Error(message.chapter.updateError.description.chapterNotFound);
+      }
+      const courseID = chapter.CourseID;
+      const course = await CourseModel.findById(courseID);
+      if (!course) {
+        throw new Error(message.course.updateError.description.courseNotFound);
+      }
+  
+      if (course.UserID !== userID) {
+        throw new Error(message.chapter.updateError.description.noPermission);
+      }
+  
+      await ChapterModel.updateTitle(chapterID, name);
+    } catch (err) {
+      throw err; 
+    }
+  }
+  
 };
 
 module.exports = chapterService;

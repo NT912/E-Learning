@@ -4,57 +4,63 @@ const Course = {
   /**
    * Tạo một khóa học mới.
    * @param {Array} params - Mảng chứa [UserID, CreateAt].
-   * @param {Function} callback - Hàm callback xử lý kết quả trả về (error, courseID).
+   * @return {Promise<Number>} - Promise chứa ID của khóa học mới tạo.
    */
-  createCourse: (params, callback) => {
+  createCourse: (params) => {
     const query = `
       INSERT INTO Course (UserID, CreateAt)
       VALUES (?, ?);
     `;
 
-    connection.query(query, params, (err, result) => {
-      if (err) {
-        console.log(`Model Fail to create a course with UserID: ${err}`);
-        return callback(err, null);
-      }
-      const insertedId = result.insertId; 
-      callback(null, insertedId); 
+    return new Promise((resolve, reject) => {
+      connection.query(query, params, (err, result) => {
+        if (err) {
+          console.log(`Model Fail to create a course with UserID: ${err}`);
+          return reject(err);
+        }
+        const insertedId = result.insertId;
+        resolve(insertedId); 
+      });
     });
   },
 
   /**
    * Tìm khóa học theo tên.
    * @param {String} courseName - Tên của khóa học cần tìm.
-   * @param {Function} callback - Hàm callback xử lý kết quả trả về (error, course).
+   * @return {Promise<Object|null>} - Promise chứa khóa học tìm được hoặc null nếu không tìm thấy.
    */
-  findByName: (courseName, callback) => {
+  findByName: (courseName) => {
     const query = `SELECT * FROM Course WHERE Name = ?`;
 
-    connection.query(query, [courseName], (err, results) => {
-      if (err) {
-        console.log(`Model Fail to find Course: ${err}`);
-        return callback(err, null);
-      }
-      const course = results[0];
-      callback(null, course); 
+    return new Promise((resolve, reject) => {
+      connection.query(query, [courseName], (err, results) => {
+        if (err) {
+          console.log(`Model Fail to find Course: ${err}`);
+          return reject(err);
+        }
+        const course = results[0] || null; 
+        resolve(course);
+      });
     });
   },
 
   /**
    * Tìm khóa học theo ID.
    * @param {Number} courseID - ID của khóa học cần tìm.
-   * @param {Function} callback - Hàm callback xử lý kết quả trả về (error, course).
+   * @return {Promise<Object|null>} - Promise chứa khóa học tìm được hoặc null nếu không tìm thấy.
    */
-  findById: (courseID, callback) => {
+  findById: (courseID) => {
     const query = `SELECT * FROM Course WHERE CourseID = ?`;
 
-    connection.query(query, [courseID], (err, results) => {
-      if (err) {
-        console.log(`Model Fail to find Course: ${err}`);
-        return callback(err, null);
-      }
-      const course = results[0]; 
-      callback(null, course); 
+    return new Promise((resolve, reject) => {
+      connection.query(query, [courseID], (err, results) => {
+        if (err) {
+          console.log(`Model Fail to find Course: ${err}`);
+          return reject(err);
+        }
+        const course = results[0] || null; 
+        resolve(course);
+      });
     });
   },
 
@@ -62,21 +68,23 @@ const Course = {
    * Cập nhật tên khóa học.
    * @param {Number} courseID - ID của khóa học cần cập nhật.
    * @param {String} name - Tên mới của khóa học.
-   * @param {Function} callback - Hàm callback xử lý kết quả trả về (error, result).
+   * @return {Promise<void>} - Promise không trả về giá trị.
    */
-  updateName: (courseID, name, callback) => {
+  updateName: (courseID, name) => {
     const query = `
       UPDATE Course
       SET Name = ?
       WHERE CourseID = ?;
     `;
 
-    connection.query(query, [name, courseID], (err, result) => {
-      if (err) {
-        console.log(`Fail to update course name: ${err}`);
-        return callback(err, null);
-      }
-      callback(null, result); 
+    return new Promise((resolve, reject) => {
+      connection.query(query, [name, courseID], (err, result) => {
+        if (err) {
+          console.log(`Fail to update course name: ${err}`);
+          return reject(err);
+        }
+        resolve(); 
+      });
     });
   },
 };

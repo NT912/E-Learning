@@ -46,11 +46,13 @@
     },
 
     "updateError": {
-      "title": "Unable to change Course attribute. Please Try Again.",
+      "title": "Unable to change Chapter attribute. Please Try Again.",
       "description": {
         "missRequireInfor": "You did not provide enough parameter is required and was not included in the request. Please provide it and try again.",
         "serverfail": "Something went wrong when.",
-        "noPermission": "This user has not permission for changing this course."
+        "noPermission": "This user has not permission for changing this course.",
+        "chapterNotFound": "You provided an ID of chapter not found",
+        "chapterNotBelongAnyCOurse": "Chapter look is look like not belong any course"
       }
     },
 

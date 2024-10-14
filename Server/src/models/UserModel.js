@@ -32,16 +32,22 @@ const User = {
     }
   },
 
-  // Lam Be viet dung xoa nha
-  findById: (UserID, callback) => {
+  /**
+   * Tìm người dùng theo ID.
+   * @param {Number} userID - ID của người dùng.
+   * @return {Promise<Object|null>} - Promise chứa người dùng tìm được hoặc null nếu không tìm thấy.
+   */
+  findById: (userID) => {
     const query = `SELECT * FROM user WHERE UserID = ?`;
 
-    connection.query(query, UserID, (err, results) => {
-      if (err) {
-        return callback(err, null);
-      }
-      const course = results[0]; 
-      callback(null, course);
+    return new Promise((resolve, reject) => {
+      connection.query(query, [userID], (err, results) => {
+        if (err) {
+          return reject(err); // Ném lỗi ra ngoài nếu có lỗi xảy ra
+        }
+        const user = results[0] || null; // Trả về người dùng tìm được hoặc null
+        resolve(user);
+      });
     });
   },
 };

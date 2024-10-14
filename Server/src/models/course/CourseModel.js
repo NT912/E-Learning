@@ -50,10 +50,10 @@ const Course = {
    * @return {Promise<Object|null>} - Promise chứa khóa học tìm được hoặc null nếu không tìm thấy.
    */
   findById: (courseID) => {
-    const query = `SELECT * FROM Course WHERE CourseID = ?`;
+    const query = `SELECT * FROM course WHERE CourseID = ?`;
 
     return new Promise((resolve, reject) => {
-      connection.query(query, [courseID], (err, results) => {
+      connection.query(query, courseID, (err, results) => {
         if (err) {
           console.log(`Model Fail to find Course: ${err}`);
           return reject(err);

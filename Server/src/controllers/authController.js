@@ -1,11 +1,15 @@
 const authService = require("../services/authService");
 const messages = require("../config/message.json");
 const sendResponse = require("../helpers/sendResponse");
+const User = require("../models/UserModel")
+const bcrypt = require("bcrypt")
+
 
 const auth = {
-  signup: async (userData) => {
+  signup: async (req, res) => {
     try {
-      // Kiểm tra xem email đã tồn tại chưa
+      const userData = req.body;
+
       const existingUser = await User.findByEmail(userData.email);
       if (existingUser) {
         return sendResponse(
@@ -33,6 +37,7 @@ const auth = {
         user
       );
     } catch (error) {
+      console.log(error)
       return sendResponse(
         res,
         false,

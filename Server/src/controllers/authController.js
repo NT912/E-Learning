@@ -1,11 +1,33 @@
 const authService = require("../services/authService");
 const sendResponse = require("../helpers/sendResponse");
-const messages = require("../config/message.json");
+const User = require("../models/UserModel")
+const bcrypt = require("bcrypt")
+
 
 const auth = {
   signup: async (req, res) => {
     try {
-      const result = await authService.signup(req.body);
+      const userData = req.body;
+
+      const existingUser = await User.findByEmail(userData.email);
+      if (existingUser) {
+        return sendResponse(
+          res,
+          false,
+          messages.auth.signup.emailExists,
+          messages.auth.signup.description.emailExists
+        );
+      }
+
+      // Mã hóa mật khẩu
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      userData.password = hashedPassword;
+
+      // Đặt role mặc định là 'student' nếu không có role được truyền vào
+      userData.role = userData.role || "student";
+
+      // Tạo người dùng mới
+      const user = await User.create(userData);
       return sendResponse(
         res,
         true,
@@ -14,6 +36,7 @@ const auth = {
         result.user
       );
     } catch (error) {
+      console.log(error)
       return sendResponse(
         res,
         false,

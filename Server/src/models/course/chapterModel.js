@@ -19,7 +19,7 @@ const Chapter = {
           return reject(err);
         }
         const insertedId = result.insertId;
-        resolve(insertedId); // Trả về ID của chapter vừa tạo
+        resolve(insertedId); 
       });
     });
   },
@@ -38,7 +38,7 @@ const Chapter = {
           console.log(`Fail to find chapter by ID: ${err}`);
           return reject(err);
         }
-        const chapter = results[0] || null; // Trả về chapter tìm được hoặc null
+        const chapter = results[0] || null; 
         resolve(chapter);
       });
     });
@@ -63,7 +63,7 @@ const Chapter = {
           console.log(`Fail to update chapter title: ${err}`);
           return reject(err);
         }
-        resolve(); // Kết thúc promise thành công
+        resolve(); 
       });
     });
   },
@@ -84,7 +84,7 @@ const Chapter = {
           console.log(`Fail to delete chapter: ${err}`);
           return reject(err);
         }
-        resolve(); // Kết thúc promise thành công
+        resolve(); 
       });
     });
   },

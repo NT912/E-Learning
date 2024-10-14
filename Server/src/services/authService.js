@@ -7,6 +7,7 @@ const authService = {
   signup: async (userData) => {
     // Kiểm tra xem email đã tồn tại chưa
     const existingUser = await User.findByEmail(userData.email);
+    
     if (existingUser) {
       throw new Error(messages.auth.signup.description.emailExists);
     }

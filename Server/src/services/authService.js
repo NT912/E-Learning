@@ -2,20 +2,14 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel");
 const messages = require("../config/message.json");
-const sendResponse = require("../helpers/sendResponse");
 
 const authService = {
-  signup: async (userData, res) => {
+  signup: async (userData) => {
     // Kiểm tra xem email đã tồn tại chưa
     const existingUser = await User.findByEmail(userData.email);
     
     if (existingUser) {
-      return sendResponse(
-        res,
-        false,
-        messages.auth.signup.emailExists,
-        messages.auth.signup.description.emailExists
-      );
+      throw new Error(messages.auth.signup.description.emailExists);
     }
 
     // Mã hóa mật khẩu
@@ -27,49 +21,28 @@ const authService = {
 
     // Tạo người dùng mới
     const user = await User.create(userData);
-    return sendResponse(
-      res,
-      true,
-      messages.auth.signup.signupSuccess,
-      messages.auth.signup.description,
-      user
-    );
+    return { message: messages.auth.signup.description.signupSuccess, user };
   },
 
-  login: async (userData, res) => {
+  login: async (userData) => {
     const user = await User.findByEmail(userData.email);
     if (!user) {
-      return sendResponse(
-        res,
-        false,
-        messages.auth.login.loginFailed,
-        messages.auth.login.description
-      );
+      throw new Error(messages.auth.login.description.loginFailed);
     }
 
     const isMatch = await bcrypt.compare(userData.password, user.HashPassword);
     if (!isMatch) {
-      return sendResponse(
-        res,
-        false,
-        messages.auth.login.loginFailed,
-        messages.auth.login.description
-      );
+      throw new Error(messages.auth.login.description.loginFailed);
     }
 
+    // Tạo token
     const token = jwt.sign(
       { id: user.UserID, role: user.Role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    return sendResponse(
-      res,
-      true,
-      messages.auth.login.loginSuccess,
-      messages.auth.login.description,
-      token
-    );
+    return { message: messages.auth.login.description.loginSuccess, token };
   },
 };
 

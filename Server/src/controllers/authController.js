@@ -1,5 +1,4 @@
 const authService = require("../services/authService");
-const messages = require("../config/message.json");
 const sendResponse = require("../helpers/sendResponse");
 const User = require("../models/UserModel")
 const bcrypt = require("bcrypt")
@@ -32,66 +31,37 @@ const auth = {
       return sendResponse(
         res,
         true,
-        messages.auth.signup.signupSuccess,
-        messages.auth.signup.description.signupSuccess,
-        user
+        messages.auth.signup.title,
+        result.message,
+        result.user
       );
     } catch (error) {
       console.log(error)
       return sendResponse(
         res,
         false,
-        messages.auth.signup.signupFailed,
-        error.message || messages.general.internalServerError
+        messages.auth.signup.title,
+        error.message || messages.auth.signup.description.signupFailed
       );
     }
   },
 
-  login: async (userData) => {
+  login: async (req, res) => {
     try {
-      const user = await User.findByEmail(userData.email, res);
-      if (!user) {
-        return sendResponse(
-          res,
-          false,
-          messages.auth.login.loginFailed,
-          messages.auth.login.loginFailed
-        );
-      }
-
-      const isMatch = await bcrypt.compare(
-        userData.password,
-        user.HashPassword
-      );
-      if (!isMatch) {
-        return sendResponse(
-          res,
-          false,
-          messages.auth.login.loginFailed,
-          messages.auth.login.loginFailed
-        );
-      }
-
-      // Tạo token
-      const token = jwt.sign(
-        { id: user.UserID, role: user.Role },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-
+      const result = await authService.login(req.body);
       return sendResponse(
         res,
         true,
-        messages.auth.login.loginSuccess,
-        messages.auth.login.description,
-        token
+        messages.auth.login.title,
+        result.message,
+        { token: result.token }
       );
     } catch (error) {
       return sendResponse(
         res,
         false,
-        messages.auth.login.loginFailed,
-        error.message || messages.general.internalServerError
+        messages.auth.login.title,
+        error.message || messages.auth.login.description.loginFailed
       );
     }
   },

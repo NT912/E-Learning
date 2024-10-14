@@ -27,8 +27,6 @@ const User = {
       connection.query(query, [email], (err, results) => {
         if (err) {
           reject(new Error("Error fetching user by email"));
-        } else if (results.length === 0) {
-          reject(new Error("User not found"));
         } else {
           resolve(results[0]);
         }

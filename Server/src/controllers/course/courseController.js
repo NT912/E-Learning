@@ -22,22 +22,15 @@ const courseController = {
       );
     } 
 
-    courseService.create(userID)
+    courseService
+      .create(userID)
       .then((result) => {
-        sendResponse(
-          res,
-          true,
-          message.course.creationSuccess.title,  
-          { courseID: result }
-        );
+        sendResponse(res, true, message.course.creationSuccess.title, {
+          courseID: result,
+        });
       })
       .catch((err) => {
-        sendResponse(
-          res,
-          false,
-          message.course.creationError.title,
-          err
-        );
+        sendResponse(res, false, message.course.creationError.title, err);
       });
   },
 

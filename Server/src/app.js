@@ -1,6 +1,7 @@
 require("module-alias/register.js");
 const express = require("express");
 const dotenv = require("dotenv");
+const quizzRoutes = require("./routes/quizzRoutes");
 
 const envFile =
   process.env.NODE_ENV === "production"
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/course", courseRoutes);
+app.use("/quizz", quizzRoutes);
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () =>

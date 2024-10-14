@@ -1,47 +1,24 @@
 const authService = require("../services/authService");
 const sendResponse = require("../helpers/sendResponse");
-const User = require("../models/UserModel");
-const bcrypt = require("bcrypt");
+const messages = require("../config/message.json");
 
 const auth = {
   signup: async (req, res) => {
     try {
-      const userData = req.body;
-      // Kiểm tra Email đã tồn tại chưa
-      const existingUser = await User.findByEmail(userData.email);
-      if (existingUser) {
-        return sendResponse(
-          res,
-          false,
-          messages.auth.signup.emailExists,
-          messages.auth.signup.description.emailExists
-        );
-      }
-
-      // Mã hóa mật khẩu
-      //
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
-      userData.password = hashedPassword;
-
-      // Đặt role mặc định là 'student' nếu không có role được truyền vào
-      userData.role = userData.role || "student";
-
-      // Tạo người dùng mới
-      const user = await User.create(userData);
+      const result = await authService.signup(req.body);
       return sendResponse(
         res,
         true,
-        messages.auth.signup.title,
+        messages.auth.signupSuccess.title,
         result.message,
         result.user
       );
     } catch (error) {
-      console.log(error);
       return sendResponse(
         res,
         false,
-        messages.auth.signup.title,
-        error.message || messages.auth.signup.description.signupFailed
+        messages.auth.signupError.title,
+        error.message || messages.auth.signupError.description.signupFailed
       );
     }
   },
@@ -52,16 +29,16 @@ const auth = {
       return sendResponse(
         res,
         true,
-        messages.auth.login.title,
-        result.message,
-        { token: result.token }
+        messages.auth.loginSuccess.title,
+        messages.auth.loginSuccess.description,
+        { token: result.token } // Trả về token nếu đăng nhập thành công
       );
     } catch (error) {
       return sendResponse(
         res,
         false,
-        messages.auth.login.title,
-        error.message || messages.auth.login.description.loginFailed
+        messages.auth.loginError.title,
+        error.message || messages.auth.loginError.description.loginFailed
       );
     }
   },

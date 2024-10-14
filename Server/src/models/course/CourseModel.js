@@ -1,4 +1,4 @@
-const connection = require("~/config/db");
+const connection = require("../../config/db");
 
 const Course = {
   /**
@@ -19,7 +19,7 @@ const Course = {
           return reject(err);
         }
         const insertedId = result.insertId;
-        resolve(insertedId); 
+        resolve(insertedId);
       });
     });
   },
@@ -63,7 +63,7 @@ const Course = {
       });
     });
   },
-
+//
   /**
    * Cập nhật tên khóa học.
    * @param {Number} courseID - ID của khóa học cần cập nhật.

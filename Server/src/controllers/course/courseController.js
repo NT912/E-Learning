@@ -1,6 +1,6 @@
-const courseService = require("~/services/course/courseService");
-const message = require("~/config/message.json");
-const sendResponse = require("~/helpers/sendResponse");
+const courseService = require("../../services/course/courseService");
+const message = require("../../config/message.json");
+const sendResponse = require("../../helpers/sendResponse");
 
 const courseController = {
   createCourse: async (req, res) => {

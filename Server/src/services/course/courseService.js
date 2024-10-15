@@ -1,6 +1,6 @@
-const CourseModel = require("~/models/course/CourseModel");
-const UserModel = require("~/models/UserModel");
-const message = require("~/config/message.json");
+const CourseModel = require("../../models/course/courseModel");
+const UserModel = require("../../models/UserModel");
+const message = require("../../config/message.json");
 
 const courseService = {
   /**

@@ -28,8 +28,8 @@
     "creationError": {
       "title": "Unable to Create Chapter. Please Try Again.",
       "description": {
-        "missRequireInfor": "You did not provide enough parameters that are required. Please provide them and try again.",
-        "noCourseID": "There is no course with this ID you provided.",
+        "missCourseID": "You did not provide enough parameters that are required. Please provide them and try again.",
+        "missNameChapter": "You did not provide enough parameters that are required. Please provide them and try again.",
         "noPermission": "This user does not have permission to perform actions on this course.",
         "failed": "Failed to create chapter in the course."
       }

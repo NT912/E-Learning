@@ -24,19 +24,10 @@ const courseController = {
   updateCourseName: async (req, res) => {
     const courseID = req.body.courseID;
     const name = req.body.courseName;
-    const userID = req.body.userID;
-
-    if (!courseID || !name || !userID) {
-      return sendResponse(
-        res,
-        false,
-        message.course.updateError.title,
-        message.course.updateError.description.missRequireInfor
-      );
-    }
+    const user = req.user;
 
     try {
-      await courseService.updateCourseName(userID, courseID, name);
+      await courseService.updateCourseName(user.id, courseID, name);
       sendResponse(res, true, message.course.updateSuccess.title, null);
     } catch (err) {
       sendResponse(res, false, message.course.updateError.title, err.message);

@@ -7,9 +7,8 @@ const authService = {
   signup: async (userData) => {
     // Kiểm tra xem email đã tồn tại chưa
     const existingUser = await User.findByEmail(userData.email);
-    
     if (existingUser) {
-      throw new Error(messages.auth.signup.description.emailExists);
+      throw new Error(messages.auth.signupError.description.emailExists);
     }
 
     // Mã hóa mật khẩu
@@ -21,18 +20,18 @@ const authService = {
 
     // Tạo người dùng mới
     const user = await User.create(userData);
-    return { message: messages.auth.signup.description.signupSuccess, user };
+    return { message: messages.auth.signupSuccess.title, user };
   },
 
   login: async (userData) => {
     const user = await User.findByEmail(userData.email);
     if (!user) {
-      throw new Error(messages.auth.login.description.loginFailed);
+      throw new Error(messages.auth.loginError.description.invalidCredentials);
     }
 
     const isMatch = await bcrypt.compare(userData.password, user.HashPassword);
     if (!isMatch) {
-      throw new Error(messages.auth.login.description.loginFailed);
+      throw new Error(messages.auth.loginError.description.invalidCredentials);
     }
 
     // Tạo token
@@ -42,7 +41,7 @@ const authService = {
       { expiresIn: "1h" }
     );
 
-    return { message: messages.auth.login.description.loginSuccess, token };
+    return { token };
   },
 };
 

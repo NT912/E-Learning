@@ -13,6 +13,8 @@ const userRoutes = require("~/routes/userRoutes");
 const courseRoutes = require("~/routes/courseRoutes");
 const paymentRoutes = require("~/routes/paymentRoutes");
 const discussionRoutes = require("~/routes/discussionRoutes");
+const quizzRoutes = require("~/routes/quizzRoutes");
+const exerciseRoutes = require("./routes/exerciseRoutes");
 
 const app = express();
 app.use(express.json());
@@ -20,6 +22,8 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/course", courseRoutes);
+app.use("/quizz", quizzRoutes);
+app.use("/exercise", exerciseRoutes);
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () =>

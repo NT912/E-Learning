@@ -6,20 +6,20 @@ const Course = {
    * @param {Array} params - Mảng chứa [UserID, CreateAt].
    * @return {Promise<Number>} - Promise chứa ID của khóa học mới tạo.
    */
-  createCourse: (params) => {
+  createCourse: (userID, createAt) => {
     const query = `
       INSERT INTO Course (UserID, CreateAt)
       VALUES (?, ?);
     `;
 
     return new Promise((resolve, reject) => {
-      connection.query(query, params, (err, result) => {
+      connection.query(query, [userID, createAt], (err, result) => {
         if (err) {
           console.log(`Model Fail to create a course with UserID: ${err}`);
           return reject(err);
         }
-        const insertedId = result.insertId;
-        resolve(insertedId);
+        const courseID = result.insertId;
+        resolve(courseID);
       });
     });
   },

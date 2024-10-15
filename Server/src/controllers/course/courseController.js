@@ -4,12 +4,18 @@ const sendResponse = require("../../helpers/sendResponse");
 
 const courseController = {
   createCourse: async (req, res) => {
-    const userID = req.body.userID;
+    const user = req.user;
+    
     try {
-      const result = await courseService.create(userID);
-      sendResponse(res, true, message.course.creationSuccess.title, {
-        courseID: result,
-      });
+      const result = await courseService.create(user.id);
+      sendResponse(
+        res,
+        true, 
+        message.course.creationSuccess.title, 
+        {
+          courseID: result,
+        }
+    );
     } catch (err) {
       sendResponse(res, false, message.course.creationError.title, err.message);
     }

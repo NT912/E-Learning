@@ -10,16 +10,6 @@ const courseService = {
    */
   create: async (userID) => {
     try {
-      const user = await UserModel.findById(userID);
-      if (!user) {
-        console.log("No user found");
-        throw new Error(message.course.creationError.description.noUserID);
-      }
-
-      if (user.Role === "student") {
-        throw new Error(message.course.creationError.description.noPermission);
-      }
-
       const params = [userID, new Date()];
       const courseID = await CourseModel.createCourse(params);
       return courseID;

@@ -66,24 +66,82 @@
     }
   },
   "auth": {
-    "signup": {
-      "title": "Unable to signup. Please Try Again.",
+    "signupSuccess": {
+      "title": "Successful to create Account"
+    },
+
+    "signupError": {
+      "title": "Unable to signup. Please Try Again",
       "description": {
         "emailExists": "Email already exists. Please use a different email.",
-        "signupSuccess": "User created successfully.",
         "signupFailed": "User registration failed. Please try again later.",
-        "noneEmail": "Email cannot be empty."
+        "emptyEmail": "Email is not empty",
+        "invalidEmail": "Invalid email format. Please enter a valid email.",
+        "emptyPassword": "Password cannot be empty. Please enter a password.",
+        "passwordTooShort": "Password must be at least 6 characters long."
       }
     },
-    "login": {
-      "title": "Unable to login. Please Try Again.",
+
+    "loginSuccess": {
+      "title": "Login successful",
+      "description": "You have successfully logged in."
+    },
+
+    "loginError": {
+      "title": "Unable to login. Please Try Again",
       "description": {
         "loginFailed": "Login unsuccessful. Please check your credentials and try again.",
         "unauthorized": "You do not have permission to perform this action.",
-        "loginSuccess": "Login successful."
+        "emptyEmail": "Email cannot be empty. Please enter your email.",
+        "emptyPassword": "Password cannot be empty. Please enter your password.",
+        "invalidEmail": "Invalid email format. Please enter a valid email.",
+        "invalidCredentials": "Incorrect email or password. Please try again."
       }
     }
   },
+
+  "quiz": {
+    "createSuccess": "Quiz created successfully.",
+    "createError": "Failed to create quiz.",
+    "questionAddSuccess": "Question added successfully.",
+    "questionAddError": "Failed to add question.",
+    "submitSuccess": "Quiz submitted successfully.",
+    "submitError": "Failed to submit quiz.",
+    "pass": "Quiz passed.",
+    "fail": "Quiz failed. Please try again.",
+    "scoreBelowMin": "Your score is below 6/10. You need to retry."
+  },
+
+  "exercise": {
+    "createSuccess": {
+      "title": "Exercise created successfully",
+      "description": "The exercise has been successfully created."
+    },
+
+    "createError": {
+      "title": "Failed to create exercise",
+      "description": {
+        "missingLessonId": "Lesson ID is required to create an exercise.",
+        "missingFields": "Title, description, and language are required fields.",
+        "databaseError": "There was an error saving the exercise to the database."
+      }
+    },
+
+    "submissionSuccess": {
+      "title": "Exercise submitted successfully",
+      "description": "Your code has been successfully submitted and evaluated."
+    },
+
+    "submissionError": {
+      "title": "Failed to submit exercise",
+      "description": {
+        "runtimeError": "There was a runtime error or syntax error in your code.",
+        "missingFields": "Exercise ID, User ID, Code, and Language are required fields.",
+        "invalidLanguage": "The provided programming language is not supported."
+      }
+    }
+  },
+
   "general": {
     "internalServerError": "Something went wrong. Please try again later.",
     "success": "Operation completed successfully."

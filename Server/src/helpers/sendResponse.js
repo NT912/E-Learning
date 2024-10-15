@@ -1,10 +1,9 @@
-const sendResponse = (res, success, title, description = null, data = {}) => {
-  const statusCode = success ? 201 : 400;
-  res.status(statusCode).json({
+const sendResponse = (res, success, title, description = null, data = null) => {
+  res.status(success ? 201 : 400).send({
     success,
     title,
     description,
-    ...data,
+    data,
   });
 };
 

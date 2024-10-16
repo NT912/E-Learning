@@ -1,10 +1,22 @@
-const requireRole = (role) => (req, res, next) => {
-  if (req.user.role !== role) {
-    return res.status(403).send("Access denied");
-  }
-  next();
+const response = require("../helpers/sendResponse")
+const message = require('../config/message.json'); 
+
+const roleMiddleware = {
+  checkRole: (requiredRole) => {
+    return (req, res, next) => {
+      const user = req.user; 
+
+      if (user.role !== requiredRole) {
+        return response(
+          res,
+          false,
+          message.permission.title,
+          message.permission.description.feature,
+        )
+      }
+      next();
+    };
+  },
 };
 
-export const roleMiddleware = {
-  requireRole,
-};
+module.exports = roleMiddleware;

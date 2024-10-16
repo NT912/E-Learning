@@ -1,14 +1,45 @@
 const jwt = require("jsonwebtoken");
+const response = require("../helpers/sendResponse")
+const UserModel = require('../models/UserModel'); 
+const message = require('../config/message.json'); 
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (!token) return res.status(403).send("Token required");
+const authMiddleware = {
+  verifyToken: async (req, res, next) => {
+    const token = req.header('Authorization');
+    if (!token) {
+      return response(
+        res, 
+        false,
+        message.auth.token.title,
+        message.auth.token.description.missToken
+      )
+    }
+  
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded;
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(401).send("Invalid token");
-    req.user = decoded;
-    next();
-  });
-};
+      const user = await UserModel.findById(decoded.id);
+      if (!user) {
+        return response(
+          res, 
+          false,
+          message.auth.token.title,
+          message.auth.token.description.userNotFound 
+        );
+      }
+      
+      next(); 
+    } catch (err) {
+      console.log(err);
+      return response(
+        res, 
+        false,
+        message.auth.token.title,
+        message.auth.token.description.failDecodeToken
+      )
+    }
+  }
+}
 
-module.exports = verifyToken;
+module.exports = authMiddleware;

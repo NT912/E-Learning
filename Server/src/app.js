@@ -24,6 +24,7 @@ app.use("/user", userRoutes);
 app.use("/course", courseRoutes);
 app.use("/quizz", quizzRoutes);
 app.use("/exercise", exerciseRoutes);
+app.use("/lesson", courseRoutes);
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () =>

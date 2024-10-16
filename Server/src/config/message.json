@@ -154,6 +154,51 @@
     }
   },
 
+  "lesson": {
+    "creationSuccess": {
+      "title": "Lesson created successfully",
+      "description": "The lesson has been successfully created."
+    },
+    "creationError": {
+      "title": "Failed to create lesson",
+      "description": {
+        "missRequireInfor": "Lesson ID, Title, and User ID are required.",
+        "noChapterID": "No chapter found with the provided ID.",
+        "noPermission": "You do not have permission to create this lesson."
+      }
+    },
+
+    "updateSuccess": {
+      "title": "Lesson updated successfully",
+      "description": "The lesson has been successfully updated."
+    },
+
+    "updateError": {
+      "title": "Failed to update lesson",
+      "description": {
+        "missRequireInfor": "Lesson ID, Title, and User ID are required.",
+        "lessonNotFound": "No lesson found with the provided ID.",
+        "noChapterID": "No chapter found with the provided ID.",
+        "noPermission": "You do not have permission to update this lesson."
+      }
+    },
+
+    "deleteSuccess": {
+      "title": "Lesson deleted successfully",
+      "description": "The lesson has been successfully deleted."
+    },
+
+    "deleteError": {
+      "title": "Failed to delete lesson",
+      "description": {
+        "missRequireInfor": "Lesson ID and User ID are required.",
+        "lessonNotFound": "No lesson found with the provided ID.",
+        "noChapterID": "No chapter found with the provided ID.",
+        "noPermission": "You do not have permission to delete this lesson."
+      }
+    }
+  },
+
   "general": {
     "internalServerError": "Something went wrong. Please try again later.",
     "success": "Operation completed successfully."

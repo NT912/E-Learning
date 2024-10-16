@@ -28,18 +28,9 @@ router.post(
 );
 
 // Chapter
-router.post(
-  "/chapter/create",
-  authMiddleware.verifyToken,
-  chapterValidator.create,
-  chapterController.create
-);
-router.post(
-  "/chapter/update/name",
-  authMiddleware.verifyToken,
-  chapterValidator.updateName,
-  chapterController.updateChapterName
-);
+router.post("/chapter/create", authMiddleware.verifyToken, chapterValidator.create, chapterController.create);
+router.post("/chapter/update/name", authMiddleware.verifyToken, chapterValidator.updateName, chapterController.updateChapterName);
+router.delete("/chapter/delete/:chapterID", authMiddleware.verifyToken, chapterController.deleteChapter);
 
 // Routes liên quan đến lesson
 router.post("/lesson/create", lessonController.create);

@@ -1,290 +1,417 @@
--- CREATE TABLE answer (
---   AnswerID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   QuestionID INT,
---   Content TEXT,
---   Score FLOAT
--- );
+-- Table structure for table `answer`
+CREATE TABLE `answer` (
+  `AnswerID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `QuestionID` int UNSIGNED DEFAULT NULL,
+  `Content` text,
+  `Score` float DEFAULT NULL,
+  PRIMARY KEY (`AnswerID`)
+);
 
--- CREATE TABLE category (
---   CategoryID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   Name TEXT,
---   Description TEXT
--- );
+-- Table structure for table `category`
+CREATE TABLE `category` (
+  `CategoryID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Name` text,
+  `Description` text,
+  PRIMARY KEY (`CategoryID`)
+);
 
--- CREATE TABLE chapter (
---   ChapterID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   CourseID INT,
---   OrderNumber INT,
---   Title TEXT,
---   Description TEXT
--- );
+-- Table structure for table `chapter`
+CREATE TABLE `chapter` (
+  `ChapterID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `CourseID` int UNSIGNED DEFAULT NULL,
+  `OrderNumber` int DEFAULT NULL,
+  `Title` text,
+  `Description` text,
+  PRIMARY KEY (`ChapterID`)
+);
 
--- CREATE TABLE contentcourse (
---   ContentCourseID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   CourseID INT,
---   Content TEXT
--- );
+-- Table structure for table `contentcourse`
+CREATE TABLE `contentcourse` (
+  `ContentCourseID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `CourseID` int UNSIGNED DEFAULT NULL,
+  `Content` text,
+  PRIMARY KEY (`ContentCourseID`)
+);
 
--- CREATE TABLE course (
---   CourseID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   UserID INT,
---   Name TEXT,
---   PictureLink TEXT,
---   ShortCut TEXT,
---   Description TEXT,
---   CreateAt DATETIME,
---   ParentID INT,
---   State VARCHAR(10) CHECK (State IN ('public', 'wait', 'pending', 'rejected')),
---   CategoryID INT,
---   Cost FLOAT
--- );
+-- Table structure for table `course`
+CREATE TABLE `course` (
+  `CourseID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `UserID` int UNSIGNED DEFAULT NULL,
+  `Name` text,
+  `PictureLink` text,
+  `ShortCut` text,
+  `Description` text,
+  `CreateAt` datetime DEFAULT NULL,
+  `ParentID` int UNSIGNED DEFAULT NULL,
+  `State` varchar(10) DEFAULT NULL,
+  `CategoryID` int UNSIGNED DEFAULT NULL,
+  `Cost` float DEFAULT NULL,
+  PRIMARY KEY (`CourseID`)
+);
 
--- CREATE TABLE coursedepend (
---   CourseDependID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   CourseID INT,
---   DependOnCourseID INT,
---   IsRequire BIT
--- );
+-- Table structure for table `categoryofcourse`
+CREATE TABLE `categoryofcourse` (
+  `CategoryOfCourseID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `CourseID` int UNSIGNED,
+  `CategoryID` int UNSIGNED,
+  PRIMARY KEY (`CategoryOfCourseID`)
+);
 
--- CREATE TABLE discussion (
---   DiscussionID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   UserID INT,
---   VideoID INT,
---   CourseID INT,
---   ParentID INT,
---   Content TEXT,
---   CreateAt DATETIME
--- );
--- ff
+-- Table structure for table `coursedepend`
+CREATE TABLE `coursedepend` (
+  `CourseDependID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `CourseID` int UNSIGNED DEFAULT NULL,
+  `DependOnCourseID` int UNSIGNED DEFAULT NULL,
+  `IsRequire` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`CourseDependID`)
+);
 
--- CREATE TABLE enrollment (
---   EnrollmentID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   UserID INT,
---   CourseID INT
--- );
+-- Table structure for table `discussion`
+CREATE TABLE `discussion` (
+  `DiscussionID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `UserID` int UNSIGNED DEFAULT NULL,
+  `LessonID` int UNSIGNED DEFAULT NULL,
+  `CourseID` int UNSIGNED DEFAULT NULL,
+  `ParentID` int UNSIGNED DEFAULT NULL,
+  `Content` text,
+  `CreateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`DiscussionID`)
+);
 
--- CREATE TABLE file (
---   FileID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   VideoID INT,
---   ChapterID INT,
---   CourseID INT,
---   DiscussionID INT,
---   FileLink TEXT
--- );
+-- Table structure for table `enrollment`
+CREATE TABLE `enrollment` (
+  `EnrollmentID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `UserID` int UNSIGNED DEFAULT NULL,
+  `CourseID` int UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`EnrollmentID`)
+);
 
--- CREATE TABLE note (
---   NoteID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   ProgressID INT,
---   Content TEXT
--- );
+-- Table structure for table `exercise`
+CREATE TABLE `exercise` (
+  `ExerciseID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `LessonID` int UNSIGNED NOT NULL,
+  `Title` text,
+  `Description` text,
+  `Language` enum('python','javascript','c','csharp','java','ruby','php','go') DEFAULT NULL,
+  `CreateAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ExerciseID`)
+);
 
--- CREATE TABLE payment (
---   PaymentID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   UserID INT,
---   CourseID INT,
---   PaymentCode TEXT,
---   Amount FLOAT,
---   Purpose VARCHAR(20) CHECK (Purpose IN ('purchase_course', 'upgrade_premium')),
---   Status VARCHAR(10) CHECK (Status IN ('pending', 'success', 'error')),
---   CreateAt DATETIME,
---   ExpireAt DATETIME,
---   UpdateAt DATETIME
--- );
+-- Table structure for table `exercise_submission`
+CREATE TABLE `exercise_submission` (
+  `SubmissionID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ExerciseID` int UNSIGNED NOT NULL,
+  `UserID` int UNSIGNED NOT NULL,
+  `Code` text,
+  `Language` enum('python','javascript','c','csharp','java','ruby','php','go') DEFAULT NULL,
+  `Score` float DEFAULT NULL,
+  `Status` enum('pending','passed','failed') DEFAULT NULL,
+  `Output` text,
+  `SubmittedAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`SubmissionID`)
+);
 
--- CREATE TABLE progress (
---   ProgressID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   EnrollmentID INT,
---   VideoID INT,
---   ProgressTime INT
--- );
+-- Table structure for table `lesson`
+CREATE TABLE `lesson` (
+  `LessonID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ChapterID` int UNSIGNED NOT NULL,
+  `FileLink` text,
+  `Title` text,
+  `Period` int DEFAULT NULL,
+  `OrderNumber` int DEFAULT NULL,
+  `Description` text,
+  `IsAllowDemo` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`LessonID`)
+);
 
--- CREATE TABLE question (
---   QuestionID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   QuizzID INT,
---   Content TEXT,
---   Picture TEXT
--- );
+-- Table structure for table `note`
+CREATE TABLE `note` (
+  `NoteID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ProgressID` int UNSIGNED DEFAULT NULL,
+  `Content` text,
+  PRIMARY KEY (`NoteID`)
+);
 
--- CREATE TABLE quizz (
---   QuizzID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   VideoID INT,
---   ChapterID INT,
---   CourseID INT,
---   Title TEXT
--- );
+-- Table structure for table `payment`
+CREATE TABLE `payment` (
+  `PaymentID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `UserID` int UNSIGNED DEFAULT NULL,
+  `CourseID` int UNSIGNED DEFAULT NULL,
+  `PaymentCode` text,
+  `Amount` float DEFAULT NULL,
+  `Purpose` varchar(20) DEFAULT NULL,
+  `Status` varchar(10) DEFAULT NULL,
+  `CreateAt` datetime DEFAULT NULL,
+  `ExpireAt` datetime DEFAULT NULL,
+  `UpdateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`PaymentID`)
+);
 
--- CREATE TABLE ratecourse (
---   RateCourseID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   UserID INT,
---   CourseID INT,
---   StarNumber INT,
---   Comment TEXT
--- );
+-- Table structure for table `progress`
+CREATE TABLE `progress` (
+  `ProgressID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `EnrollmentID` int UNSIGNED DEFAULT NULL,
+  `LessonID` int UNSIGNED DEFAULT NULL,
+  `ProgressTime` int DEFAULT NULL,
+  PRIMARY KEY (`ProgressID`)
+);
 
--- CREATE TABLE submit (
---   SubmitID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   QuizzID INT,
---   UserID INT,
---   Score FLOAT,
---   CreateAt DATETIME
--- );
+-- Table structure for table `question`
+CREATE TABLE `question` (
+  `QuestionID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `QuizzID` int UNSIGNED DEFAULT NULL,
+  `Content` text,
+  `Picture` text,
+  PRIMARY KEY (`QuestionID`)
+);
 
--- CREATE TABLE systemtransaction (
---   SystemTransactionID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   PaymentID INT,
---   Amount FLOAT,
---   Message TEXT,
---   UserID INT,
---   BankName TEXT,
---   BankAccountNumber TEXT,
---   Status VARCHAR(10) CHECK (Status IN ('pending', 'success', 'error')),
---   CreateAt DATETIME
--- );
+-- Table structure for table `quizz`
+CREATE TABLE `quizz` (
+  `QuizzID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `LessonID` int UNSIGNED DEFAULT NULL,
+  `ChapterID` int UNSIGNED DEFAULT NULL,
+  `CourseID` int UNSIGNED DEFAULT NULL,
+  `Title` text,
+  PRIMARY KEY (`QuizzID`)
+);
 
--- CREATE TABLE user (
---   UserID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   Email TEXT,
---   HashPassword TEXT,
---   PhoneNumber TEXT,
---   About TEXT,
---   AvatarLink TEXT,
---   BankName TEXT,
---   BankAccountNumber TEXT,
---   Role ENUM('student', 'teacher', 'admin') NOT NULL DEFAULT 'student',
---   CreateAt DATETIME,
---   IsPremium DATETIME
--- );
+-- Table structure for table `ratecourse`
+CREATE TABLE `ratecourse` (
+  `RateCourseID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `UserID` int UNSIGNED DEFAULT NULL,
+  `CourseID` int UNSIGNED DEFAULT NULL,
+  `StarNumber` int DEFAULT NULL,
+  `Comment` text,
+  PRIMARY KEY (`RateCourseID`)
+);
 
--- CREATE TABLE useranswer (
---   UserAnswerID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   SubmitID INT,
---   AnswerID INT
--- );
+-- Table structure for table `submit`
+CREATE TABLE `submit` (
+  `SubmitID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `QuizzID` int UNSIGNED DEFAULT NULL,
+  `UserID` int UNSIGNED DEFAULT NULL,
+  `Score` float DEFAULT NULL,
+  `CreateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`SubmitID`)
+);
 
--- CREATE TABLE usertransaction (
---   UserTransactionID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   PaymentID INT,
---   Amount FLOAT,
---   Message TEXT,
---   Bank TEXT,
---   BankAccountNumber TEXT,
---   CreateAt DATETIME
--- );
+-- Table structure for table `systemtransaction`
+CREATE TABLE `systemtransaction` (
+  `SystemTransactionID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `PaymentID` int UNSIGNED DEFAULT NULL,
+  `Amount` float DEFAULT NULL,
+  `Message` text,
+  `UserID` int UNSIGNED DEFAULT NULL,
+  `BankName` text,
+  `BankAccountNumber` text,
+  `Status` varchar(10) DEFAULT NULL,
+  `CreateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`SystemTransactionID`)
+);
 
--- CREATE TABLE video (
---   VideoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---   ChapterID INT,
---   Title TEXT,
---   VideoLink TEXT,
---   Time INT,
---   Description TEXT,
---   PictureLink TEXT,
---   IsAllowDemo BIT
--- );
+-- Table structure for table `user`
+CREATE TABLE `user` (
+  `UserID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Email` text,
+  `HashPassword` text,
+  `PhoneNumber` text,
+  `About` text,
+  `AvatarLink` text,
+  `BankName` text,
+  `BankAccountNumber` text,
+  `Role` enum('student','teacher','admin') NOT NULL DEFAULT 'student',
+  `CreateAt` datetime DEFAULT NULL,
+  `IsPremium` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserID`)
+);
 
--- -- Thêm các khóa ngoại (Foreign Key) và các ràng buộc khác
--- ALTER TABLE answer
---   ADD CONSTRAINT FK_answer_question FOREIGN KEY (QuestionID) REFERENCES question(QuestionID);
+-- Table structure for table `useranswer`
+CREATE TABLE `useranswer` (
+  `UserAnswerID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `SubmitID` int UNSIGNED DEFAULT NULL,
+  `AnswerID` int UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`UserAnswerID`)
+);
 
--- ALTER TABLE chapter
---   ADD CONSTRAINT FK_chapter_course FOREIGN KEY (CourseID) REFERENCES course(CourseID);
+-- Table structure for table `usertransaction`
+CREATE TABLE `usertransaction` (
+  `UserTransactionID` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `PaymentID` int UNSIGNED DEFAULT NULL,
+  `Amount` float DEFAULT NULL,
+  `Message` text,
+  `Bank` text,
+  `BankAccountNumber` text,
+  `CreateAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserTransactionID`)
+);
 
--- ALTER TABLE contentcourse
---   ADD CONSTRAINT FK_contentcourse_course FOREIGN KEY (CourseID) REFERENCES course(CourseID);
 
--- ALTER TABLE course
---   ADD CONSTRAINT FK_course_user FOREIGN KEY (UserID) REFERENCES user(UserID);
+-- Foreign key for table `answer`
+ALTER TABLE `answer` 
+ADD CONSTRAINT `FK_answer_question` 
+FOREIGN KEY (`QuestionID`) REFERENCES `question` (`QuestionID`);
 
--- ALTER TABLE course
---   ADD CONSTRAINT FK_course_category FOREIGN KEY (CategoryID) REFERENCES category(CategoryID);
+-- Foreign key for table `chapter`
+ALTER TABLE `chapter` 
+ADD CONSTRAINT `FK_chapter_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE coursedepend
---   ADD CONSTRAINT FK_coursedepend_course FOREIGN KEY (CourseID) REFERENCES course(CourseID);
+-- Foreign key for table `contentcourse`
+ALTER TABLE `contentcourse` 
+ADD CONSTRAINT `FK_contentcourse_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE coursedepend
---   ADD CONSTRAINT FK_coursedepend_dependoncourse FOREIGN KEY (DependOnCourseID) REFERENCES course(CourseID);
+-- Foreign keys for table `course`
+ALTER TABLE `course` 
+ADD CONSTRAINT `FK_course_user` 
+FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
 
--- ALTER TABLE discussion
---   ADD CONSTRAINT FK_discussion_user FOREIGN KEY (UserID) REFERENCES user(UserID);
+ALTER TABLE `course` 
+ADD CONSTRAINT `FK_course_category` 
+FOREIGN KEY (`CategoryID`) REFERENCES `category` (`CategoryID`);
 
--- ALTER TABLE discussion
---   ADD CONSTRAINT FK_discussion_video FOREIGN KEY (VideoID) REFERENCES video(VideoID);
+-- Foreign key for table `categoryofcourse`
+ALTER TABLE `categoryofcourse` 
+ADD CONSTRAINT `FK_categoryofcourse_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE discussion
---   ADD CONSTRAINT FK_discussion_course FOREIGN KEY (CourseID) REFERENCES course(CourseID);
+ALTER TABLE `categoryofcourse` 
+ADD CONSTRAINT `FK_categoryofcourse_category` 
+FOREIGN KEY (`CategoryID`) REFERENCES `category` (`CategoryID`);
 
--- ALTER TABLE discussion
---   ADD CONSTRAINT FK_discussion_parent FOREIGN KEY (ParentID) REFERENCES discussion(DiscussionID);
+-- Foreign keys for table `coursedepend`
+ALTER TABLE `coursedepend` 
+ADD CONSTRAINT `FK_coursedepend_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE enrollment
---   ADD CONSTRAINT FK_enrollment_user FOREIGN KEY (UserID) REFERENCES user(UserID);
+ALTER TABLE `coursedepend` 
+ADD CONSTRAINT `FK_coursedepend_dependoncourse` 
+FOREIGN KEY (`DependOnCourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE enrollment
---   ADD CONSTRAINT FK_enrollment_course FOREIGN KEY (CourseID) REFERENCES course(CourseID);
+-- Foreign keys for table `discussion`
+ALTER TABLE `discussion` 
+ADD CONSTRAINT `FK_discussion_user` 
+FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
 
--- ALTER TABLE file
---   ADD CONSTRAINT FK_file_video FOREIGN KEY (VideoID) REFERENCES video(VideoID);
+ALTER TABLE `discussion` 
+ADD CONSTRAINT `FK_discussion_lesson` 
+FOREIGN KEY (`LessonID`) REFERENCES `lesson` (`LessonID`);
 
--- ALTER TABLE file
---   ADD CONSTRAINT FK_file_chapter FOREIGN KEY (ChapterID) REFERENCES chapter(ChapterID);
+ALTER TABLE `discussion` 
+ADD CONSTRAINT `FK_discussion_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE file
---   ADD CONSTRAINT FK_file_course FOREIGN KEY (CourseID) REFERENCES course(CourseID);
+ALTER TABLE `discussion` 
+ADD CONSTRAINT `FK_discussion_parent` 
+FOREIGN KEY (`ParentID`) REFERENCES `discussion` (`DiscussionID`);
 
--- ALTER TABLE file
---   ADD CONSTRAINT FK_file_discussion FOREIGN KEY (DiscussionID) REFERENCES discussion(DiscussionID);
+-- Foreign keys for table `enrollment`
+ALTER TABLE `enrollment` 
+ADD CONSTRAINT `FK_enrollment_user` 
+FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
 
--- ALTER TABLE note
---   ADD CONSTRAINT FK_note_progress FOREIGN KEY (ProgressID) REFERENCES progress(ProgressID);
+ALTER TABLE `enrollment` 
+ADD CONSTRAINT `FK_enrollment_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE payment
---   ADD CONSTRAINT FK_payment_user FOREIGN KEY (UserID) REFERENCES user(UserID);
+-- Foreign keys for table `exercise`
+ALTER TABLE `exercise` 
+ADD CONSTRAINT `FK_exercise_lesson` 
+FOREIGN KEY (`LessonID`) REFERENCES `lesson` (`LessonID`);
 
--- ALTER TABLE payment
---   ADD CONSTRAINT FK_payment_course FOREIGN KEY (CourseID) REFERENCES course(CourseID);
+-- Foreign keys for table `exercise_submission`
+ALTER TABLE `exercise_submission` 
+ADD CONSTRAINT `FK_exercise_submission_exercise` 
+FOREIGN KEY (`ExerciseID`) REFERENCES `exercise` (`ExerciseID`);
 
--- ALTER TABLE progress
---   ADD CONSTRAINT FK_progress_enrollment FOREIGN KEY (EnrollmentID) REFERENCES enrollment(EnrollmentID);
+ALTER TABLE `exercise_submission` 
+ADD CONSTRAINT `FK_exercise_submission_user` 
+FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
 
--- ALTER TABLE progress
---   ADD CONSTRAINT FK_progress_video FOREIGN KEY (VideoID) REFERENCES video(VideoID);
+-- Foreign keys for table `lesson`
+ALTER TABLE `lesson` 
+ADD CONSTRAINT `FK_lesson_chapter` 
+FOREIGN KEY (`ChapterID`) REFERENCES `chapter` (`ChapterID`);
 
--- ALTER TABLE question
---   ADD CONSTRAINT FK_question_quizz FOREIGN KEY (QuizzID) REFERENCES quizz(QuizzID);
+-- Foreign keys for table `note`
+ALTER TABLE `note` 
+ADD CONSTRAINT `FK_note_progress` 
+FOREIGN KEY (`ProgressID`) REFERENCES `progress` (`ProgressID`);
 
--- ALTER TABLE quizz
---   ADD CONSTRAINT FK_quizz_video FOREIGN KEY (VideoID) REFERENCES video(VideoID);
+-- Foreign keys for table `payment`
+ALTER TABLE `payment` 
+ADD CONSTRAINT `FK_payment_user` 
+FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
 
--- ALTER TABLE quizz
---   ADD CONSTRAINT FK_quizz_chapter FOREIGN KEY (ChapterID) REFERENCES chapter(ChapterID);
+ALTER TABLE `payment` 
+ADD CONSTRAINT `FK_payment_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE ratecourse
---   ADD CONSTRAINT FK_ratecourse_user FOREIGN KEY (UserID) REFERENCES user(UserID);
+-- Foreign keys for table `progress`
+ALTER TABLE `progress` 
+ADD CONSTRAINT `FK_progress_enrollment` 
+FOREIGN KEY (`EnrollmentID`) REFERENCES `enrollment` (`EnrollmentID`);
 
--- ALTER TABLE ratecourse
---   ADD CONSTRAINT FK_ratecourse_course FOREIGN KEY (CourseID) REFERENCES course(CourseID);
+ALTER TABLE `progress` 
+ADD CONSTRAINT `FK_progress_lesson` 
+FOREIGN KEY (`LessonID`) REFERENCES `lesson` (`LessonID`);
 
--- ALTER TABLE submit
---   ADD CONSTRAINT FK_submit_quizz FOREIGN KEY (QuizzID) REFERENCES quizz(QuizzID);
+-- Foreign keys for table `question`
+ALTER TABLE `question` 
+ADD CONSTRAINT `FK_question_quizz` 
+FOREIGN KEY (`QuizzID`) REFERENCES `quizz` (`QuizzID`);
 
--- ALTER TABLE submit
---   ADD CONSTRAINT FK_submit_user FOREIGN KEY (UserID) REFERENCES user(UserID);
+-- Foreign keys for table `quizz`
+ALTER TABLE `quizz` 
+ADD CONSTRAINT `FK_quizz_lesson` 
+FOREIGN KEY (`LessonID`) REFERENCES `lesson` (`LessonID`);
 
--- ALTER TABLE systemtransaction
---   ADD CONSTRAINT FK_systemtransaction_payment FOREIGN KEY (PaymentID) REFERENCES payment(PaymentID);
+ALTER TABLE `quizz` 
+ADD CONSTRAINT `FK_quizz_chapter` 
+FOREIGN KEY (`ChapterID`) REFERENCES `chapter` (`ChapterID`);
 
--- ALTER TABLE systemtransaction
---   ADD CONSTRAINT FK_systemtransaction_user FOREIGN KEY (UserID) REFERENCES user(UserID);
+ALTER TABLE `quizz` 
+ADD CONSTRAINT `FK_quizz_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE useranswer
---   ADD CONSTRAINT FK_useranswer_submit FOREIGN KEY (SubmitID) REFERENCES submit(SubmitID);
+-- Foreign keys for table `ratecourse`
+ALTER TABLE `ratecourse` 
+ADD CONSTRAINT `FK_ratecourse_user` 
+FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
 
--- ALTER TABLE useranswer
---   ADD CONSTRAINT FK_useranswer_answer FOREIGN KEY (AnswerID) REFERENCES answer(AnswerID);
+ALTER TABLE `ratecourse` 
+ADD CONSTRAINT `FK_ratecourse_course` 
+FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`);
 
--- ALTER TABLE usertransaction
---   ADD CONSTRAINT FK_usertransaction_payment FOREIGN KEY (PaymentID) REFERENCES payment(PaymentID);
+-- Foreign keys for table `submit`
+ALTER TABLE `submit` 
+ADD CONSTRAINT `FK_submit_quizz` 
+FOREIGN KEY (`QuizzID`) REFERENCES `quizz` (`QuizzID`);
 
--- ALTER TABLE video
---   ADD CONSTRAINT FK_video_chapter FOREIGN KEY (ChapterID) REFERENCES chapter(ChapterID);
+ALTER TABLE `submit` 
+ADD CONSTRAINT `FK_submit_user` 
+FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
+
+-- Foreign keys for table `systemtransaction`
+ALTER TABLE `systemtransaction` 
+ADD CONSTRAINT `FK_systemtransaction_payment` 
+FOREIGN KEY (`PaymentID`) REFERENCES `payment` (`PaymentID`);
+
+ALTER TABLE `systemtransaction` 
+ADD CONSTRAINT `FK_systemtransaction_user` 
+FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
+
+-- Foreign keys for table `useranswer`
+ALTER TABLE `useranswer` 
+ADD CONSTRAINT `FK_useranswer_submit` 
+FOREIGN KEY (`SubmitID`) REFERENCES `submit` (`SubmitID`);
+
+ALTER TABLE `useranswer` 
+ADD CONSTRAINT `FK_useranswer_answer` 
+FOREIGN KEY (`AnswerID`) REFERENCES `answer` (`AnswerID`);
+
+-- Foreign keys for table `usertransaction`
+ALTER TABLE `usertransaction` 
+ADD CONSTRAINT `FK_usertransaction_payment` 
+FOREIGN KEY (`PaymentID`) REFERENCES `payment` (`PaymentID`);
 

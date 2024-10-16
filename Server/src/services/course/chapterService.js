@@ -53,8 +53,30 @@ const chapterService = {
     } catch (err) {
       throw err; 
     }
+  },
+
+  deleteChapter: async (userID, chapterID) => {
+    try {
+      const chapter = await ChapterModel.findById(chapterID);
+      if (!chapter) {
+        throw new Error(message.chapter.deleteError.description.chapterNotFound);
+      }
+
+      const courseID = chapter.CourseID;
+      const course = await CourseModel.findById(courseID);
+      if (!course) {
+        throw new Error(message.course.deleteError.description.courseNotFound);
+      }
+
+      if (course.UserID !== userID) {
+        throw new Error(message.chapter.deleteError.description.noPermission);
+      }
+
+      await ChapterModel.deleteChapter(chapterID);
+    } catch (err) {
+    throw(err)
+    }
   }
-  
 };
 
 module.exports = chapterService;

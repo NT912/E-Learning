@@ -52,5 +52,51 @@ const chapterController = {
     }
   },
 };
+    updateChapterName: async (req, res) => {
+      const { chapterID, chapterName } = req.body;
+      const user = req.user;
+    
+      
+    
+      try {
+        await chapterService.updateChapterName(user.id, chapterID, chapterName);
+        sendResponse(
+          res,
+          true,
+          message.chapter.updateSuccess.title,
+          null
+        );
+      } catch (err) {
+        sendResponse(
+          res,
+          false,
+          message.chapter.updateError.title,
+          err.message
+        );
+      }
+    },
+
+    deleteChapter: async (req, res) => {
+      const { chapterID } = req.params;
+      const user = req.user;
+  
+      try {
+        await chapterService.deleteChapter(user.id, chapterID);
+        sendResponse(
+          res,
+          true,
+          message.chapter.deleteSuccess.title,
+          null
+        );
+      } catch (err) {
+        sendResponse(
+          res,
+          false,
+          message.chapter.deleteError.title,
+          err.message
+        );
+      }
+    }
+}
 
 module.exports = chapterController;

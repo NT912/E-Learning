@@ -1,4 +1,4 @@
-const CourseModel = require('../../models/course/CourseModel');
+const CourseModel = require('../../models/course/courseModel');
 const ChapterModel = require('../../models/course/chapterModel');
 const message = require('../../config/message.json');
 

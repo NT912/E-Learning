@@ -1,22 +1,45 @@
 const express = require("express");
 const courseController = require("../controllers/course/courseController");
 const chapterController = require("../controllers/course/chapterController");
-const lessonController = require("../controllers/course/lessonController");
+const videoController = require("../controllers/course/videoController");
+
+const roleMiddleware = require("../middleware/roleMiddleware");
+const authMiddleware = require("../middleware/authMiddleware");
+
 const courseValidator = require("../validation/courseValidation");
+const chapterValidator = require("../validation/chapterValidation");
+
+const Role = require("../config/role");
 
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Routes liên quan đến course
 router.post(
   "/create",
-  courseValidator.createCourse,
+  authMiddleware.verifyToken,
+  roleMiddleware.checkRole(Role.TEACHER),
   courseController.createCourse
 );
-router.post("/update/name", courseController.updateCourseName);
+router.post(
+  "/update/name",
+  authMiddleware.verifyToken,
+  courseValidator.updateCourseName,
+  courseController.updateCourseName
+);
 
-// Routes liên quan đến chapter
-router.post("/chapter/create", chapterController.create);
-router.post("/chapter/update/name", chapterController.updateChapterName);
+// Chapter
+router.post(
+  "/chapter/create",
+  authMiddleware.verifyToken,
+  chapterValidator.create,
+  chapterController.create
+);
+router.post(
+  "/chapter/update/name",
+  authMiddleware.verifyToken,
+  chapterValidator.updateName,
+  chapterController.updateChapterName
+);
 
 // Routes liên quan đến lesson
 router.post("/lesson/create", lessonController.create);

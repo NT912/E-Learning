@@ -15,7 +15,7 @@ const videoService = {
    * @param {File} chapterID - videoFile file
    * @return {Promise<Number>} - Promise chứa ID của khóa học mới tạo hoặc lỗi.
    */
-  create: async ( userID, chapterID, videoFile) => {
+  create: async (userID, chapterID, videoFile) => {
     try {
       console.log(duration);
       const chapter = await ChapterModel.findById(chapterID);

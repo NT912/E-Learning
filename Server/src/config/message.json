@@ -3,10 +3,7 @@
     "creationError": {
       "title": "Unable to Create Course. Please Try Again.",
       "description": {
-        "noUserID": "No user found with the provided ID. Please check the ID and try again.",
-        "failed": "Course creation failed for the provided user ID. Please try again later.",
-        "missRequireInfor": "The userID parameter is required and was not included in the request. Please provide it and try again.",
-        "noPermission": "This user does not have permission to create a course."
+        "failed": "Course creation failed for the provided user ID. Please try again later."
       }
     },
     "creationSuccess": {
@@ -15,7 +12,8 @@
     "updateError": {
       "title": "Unable to change Course attribute. Please Try Again.",
       "description": {
-        "missRequireInfor": "You did not provide enough parameters that are required. Please provide them and try again.",
+        "missCourseID": "You did not provide enough parameters that are required (course id). Please provide them and try again.",
+        "missCourseName": "You did not provide enough parameters that are required (course name). Please provide them and try again.",
         "serverfail": "Something went wrong while processing your request.",
         "courseNotFound": "There is no Course ID you provided.",
         "noPermission": "This user does not have permission to change this course.",
@@ -30,8 +28,8 @@
     "creationError": {
       "title": "Unable to Create Chapter. Please Try Again.",
       "description": {
-        "missRequireInfor": "You did not provide enough parameters that are required. Please provide them and try again.",
-        "noCourseID": "There is no course with this ID you provided.",
+        "missCourseID": "You did not provide enough parameters that are required. Please provide them and try again.",
+        "missNameChapter": "You did not provide enough parameters that are required. Please provide them and try again.",
         "noPermission": "This user does not have permission to perform actions on this course.",
         "failed": "Failed to create chapter in the course."
       }
@@ -97,6 +95,20 @@
         "invalidEmail": "Invalid email format. Please enter a valid email.",
         "invalidCredentials": "Incorrect email or password. Please try again."
       }
+    },
+    "token": {
+      "title": "Token fail",
+      "description": {
+        "missToken": "Require Token.",
+        "failDecodeToken": "Fail decode Token.",
+        "userNotFound": "User not found."
+      }
+    }
+  },
+  "permission": {
+    "title": "Denied access",
+    "description": {
+      "feature": "Your account do not have permission to perform thisaction"
     }
   },
 

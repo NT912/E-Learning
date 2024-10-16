@@ -1,5 +1,5 @@
 const message = require('~/config/message.json');
-const chapterService = require('~/services/course/chapterService');
+const chapterService = require('../../services/course/chapterService');
 
 const sendResponse = (res, success, title, description = null) => {
   res.status(success ? 201 : 400).send({
@@ -16,20 +16,11 @@ const chapterController = {
    * @param {Object} res - Đối tượng response để gửi phản hồi về client.
    */
   create: async (req, res) => {
-    const { courseID, chapterName, userID } = req.body;
-
-    // Kiểm tra các tham số đầu vào
-    if (!courseID || !chapterName || !userID) {
-      return sendResponse(
-        res,
-        false,
-        message.chapter.creationError.title,
-        message.chapter.creationError.description.missRequireInfor
-      );
-    }
+    const { courseID, chapterName } = req.body;
+    const user = req.user;
 
     try {
-      const result = await chapterService.createChapter(userID, courseID, chapterName);
+      const result = await chapterService.createChapter(user.id, courseID, chapterName);
       sendResponse(
         res,
         true,
@@ -49,22 +40,13 @@ const chapterController = {
   },
 
     updateChapterName: async (req, res) => {
-      const chapterID = req.body.chapterID;
-      const name = req.body.chapterName;
-      const userID = req.body.userID;
+      const { chapterID, chapterName } = req.body;
+      const user = req.user;
     
-      // Kiểm tra các tham số đầu vào
-      if (!chapterID || !name || !userID) {
-        return sendResponse( 
-          res,
-          false,
-          message.chapter.updateError.title,
-          message.chapter.updateError.description.missRequireInfor
-        );
-      }
+      
     
       try {
-        await chapterService.updateChapterName(userID, chapterID, name);
+        await chapterService.updateChapterName(user.id, chapterID, chapterName);
         sendResponse(
           res,
           true,

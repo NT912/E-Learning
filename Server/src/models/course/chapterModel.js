@@ -87,7 +87,7 @@ const Chapter = {
         resolve(); 
       });
     });
-  },
+  }
 };
 
 module.exports = Chapter;

@@ -21,6 +21,7 @@ router.post("/update/name", authMiddleware.verifyToken, courseValidator.updateCo
 // Chapter
 router.post("/chapter/create", authMiddleware.verifyToken, chapterValidator.create, chapterController.create);
 router.post("/chapter/update/name", authMiddleware.verifyToken, chapterValidator.updateName, chapterController.updateChapterName);
+router.delete("/chapter/delete/:chapterID", authMiddleware.verifyToken, chapterController.deleteChapter);
 
 // Video 
 router.post("/video/create",upload.single("video"), videoController.uploadVideo)

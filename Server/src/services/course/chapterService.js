@@ -27,10 +27,10 @@ const chapterService = {
   },
 
   /**
-   * Cập nhật tên khóa học.
+   * Cập nhật tên chapter.
    * @param {Number} userID - ID của người dùng yêu cầu cập nhật.
-   * @param {Number} courseID - ID của khóa học cần cập nhật.
-   * @param {String} name - Tên mới của khóa học.
+   * @param {Number} courseID - ID của chapter cần cập nhật.
+   * @param {String} name - Tên mới của chapter.
    * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
    */
   updateChapterName: async (userID, chapterID, name) => {
@@ -40,10 +40,11 @@ const chapterService = {
         throw new Error(message.chapter.updateError.description.chapterNotFound);
       }
       const courseID = chapter.CourseID;
-      const course = await CourseModel.findById(courseID);
+      const course = await CourseModel.findCourseByChapterID(courseID);
       if (!course) {
         throw new Error(message.course.updateError.description.courseNotFound);
       }
+
   
       if (course.UserID !== userID) {
         throw new Error(message.chapter.updateError.description.noPermission);
@@ -55,6 +56,13 @@ const chapterService = {
     }
   },
 
+  /**
+   * Xoá một chapter.
+   * @param {Number} userID - ID của người dùng yêu cầu.
+   * @param {Number} chapterID - ID của chapter cần cập nhật.
+   * @param {String} name - Tên mới của khóa học.
+   * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
+   */
   deleteChapter: async (userID, chapterID) => {
     try {
       const chapter = await ChapterModel.findById(chapterID);

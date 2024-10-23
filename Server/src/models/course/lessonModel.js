@@ -3,23 +3,23 @@ const connection = require("../../config/db");
 const Lesson = {
   /**
    * Tạo một bài học mới trong chương.
-   * @param {Array} params - Mảng chứa [ChapterID, Title, Description].
+   * @param {Array} ChapterID - ChapterID lesson belong to
    * @return {Promise<Number>} - Promise chứa ID của bài học mới tạo.
    */
-  createLesson: (params) => {
+  createLesson: (ChapterID) => {
     const query = `
-      INSERT INTO Lesson (ChapterID, Title, Description, IsAllowDemo, Period, OrderNumber)
-      VALUES (?, ?, ?, ?, ?, ?);
+      INSERT INTO Lesson (ChapterID)
+      VALUES (?);
     `;
 
     return new Promise((resolve, reject) => {
-      connection.query(query, params, (err, result) => {
+      connection.query(query, ChapterID, (err, result) => {
         if (err) {
           console.log(`Fail to create lesson: ${err}`);
           return reject(err);
         }
-        const insertedId = result.insertId;
-        resolve(insertedId);
+        const lessonID = result.insertId;
+        resolve(lessonID);
       });
     });
   },
@@ -51,21 +51,46 @@ const Lesson = {
    * @param {String} description - Mô tả mới của bài học.
    * @return {Promise<void>} - Promise không trả về giá trị.
    */
-  updateLesson: (lessonID, title, description) => {
+  updateLesson: (lessonID, title, description, fileLink) => {
     const query = `
       UPDATE Lesson
-      SET Title = ?, Description = ?
+      SET Title = ?, Description = ?, FileLink = ?
       WHERE LessonID = ?;
     `;
 
     return new Promise((resolve, reject) => {
-      connection.query(query, [title, description, lessonID], (err, result) => {
-        if (err) {
-          console.log(`Fail to update lesson: ${err}`);
-          return reject(err);
-        }
-        resolve();
-      });
+        connection.query(query, [title, description, fileLink, lessonID], (err, result) => {
+            if (err) {
+                console.log(`Failed to update lesson: ${err}`);
+                return reject(err);
+            }
+            resolve();
+        });
+    });
+  },
+
+  /**
+   * Cập nhật tiêu đề và mô tả của bài học.
+   * @param {Number} lessonID - ID của bài học.
+   * @param {String} title - Tiêu đề mới của bài học.
+   * @param {String} description - Mô tả mới của bài học.
+   * @return {Promise<void>} - Promise không trả về giá trị.
+   */
+  updateLessonAllowDemo: (lessonID, newState) => {
+    const query = `
+      UPDATE Lesson
+      SET IsAllowDemo = ?
+      WHERE LessonID = ?;
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [newState, lessonID], (err, result) => {
+            if (err) {
+                console.log(`Failed to update lesson: ${err}`);
+                return reject(err);
+            }
+            resolve();
+        });
     });
   },
 

@@ -10,7 +10,7 @@ dotenv.config({ path: envFile });
 
 const authRoutes = require("~/routes/authRoutes");
 const userRoutes = require("~/routes/userRoutes");
-const courseRoutes = require("~/routes/courseRoutes");
+const courseRoutes = require("./routes/courseRoutes");
 const paymentRoutes = require("~/routes/paymentRoutes");
 const discussionRoutes = require("~/routes/discussionRoutes");
 const quizzRoutes = require("~/routes/quizzRoutes");
@@ -24,7 +24,6 @@ app.use("/user", userRoutes);
 app.use("/course", courseRoutes);
 app.use("/quizz", quizzRoutes);
 app.use("/exercise", exerciseRoutes);
-app.use("/lesson", courseRoutes);
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () =>

@@ -22,10 +22,7 @@ const chapterValidator = {
   ],
 
   updateName: [
-    check("chapterID", )
-      .notEmpty()
-      .withMessage(message.chapter.creationError.description.missCourseID), 
-    check("chapterName", )
+    check("chapterName")
       .notEmpty()
       .withMessage(message.chapter.creationError.description.missNameChapter), 
     (req, res, next) => {

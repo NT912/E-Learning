@@ -30,8 +30,7 @@ const auth = {
         res,
         true,
         messages.auth.loginSuccess.title,
-        messages.auth.loginSuccess.description,
-        { token: result.token } // Trả về token nếu đăng nhập thành công
+        { token: result.token },
       );
     } catch (error) {
       return sendResponse(

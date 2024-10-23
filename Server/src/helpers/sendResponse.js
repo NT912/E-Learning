@@ -3,7 +3,6 @@ const sendResponse = (res, success, title, description = null, data = null) => {
     success,
     title,
     description,
-    data,
   });
 };
 

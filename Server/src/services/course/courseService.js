@@ -2,6 +2,8 @@ const CourseModel = require("../../models/course/courseModel");
 const UserModel = require("../../models/UserModel");
 const message = require("../../config/message.json");
 
+const firebaseHelper = require("../../helpers/firebaseHelper")
+
 const courseService = {
   /**
    * Tạo một khóa học mới.
@@ -10,8 +12,7 @@ const courseService = {
    */
   create: async (userID) => {
     try {
-      const params = [userID, new Date()];
-      const courseID = await CourseModel.createCourse(params);
+      const courseID = await CourseModel.createCourse(userID, new Date());
       return courseID;
     } catch (err) {
       console.log(`Error creating course: ${err.message}`);
@@ -39,11 +40,117 @@ const courseService = {
 
       const existingCourse = await CourseModel.findByName(name);
       if (existingCourse) {
+        if (existingCourse.CourseID == courseID) return; 
         throw new Error(message.course.updateError.description.nameNotAvailable);
       }
 
       await CourseModel.updateName(courseID, name);
     } catch (err) {
+      throw err; 
+    }
+  },
+
+  /**
+   * Update state of course.
+   * @param {Number} userID - ID của người dùng yêu cầu tạo khóa học.
+   * @return {Promise<Number>} - Promise chứa ID của khóa học mới tạo hoặc lỗi.
+   */
+  updateCourseStatus: async (userID, courseID, newStatus) => {
+    try {
+      const course = await CourseModel.findById(courseID);
+      if (!course) {
+        throw new Error(message.course.updateError.description.courseNotFound);
+      }
+
+      if (course.UserID !== userID) {
+        throw new Error(message.course.updateError.description.noPermission);
+      }
+
+      CourseModel.updateStatus(courseID, newStatus);
+    } catch (err) {
+      console.log(`Error creating course: ${err.message}`);
+      throw err; 
+    }
+  },
+
+  updateCourseAvatar: async (userID, courseID, file) => {
+    try {
+      if (!file) {
+        throw new Error(message.lesson.updateError.description.missFile);
+      }
+
+      const course = await CourseModel.findById(courseID);
+      if (!course) {
+        throw new Error(message.course.updateError.description.courseNotFound);
+      }
+
+      if (course.UserID !== userID) {
+        throw new Error(message.course.updateError.description.noPermission);
+      }
+
+      let fileLink = course.PictureLink;
+      if (fileLink) {
+          await firebaseHelper.deleteFile(fileLink);  
+      }
+      fileLink = await firebaseHelper.uploadAvatarCourse(file);
+
+      CourseModel.updateAvatar(courseID, fileLink);
+    } catch (err) {
+      console.log(`Error update avatar course: ${err.message}`);
+      throw err; 
+    }
+  },
+
+  updateCourseShortcut: async (userID, courseID, content) => {
+    try {
+      const course = await CourseModel.findById(courseID);
+      if (!course) {
+        throw new Error(message.course.updateError.description.courseNotFound);
+      }
+
+      if (course.UserID !== userID) {
+        throw new Error(message.course.updateError.description.noPermission);
+      }
+
+      CourseModel.updateShortcut(courseID, content);
+    } catch (err) {
+      console.log(`Error update avatar course: ${err.message}`);
+      throw err; 
+    }
+  },
+
+  updateCourseDescription: async (userID, courseID, content) => {
+    try {
+      const course = await CourseModel.findById(courseID);
+      if (!course) {
+        throw new Error(message.course.updateError.description.courseNotFound);
+      }
+
+      if (course.UserID !== userID) {
+        throw new Error(message.course.updateError.description.noPermission);
+      }
+
+      CourseModel.updateDescription(courseID, content);
+    } catch (err) {
+      console.log(`Error update avatar course: ${err.message}`);
+      throw err; 
+    }
+  },
+
+  updateCourseCost: async (userID, courseID, amount) => {
+    try {
+      const course = await CourseModel.findById(courseID);
+      if (!course) {
+        throw new Error(message.course.updateError.description.courseNotFound);
+      }
+
+      if (course.UserID !== userID) {
+        throw new Error(message.course.updateError.description.noPermission);
+      }
+
+      CourseModel.updateCost(courseID, amount);
+    } catch (err) {
+      console.log(`Error update avatar course: ${err.message}`);
       throw err; 
     }
   },

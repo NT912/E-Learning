@@ -13,7 +13,6 @@ const lessonService = {
    * @return {Promise<Number>} - Promise chứa ID của bài học mới tạo hoặc lỗi.
    */
   createLesson: async (userID, chapterID) => {
-    try {
       const course = await courseModel.findCourseByChapterID(chapterID);
       if (!course) {
         throw new Error(message.lesson.creationError.description.courseNotFound);
@@ -25,10 +24,6 @@ const lessonService = {
   
       const lessonID = await LessonModel.createLesson(chapterID);
       return lessonID;
-    } catch(err) {
-      throw(err)
-    }
-    
   },
 
   /**
@@ -38,7 +33,6 @@ const lessonService = {
    * @return {Promise<Number>} - Promise chứa ID của bài học mới tạo hoặc lỗi.
    */
   updateLesson: async (userID, lessonID, title, description, file) => {
-    try {
       if (!file) {
         throw new Error(message.lesson.updateError.description.missFile);
       }
@@ -64,9 +58,6 @@ const lessonService = {
       fileLink = await firebaseHelper.uploadVideo(file);
 
       await LessonModel.updateLesson(lessonID, title, description, fileLink);
-    } catch(err) {
-      throw(err);
-    }
   },
 
   /**
@@ -76,7 +67,6 @@ const lessonService = {
    * @return {Promise<Number>} - Promise chứa ID của bài học mới tạo hoặc lỗi.
    */
   updateLessonAllowDemo: async (userID, lessonID) => {
-    try {
       const lesson = await LessonModel.findById(lessonID);
       if (!lesson) {
         throw new Error(message.lesson.updateError.description.lessonNotFound);
@@ -93,9 +83,6 @@ const lessonService = {
 
       const newState = !lesson.IsAllowDemo;
       await LessonModel.updateLessonAllowDemo(lessonID, newState);
-    } catch(err) {
-      throw(err);
-    }
   },
 
   deleteLesson: async (userID, lessonID) => {

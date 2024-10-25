@@ -5,14 +5,13 @@ const chapterController = {
    * Xử lý yêu cầu tạo chapter mới cho khóa học.
    */
   create: async (req, res) => {
-    const { courseID, chapterName } = req.body;
+    const { courseID} = req.params;
     const user = req.user;
 
     try {
       const result = await chapterService.createChapter(
         user.id,
         courseID,
-        chapterName
       );
       res.status(201).json({
         chapterID: result

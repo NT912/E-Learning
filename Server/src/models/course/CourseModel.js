@@ -18,7 +18,7 @@ const courseModel = {
       connection.query(query, [userID, createAt], (err, result) => {
         if (err) {
           console.log(`Model failed to create a course with UserID: ${err}`);
-          return reject(message.course.creationError.description.failed);
+          return reject(message.course.creationError.failed);
         }
         const courseID = result.insertId;
         resolve(courseID);

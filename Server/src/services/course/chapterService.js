@@ -10,19 +10,18 @@ const chapterService = {
    * @param {String} chapterName - Tên của chapter mới.
    * @return {Promise<Number>} - Promise chứa ID của chapter mới tạo hoặc lỗi.
    */
-  createChapter: async (userID, courseID, chapterName) => {
+  createChapter: async (userID, courseID) => {
     // Tìm khóa học theo ID
     const course = await CourseModel.findById(courseID);
     if (!course) {
-      throw new Error(message.chapter.creationError.description.noCourseID);
+      throw new Error(message.chapter.creationError.noCourseID);
     }
 
     if (userID !== course.UserID) {
-      throw new Error(message.chapter.creationError.description.noPermission);
+      throw new Error(message.chapter.creationError.noPermission);
     }
 
-    const params = [courseID, chapterName];
-    const chapterID = await ChapterModel.createChapter(params);
+    const chapterID = await ChapterModel.createChapter(courseID);
     return chapterID;
   },
 
@@ -34,26 +33,22 @@ const chapterService = {
    * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
    */
   updateChapterName: async (userID, chapterID, name) => {
-    try {
       const chapter = await ChapterModel.findById(chapterID);
       if (!chapter) {
-        throw new Error(message.chapter.updateError.description.chapterNotFound);
+        throw new Error(message.chapter.updateError.chapterNotFound);
       }
       const courseID = chapter.CourseID;
       const course = await CourseModel.findCourseByChapterID(courseID);
       if (!course) {
-        throw new Error(message.course.updateError.description.courseNotFound);
+        throw new Error(message.course.updateError.courseNotFound);
       }
 
   
       if (course.UserID !== userID) {
-        throw new Error(message.chapter.updateError.description.noPermission);
+        throw new Error(message.chapter.updateError.noPermission);
       }
   
       await ChapterModel.updateTitle(chapterID, name);
-    } catch (err) {
-      throw err; 
-    }
   },
 
   /**
@@ -64,26 +59,22 @@ const chapterService = {
    * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
    */
   deleteChapter: async (userID, chapterID) => {
-    try {
       const chapter = await ChapterModel.findById(chapterID);
       if (!chapter) {
-        throw new Error(message.chapter.deleteError.description.chapterNotFound);
+        throw new Error(message.chapter.deleteError.chapterNotFound);
       }
 
       const courseID = chapter.CourseID;
       const course = await CourseModel.findById(courseID);
       if (!course) {
-        throw new Error(message.course.deleteError.description.courseNotFound);
+        throw new Error(message.chapter.deleteError.courseNotFound);
       }
 
       if (course.UserID !== userID) {
-        throw new Error(message.chapter.deleteError.description.noPermission);
+        throw new Error(message.chapter.deleteError.noPermission);
       }
 
       await ChapterModel.deleteChapter(chapterID);
-    } catch (err) {
-    throw(err)
-    }
   }
 };
 

@@ -7,23 +7,20 @@ const outlineService = {
    * Tạo một mục tiêu học tập mới cho khóa học.
    * @param {Number} userID - ID của người dùng yêu cầu tạo mục tiêu học tập.
    * @param {Number} courseID - ID của khóa học mà mục tiêu học tập sẽ được thêm vào.
-   * @param {String} description - Nội dung của mục tiêu học tập.
    * @return {Promise<Number>} - Promise chứa ID của mục tiêu học tập mới tạo hoặc lỗi.
    */
-  createOutline: async (userID, courseID, description) => {
-    // Tìm khóa học theo ID
+  createOutline: async (userID, courseID) => {
     const course = await CourseModel.findById(courseID);
     if (!course) {
-      throw new Error(message.outline.creationError.description.noCourseID);
+      throw new Error(message.outline.creationError.noCourseID);
     }
 
     if (userID !== course.UserID) {
-      throw new Error(message.outline.creationError.description.noPermission);
+      throw new Error(message.outline.creationError.noPermission);
     }
 
-    const params = [courseID, description];
-    const outlineID = await OutlineModel.addLearningOutcome(params);
-    return outlineID;
+    const outComeID = await OutlineModel.addLearningOutcome(courseID);
+    return outComeID;
   },
 
   /**
@@ -33,23 +30,23 @@ const outlineService = {
    * @param {String} description - Nội dung mới của mục tiêu học tập.
    * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
    */
-  updateOutline: async (userID, outlineID, description) => {
+  updateOutline: async (userID, outlineID, content) => {
     const outline = await OutlineModel.findById(outlineID);
     if (!outline) {
-      throw new Error(message.outline.updateError.description.outlineNotFound);
+      throw new Error(message.outline.updateError.outlineNotFound);
     }
 
     const courseID = outline.CourseID;
     const course = await CourseModel.findById(courseID);
     if (!course) {
-      throw new Error(message.course.updateError.description.courseNotFound);
+      throw new Error(message.outline.updateError.courseNotFound);
     }
 
     if (course.UserID !== userID) {
-      throw new Error(message.outline.updateError.description.noPermission);
+      throw new Error(message.outline.updateError.noPermission);
     }
 
-    await OutlineModel.updateLearningOutcome(outlineID, description);
+    await OutlineModel.updateLearningOutcome(outlineID, content);
   },
 
   /**
@@ -61,17 +58,17 @@ const outlineService = {
   deleteOutline: async (userID, outlineID) => {
     const outline = await OutlineModel.findById(outlineID);
     if (!outline) {
-      throw new Error(message.outline.deleteError.description.outlineNotFound);
+      throw new Error(message.outline.deleteError.outlineNotFound);
     }
 
     const courseID = outline.CourseID;
     const course = await CourseModel.findById(courseID);
     if (!course) {
-      throw new Error(message.course.deleteError.description.courseNotFound);
+      throw new Error(message.outline.deleteError.courseNotFound);
     }
 
     if (course.UserID !== userID) {
-      throw new Error(message.outline.deleteError.description.noPermission);
+      throw new Error(message.outline.deleteError.noPermission);
     }
 
     await OutlineModel.deleteLearningOutcome(outlineID);

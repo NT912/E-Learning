@@ -6,14 +6,14 @@ const Chapter = {
    * @param {Array} params - Mảng chứa [CourseID, Title].
    * @return {Promise<Number>} - Promise chứa ID của chapter mới tạo.
    */
-  createChapter: (params) => {
+  createChapter: (courseID) => {
     const query = `
-      INSERT INTO Chapter (CourseID, Title)
-      VALUES (?, ?);
+      INSERT INTO Chapter (CourseID)
+      VALUES (?);
     `;
 
     return new Promise((resolve, reject) => {
-      connection.query(query, params, (err, result) => {
+      connection.query(query, courseID, (err, result) => {
         if (err) {
           console.log(`Fail to create chapter with CourseID: ${err}`);
           return reject(err);

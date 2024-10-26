@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const Role = require("../config/role");
+const Role = require("../../config/data/role");
 const router = express.Router();
 
 // Controller
@@ -9,8 +9,6 @@ const QuizzController = require("../controllers/quizz/quizzController");
 // Middleware
 const roleMiddleware = require("../middleware/roleMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
-
-const router = express.Router();
 
 // Tạo bài kiểm tra
 router.post(

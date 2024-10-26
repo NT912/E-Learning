@@ -1,4 +1,4 @@
-const connection = require("../../config/db");
+const connection = require("../../../config/database/db");
 
 const Question = {
   create: (QuizzID, Content, Picture, QuestionType) => {
@@ -31,3 +31,5 @@ const Question = {
     });
   },
 };
+
+module.exports = Question;

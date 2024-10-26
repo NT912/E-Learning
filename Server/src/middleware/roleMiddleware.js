@@ -1,5 +1,5 @@
 const response = require("../helpers/sendResponse")
-const message = require('../config/message.json'); 
+const message = require('../../config/message.json'); 
 
 const roleMiddleware = {
   checkRole: (requiredRole) => {

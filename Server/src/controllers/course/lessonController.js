@@ -7,7 +7,7 @@ const lessonController = {
    * @param {Object} res - Đối tượng response để gửi phản hồi về client.
    */
   create: async (req, res) => {
-    const { chapterID } = req.body;
+    const { chapterID } = req.params;
     const user = req.user;
 
     try {

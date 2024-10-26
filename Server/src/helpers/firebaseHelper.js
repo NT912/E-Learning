@@ -1,7 +1,7 @@
 const { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } = require("firebase/storage");
-const app = require("../config/firsebase");
+const app = require("../../config/database/firsebase");
 const storage = getStorage(app); 
-const message = require("../config/message.json")
+const message = require("../../config/message.json")
 
 const firebaseHelper = {
     /**

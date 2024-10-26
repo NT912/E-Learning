@@ -1,6 +1,6 @@
 const authService = require("../services/authService");
 const sendResponse = require("../helpers/sendResponse");
-const messages = require("../config/message.json");
+const messages = require("../../config/message.json");
 
 const auth = {
   signup: async (req, res) => {

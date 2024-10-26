@@ -1,5 +1,5 @@
-const connection = require("../../config/db");
-const message = require("../../config/message.json");
+const connection = require("../../../config/database/db");
+const message = require("../../../config/message.json");
 
 const courseModel = {
   /**

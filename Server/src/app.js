@@ -5,9 +5,10 @@ const dotenv = require("dotenv");
 const path = require("path");
 const swaggerUi = require('swagger-ui-express');
 
-// Load environment configuration
+// Load config project
 const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
 dotenv.config({ path: envFile });
+const config = require("../config");
 
 // Import routes
 const authRoutes = require("./routes/authRoutes");
@@ -17,10 +18,10 @@ const quizzRoutes = require("~/routes/quizzRoutes");
 const exerciseRoutes = require("./routes/exerciseRoutes");
 
 // Import Swagger config
-const swaggerDocs = require('./config/swagger');
+const swaggerDocs = require('../config/swagger');
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = config.PORT || 3002;
 
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));

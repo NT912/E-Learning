@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const message = require('../config/message.json');
+const message = require('../../config/message.json');
 
 const authMiddleware = {
   verifyToken: async (req, res, next) => {

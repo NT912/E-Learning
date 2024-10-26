@@ -1,5 +1,5 @@
 const { check, validationResult } = require("express-validator");
-const message = require("../config/message.json");
+const message = require("../../config/message.json");
 
 const outcomeValidator = {
 

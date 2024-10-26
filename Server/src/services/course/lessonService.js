@@ -3,7 +3,7 @@ const chapterModel = require("../../models/course/chapterModel");
 const courseModel = require("../../models/course/courseModel");
 
 const firebaseHelper = require("../../helpers/firebaseHelper")
-const message = require("../../config/message.json");
+const message = require('../../../config/message.json');
 
 const lessonService = {
   /**

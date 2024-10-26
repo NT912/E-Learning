@@ -6,7 +6,7 @@ const authMiddleware = require("../../middleware/authMiddleware");
 const outcomeValidator = require("../../validation/outcomeValidation");
 
 const roleMiddleware = require("../../middleware/roleMiddleware");
-const Role = require("../../config/role");
+const Role = require("../../../config/data/role");
 
 /*
 Outcome

@@ -7,7 +7,7 @@ const authMiddleware = require("../../middleware/authMiddleware");
 const lessonValidator = require("../../validation/lessonValidation");
 
 const roleMiddleware = require("../../middleware/roleMiddleware");
-const Role = require("../../config/role");
+const Role = require("../../../config/data/role");
 
 const upload = multer({ dest: 'uploads/' });
 

@@ -1,7 +1,7 @@
 import 'package:app_learning/enums/intro_page_position.dart';
 import 'package:flutter/material.dart';
 
-import '../Login.dart';
+import '../Login/Login.dart';
 
 // Giao diện màn hình
 class IntroChildPage extends StatefulWidget {

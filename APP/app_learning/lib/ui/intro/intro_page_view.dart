@@ -1,5 +1,5 @@
 import 'package:app_learning/enums/intro_page_position.dart';
-import 'package:app_learning/ui/Login.dart';
+import 'package:app_learning/ui/Login/Login.dart';
 import 'package:app_learning/ui/intro/intro_child_page.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +30,7 @@ class _IntroPageViewState extends State<IntroPageView> {
           IntroChildPage(
             introPagePosition: IntroPagePosition.page2,
             nextOnPressed: () {
-              // Navigate to the LoginPage
+              // Navigate to the Login
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const Login()),

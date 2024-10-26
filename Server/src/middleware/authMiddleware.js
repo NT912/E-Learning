@@ -4,7 +4,6 @@ const message = require('../../config/message.json');
 const authMiddleware = {
   verifyToken: async (req, res, next) => {
     const token = req.header('Authorization');
-
     if (!token) {
       return res.status(401).json(
         message.auth.token.description.missToken

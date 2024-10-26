@@ -23,6 +23,20 @@ const firebaseHelper = {
         }
     },
 
+    uploadFile: async (file) => {
+        try {
+            const timestamp = Date.now();
+            const fileName = `${timestamp}_${file.originalname}`;
+            const storageRef = ref(storage, `file/${fileName}`);
+            await uploadBytes(storageRef, file.buffer); 
+            const downloadURL = await getDownloadURL(storageRef); 
+            return downloadURL; 
+        } catch (error) {
+            console.error("Firebase Error uploading File:", error);
+            throw new Error(message.video.uploadError.description.failFirebase); 
+        }
+    },
+
     deleteFile: async (fileLink) => {
         const storage = getStorage();
         const fileRef = ref(storage, fileLink);

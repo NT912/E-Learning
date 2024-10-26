@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const Role = require("../../../config/");
+const Role = require("../../../config/data/role");
 const router = express.Router();
 
 const upload = multer({ dest: 'uploads/' });

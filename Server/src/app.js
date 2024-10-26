@@ -14,7 +14,7 @@ const config = require("../config");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("~/routes/userRoutes");
 const courseRoutes = require("./routes/course/courseRoutes");
-const quizzRoutes = require("~/routes/quizzRoutes");
+const quizzRoutes = require("./routes/quizzRoutes");
 const exerciseRoutes = require("./routes/exerciseRoutes");
 
 // Import Swagger config

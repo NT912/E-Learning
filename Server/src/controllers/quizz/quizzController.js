@@ -4,9 +4,9 @@ const sendResponse = require("../../helpers/sendResponse");
 const QuizzController = {
   createQuiz: async (req, res) => {
     try {
-      const { courseId, chapterId } = req.params;
+      const { courseId, chapterId, lessonId } = req.params;
       const { title } = req.body;
-      const result = await QuizzService.createQuiz(chapterId, title);
+      const result = await QuizzService.createQuiz(chapterId, lessonId, title);
       sendResponse(res, true, "Quiz created successfully", "", result);
     } catch (error) {
       sendResponse(res, false, "Failed to create quiz", error.message);

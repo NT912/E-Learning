@@ -1,8 +1,8 @@
 const Quizz = require("../../models/quizz/quizzModel");
 
 const QuizzService = {
-  createQuiz: async (chapterId, title) => {
-    const quizId = await Quizz.create(chapterId, title);
+  createQuiz: async (chapterId, lessonId, title) => {
+    const quizId = await Quizz.create(chapterId, lessonId, title);
     return { quizId };
   },
 

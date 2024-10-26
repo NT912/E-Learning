@@ -1,5 +1,5 @@
 const courseService = require("../../services/course/courseService");
-const CourseStatus = require("../../config/courseState");
+const CourseStatus = require("../../../config/");
 
 const courseController = {
   /**
@@ -123,9 +123,8 @@ const courseController = {
     const user = req.user;
 
     try {
-      // Cập nhật tên khóa học
       await courseService.updateCourseCost(user.id, courseID, amount);
-      res.status(200).json();
+      res.status(200).json("Course cost updated successfully");
     } catch (err) {
       res.status(400).json({
         error: err.message
@@ -142,7 +141,6 @@ const courseController = {
   confirm: async (req, res) => {
     const { courseID } = req.params;
     const user = req.user;
-
     try {
       await courseService.updateCourseStatus(user.id, courseID, CourseStatus.CONFIRMED);
       res.status(200).json();

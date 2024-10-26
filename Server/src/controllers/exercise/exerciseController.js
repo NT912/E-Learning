@@ -1,6 +1,6 @@
 const ExerciseService = require("../../services/exercise/exerciseService");
 const sendResponse = require("../../helpers/sendResponse");
-const messages = require("../../config/message.json");
+const messages = require("../../../config/message.json");
 
 const ExerciseController = {
   createExercise: async (req, res) => {

@@ -1,101 +1,96 @@
 {
   "course": {
     "creationError": {
-      "title": "Unable to Create Course. Please Try Again.",
-      "description": {
         "failed": "Course creation failed for the provided user ID. Please try again later."
-      }
     },
     "creationSuccess": {
-      "title": "Success in creating a new course"
-    },
-    "updateError": {
-      "title": "Unable to change Course attribute. Please Try Again.",
-      "description": {
         "missCourseID": "You did not provide enough parameters that are required (course id). Please provide them and try again.",
         "missCourseName": "You did not provide enough parameters that are required (course name). Please provide them and try again.",
         "serverfail": "Something went wrong while processing your request.",
         "courseNotFound": "There is no Course ID you provided.",
         "noPermission": "This user does not have permission to change this course.",
         "nameNotAvailable": "The provided name is not available."
-      }
     },
-    "updateSuccess": {
-      "title": "Success in updating course attributes"
+    "updateError": {
+      "courseNotFound": "Course not found",
+      "noPermission": "User has no permission",
+      "nameNotAvailable": "Name is not aivalable"
     }
   },
   "chapter": {
     "creationError": {
-      "title": "Unable to Create Chapter. Please Try Again.",
-      "description": {
         "missCourseID": "You did not provide enough parameters that are required. Please provide them and try again.",
         "missNameChapter": "You did not provide enough parameters that are required. Please provide them and try again.",
         "noPermission": "This user does not have permission to perform actions on this course.",
         "failed": "Failed to create chapter in the course."
-      }
     },
     "creationSuccess": {
-      "title": "Success in creating a new chapter"
-    },
-    "updateError": {
-      "title": "Unable to change Chapter attributes. Please Try Again.",
-      "description": {
         "missRequireInfor": "You did not provide enough parameters that are required. Please provide them and try again.",
         "serverfail": "Something went wrong while processing your request.",
         "noPermission": "This user does not have permission to change this chapter.",
         "chapterNotFound": "You provided an ID of a chapter that was not found.",
         "chapterNotBelongAnyCourse": "The chapter appears to not belong to any course."
-      }
     },
-    "updateSuccess": {
-      "title": "Success in updating chapter attributes"
+    "updateError": {
+      "chapterNotFound": "Chapter not found"
+    },
+    "deleteError": {
+      "chapterNotFound": "Chapter not found",
+      "courseNotFound": "Course not found",
+      "noPermission": "User has no permission"
+    }
+  },
+  "outline": {
+    "creationError": {
+        "missCourseID": "Miss course ID",
+        "noCourseID": "Course not found.",
+        "noPermission": "This user does not have permission to perform actions on this course.",
+        "failed": "Failed to create chapter in the course."
+    },
+    "creationSuccess": {
+        "missRequireInfor": "You did not provide enough parameters that are required. Please provide them and try again.",
+        "serverfail": "Something went wrong while processing your request.",
+        "noPermission": "This user does not have permission to change this chapter.",
+        "chapterNotFound": "You provided an ID of a chapter that was not found.",
+        "chapterNotBelongAnyCourse": "The chapter appears to not belong to any course."
+    },
+    "updateError": {
+      "outlineNotFound": "outline not found",
+      "courseNotFound": "Course not found",
+      "noPermission":  "User no permission",
+      "missDescription": "Miss description"
+    },
+    "deleteError": {
+      "outlineNotFound": "outline not found",
+      "courseNotFound": "Course not found",
+      "noPermission": "User not permission"
     }
   },
   "lesson": {
-    "creationSuccess": {
-      "title": "Lesson created successfully",
-      "description": "The lesson has been successfully created."
-    },
-
     "creationError": {
-      "title": "Failed to create lesson",
-      "description": {
         "missChapterID": "Miss ChapterID.",
         "noChapterID": "No chapter found with the provided ID.",
         "chapterNotFound": "Chapter do not belong to any course.",
         "courseNotFound": "Course do not belong to any course.",
         "noPermission": "You do not have permission to create this lesson on course."
-      }
-    },
-
-    "updateSuccess": {
-      "title": "Lesson updated successfully",
-      "description": "The lesson has been successfully updated."
     },
 
     "updateError": {
-      "title": "Failed to update lesson",
-      "description": {
         "missName": "Name is required.",
         "missFile": "File is required.",
         "lessonNotFound": "Lesson id not found"
-      }
     },
 
     "deleteSuccess": {
-      "title": "Lesson deleted successfully",
       "description": "The lesson has been successfully deleted."
     },
 
     "deleteError": {
-      "title": "Failed to delete lesson",
-      "description": {
         "fileDeletionFailed": "Failed delete lesson",
         "missRequireInfor": "Lesson ID and User ID are required.",
         "lessonNotFound": "No lesson found with the provided ID.",
         "noChapterID": "No chapter found with the provided ID.",
         "noPermission": "You do not have permission to delete this lesson."
-      }
     }
   },
   "video": {

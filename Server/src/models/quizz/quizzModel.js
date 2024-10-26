@@ -1,4 +1,4 @@
-const connection = require("../../config/db");
+const connection = require("../../../config/database/db");
 
 const Quizz = {
   create: (chapterId, lessonId, title) => {

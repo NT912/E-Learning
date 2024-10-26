@@ -1,6 +1,6 @@
 const CourseModel = require("../../models/course/courseModel");
 const UserModel = require("../../models/UserModel");
-const message = require("../../config/message.json");
+const message = require('../../../config/message.json');
 
 const firebaseHelper = require("../../helpers/firebaseHelper")
 
@@ -31,17 +31,17 @@ const courseService = {
     try {
       const course = await CourseModel.findById(courseID);
       if (!course) {
-        throw new Error(message.course.updateError.description.courseNotFound);
+        throw new Error(message.course.updateError.courseNotFound);
       }
 
       if (course.UserID !== userID) {
-        throw new Error(message.course.updateError.description.noPermission);
+        throw new Error(message.course.updateError.noPermission);
       }
 
       const existingCourse = await CourseModel.findByName(name);
       if (existingCourse) {
         if (existingCourse.CourseID == courseID) return; 
-        throw new Error(message.course.updateError.description.nameNotAvailable);
+        throw new Error(message.course.updateError.nameNotAvailable);
       }
 
       await CourseModel.updateName(courseID, name);
@@ -59,11 +59,11 @@ const courseService = {
     try {
       const course = await CourseModel.findById(courseID);
       if (!course) {
-        throw new Error(message.course.updateError.description.courseNotFound);
+        throw new Error(message.course.updateError.courseNotFound);
       }
 
       if (course.UserID !== userID) {
-        throw new Error(message.course.updateError.description.noPermission);
+        throw new Error(message.course.updateError.noPermission);
       }
 
       CourseModel.updateStatus(courseID, newStatus);
@@ -76,16 +76,16 @@ const courseService = {
   updateCourseAvatar: async (userID, courseID, file) => {
     try {
       if (!file) {
-        throw new Error(message.lesson.updateError.description.missFile);
+        throw new Error(message.lesson.updateError.missFile);
       }
 
       const course = await CourseModel.findById(courseID);
       if (!course) {
-        throw new Error(message.course.updateError.description.courseNotFound);
+        throw new Error(message.course.updateError.courseNotFound);
       }
 
       if (course.UserID !== userID) {
-        throw new Error(message.course.updateError.description.noPermission);
+        throw new Error(message.course.updateError.noPermission);
       }
 
       let fileLink = course.PictureLink;
@@ -105,11 +105,11 @@ const courseService = {
     try {
       const course = await CourseModel.findById(courseID);
       if (!course) {
-        throw new Error(message.course.updateError.description.courseNotFound);
+        throw new Error(message.course.updateError.courseNotFound);
       }
 
       if (course.UserID !== userID) {
-        throw new Error(message.course.updateError.description.noPermission);
+        throw new Error(message.course.updateError.noPermission);
       }
 
       CourseModel.updateShortcut(courseID, content);
@@ -123,11 +123,11 @@ const courseService = {
     try {
       const course = await CourseModel.findById(courseID);
       if (!course) {
-        throw new Error(message.course.updateError.description.courseNotFound);
+        throw new Error(message.course.updateError.courseNotFound);
       }
 
       if (course.UserID !== userID) {
-        throw new Error(message.course.updateError.description.noPermission);
+        throw new Error(message.course.updateError.noPermission);
       }
 
       CourseModel.updateDescription(courseID, content);
@@ -141,11 +141,11 @@ const courseService = {
     try {
       const course = await CourseModel.findById(courseID);
       if (!course) {
-        throw new Error(message.course.updateError.description.courseNotFound);
+        throw new Error(message.course.updateError.courseNotFound);
       }
 
       if (course.UserID !== userID) {
-        throw new Error(message.course.updateError.description.noPermission);
+        throw new Error(message.course.updateError.noPermission);
       }
 
       CourseModel.updateCost(courseID, amount);

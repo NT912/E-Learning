@@ -1,25 +1,45 @@
-const connection = require("../../config/db");
+const connection = require("../../../config/database/db");
 
 const outlineModel = {
   /**
+   * Tìm bài học theo ID.
+   * @param {Number} lessonID - ID của bài học.
+   * @return {Promise<Object>} - Promise chứa bài học hoặc lỗi.
+   */
+  findById: (courseOutcomeID) => {
+    const query = `SELECT * FROM courseoutcome WHERE CourseOutcomeID = ?`;
+
+    return new Promise((resolve, reject) => {
+      connection.query(query, [courseOutcomeID], (err, results) => {
+        if (err) {
+          console.log(`Fail to find lesson by ID: ${err}`);
+          return reject(err);
+        }
+        const lesson = results[0] || null;
+        resolve(lesson);
+      });
+    });
+  },
+
+  /**
    * Thêm mục tiêu học tập vào khóa học.
    * @param {Number} courseID - ID của khóa học.
-   * @param {String} description - Nội dung của mục tiêu học tập.
    * @return {Promise<void>}
    */
-  addLearningOutcome: (courseID, description) => {
+  addLearningOutcome: (courseID) => {
     const query = `
-      INSERT INTO CourseOutcomes (CourseID, Description)
-      VALUES (?, ?);
+      INSERT INTO courseoutcome (CourseID)
+      VALUES (?);
     `;
 
     return new Promise((resolve, reject) => {
-      connection.query(query, [courseID, description], (err, result) => {
+      connection.query(query, [courseID], (err, result) => {
         if (err) {
           console.error(`Failed to add learning outcome: ${err.message}`);
           return reject(err);
         }
-        resolve();
+        const outcomeID = result.insertId;
+        resolve(outcomeID); 
       });
     });
   },
@@ -32,9 +52,9 @@ const outlineModel = {
    */
   updateLearningOutcome: (outcomeID, description) => {
     const query = `
-      UPDATE CourseOutcomes
-      SET Description = ?
-      WHERE OutcomeID = ?;
+      UPDATE CourseOutcome
+      SET Content = ?
+      WHERE CourseOutcomeID = ?;
     `;
 
     return new Promise((resolve, reject) => {
@@ -55,8 +75,8 @@ const outlineModel = {
    */
   deleteLearningOutcome: (outcomeID) => {
     const query = `
-      DELETE FROM CourseOutcomes
-      WHERE OutcomeID = ?;
+      DELETE FROM CourseOutcome
+      WHERE CourseOutcomeID = ?;
     `;
 
     return new Promise((resolve, reject) => {

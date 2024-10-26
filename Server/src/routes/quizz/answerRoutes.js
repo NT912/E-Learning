@@ -5,10 +5,10 @@ const userAnswerValidator = require("../../validation/userAnswerValidation");
 
 /**
  * @swagger
- * /userAnswers:
+ * /Answers:
  *   post:
  *     summary: Submit a user's answer to a question
- *     tags: [UserAnswers]
+ *     tags: [Answers]
  *     requestBody:
  *       description: Provide details of the user's answer
  *       required: true
@@ -44,7 +44,7 @@ router.post(
  * /userAnswers/{UserID}/{QuestionID}:
  *   get:
  *     summary: Retrieve a user's answer to a specific question
- *     tags: [UserAnswers]
+ *     tags: [Answers]
  *     parameters:
  *       - in: path
  *         name: UserID

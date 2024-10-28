@@ -1,68 +1,64 @@
-const message = require('~/config/message.json');
-const chapterService = require('../../services/course/chapterService');
-
-const sendResponse = (res, success, title, description = null) => {
-  res.status(success ? 201 : 400).send({
-    success,
-    title,
-    description,
-  });
-};
+const chapterService = require("../../services/course/chapterService");
 
 const chapterController = {
-     /**
+  /**
    * Xử lý yêu cầu tạo chapter mới cho khóa học.
-   * @param {Object} req - Yêu cầu từ client.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
    */
   create: async (req, res) => {
-    const { courseID, chapterName } = req.body;
+    const { courseID} = req.params;
     const user = req.user;
 
     try {
-      const result = await chapterService.createChapter(user.id, courseID, chapterName);
-      sendResponse(
-        res,
-        true,
-        message.chapter.creationSuccess.title,
-        { chapterID: result }
+      const result = await chapterService.createChapter(
+        user.id,
+        courseID,
       );
+      res.status(201).json({
+        chapterID: result
+      });
     } catch (err) {
       console.error(err); // Ghi lại lỗi để kiểm tra
 
-      sendResponse(
-        res,
-        false,
-        message.chapter.creationError.title,
-        err.message
-      );
+      res.status(400).json({
+        error: err.message
+      });
     }
   },
 
-    updateChapterName: async (req, res) => {
-      const { chapterID, chapterName } = req.body;
-      const user = req.user;
-    
-      
-    
-      try {
-        await chapterService.updateChapterName(user.id, chapterID, chapterName);
-        sendResponse(
-          res,
-          true,
-          message.chapter.updateSuccess.title,
-          null
-        );
-      } catch (err) {
-        sendResponse(
-          res,
-          false,
-          message.chapter.updateError.title,
-          err.message
-        );
-      }
+  /**
+   * Xử lý yêu cầu cập nhật tên chapter.
+   */
+  updateChapterName: async (req, res) => {
+    const { chapterName } = req.body;
+    const { chapterID } = req.params;
+    const user = req.user;
+
+    try {
+      await chapterService.updateChapterName(user.id, chapterID, chapterName);
+      res.status(200).json();
+    } catch (err) {
+      res.status(400).json({
+        error: err.message
+      });
     }
-    
-}
+  },
+
+  /**
+   * Xử lý yêu cầu xóa chapter.
+   */
+  deleteChapter: async (req, res) => {
+    const { chapterID } = req.params;
+    const user = req.user;
+
+    try {
+      await chapterService.deleteChapter(user.id, chapterID);
+      res.status(200).json();
+    } catch (err) {
+      res.status(400).json({
+        error: err.message
+      });
+    }
+  }
+};
 
 module.exports = chapterController;

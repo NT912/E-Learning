@@ -1,45 +1,23 @@
 const { check, validationResult } = require("express-validator");
-const message = require("../config/message.json");
+const message = require("../../config/message.json");
 const { updateName } = require("../models/course/courseModel");
 
-const chapterValidator = {
-  create: [
-    check("courseID", )
-      .notEmpty()
-      .withMessage(message.chapter.creationError.description.missCourseID), 
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return response(
-          res,
-          false,
-          message.course.creationError.title,
-          errors.array().map(err => err.msg).join(", ")
-        );
-      }
-      next();
-    },
-  ],
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array().map(err => err.msg).join(", ")
+    });
+  }
+  next();
+};
 
+const chapterValidator = {
   updateName: [
-    check("chapterID", )
+    check("chapterName")
       .notEmpty()
-      .withMessage(message.chapter.creationError.description.missCourseID), 
-    check("chapterName", )
-      .notEmpty()
-      .withMessage(message.chapter.creationError.description.missNameChapter), 
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return response(
-          res,
-          false,
-          message.course.creationError.title,
-          errors.array().map(err => err.msg).join(", ")
-        );
-      }
-      next();
-    },
+      .withMessage(message.chapter.creationError.missNameChapter), 
+    handleValidationErrors,
   ],
 };
 

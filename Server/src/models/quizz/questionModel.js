@@ -1,32 +1,41 @@
 const connection = require("../../../config/database/db");
 
 const Question = {
-  create: (QuizzID, Content, Picture, QuestionType) => {
+  /**
+   * Tạo câu hỏi mới trong bài kiểm tra.
+   * @param {Array} questionData - Mảng chứa các thông tin của câu hỏi.
+   * @return {Promise<Number>} - Promise chứa ID của câu hỏi mới tạo.
+   */
+  createQuestion: (questionData) => {
+    const query = `
+      INSERT INTO Question (QuizzID, Content, Picture, QuestionType)
+      VALUES (?, ?, ?, ?);
+    `;
     return new Promise((resolve, reject) => {
-      const query = `INSERT INTO Question (QuizzID, Content, Picture, QuestionType) VALUES (?, ?, ?, ?)`;
-      connection.query(
-        query,
-        [QuizzID, Content, Picture, QuestionType],
-        (err, result) => {
-          if (err) {
-            return reject(err);
-          }
-          resolve(result.insertId);
+      connection.query(query, questionData, (err, result) => {
+        if (err) {
+          console.log(`Failed to create question: ${err}`);
+          return reject(err);
         }
-      );
+        resolve(result.insertId);
+      });
     });
   },
 
-  findById: (QuizzID) => {
+  /**
+   * Lấy danh sách câu hỏi theo ID của bài kiểm tra.
+   * @param {Number} quizzID - ID của bài kiểm tra.
+   * @return {Promise<Array>} - Promise chứa danh sách các câu hỏi.
+   */
+  findByQuizzId: (quizzID) => {
+    const query = `SELECT * FROM Question WHERE QuizzID = ?`;
     return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM Question WHERE QuizzID = ?`;
-      connection.query(query, [QuizzID], (err, result) => {
+      connection.query(query, [quizzID], (err, results) => {
         if (err) {
-          console.log(`Fail to find lesson by ID: ${err}`);
+          console.log(`Failed to find questions by quiz ID: ${err}`);
           return reject(err);
         }
-        const question = result[0] || null;
-        return resolve(question);
+        resolve(results);
       });
     });
   },

@@ -85,7 +85,7 @@ const courseModel = {
           console.log(`Failed to find course by chapter ID: ${err}`);
           return reject(err);
         }
-        const course = results[0] || null;  
+        const course = results[0] || null;
         resolve(course);
       });
     });
@@ -111,7 +111,7 @@ const courseModel = {
           console.log(`Failed to find course by lesson ID: ${err}`);
           return reject(err);
         }
-        const course = results[0] || null;  
+        const course = results[0] || null;
         resolve(course);
       });
     });
@@ -157,7 +157,9 @@ const courseModel = {
     return new Promise((resolve, reject) => {
       connection.query(query, [newStatus, courseID], (err) => {
         if (err) {
-          console.log(`Model failed to update status for CourseID: ${courseID}. Error: ${err}`);
+          console.log(
+            `Model failed to update status for CourseID: ${courseID}. Error: ${err}`
+          );
           return reject(message.course.updateError.description.failed);
         }
         resolve();
@@ -181,7 +183,9 @@ const courseModel = {
     return new Promise((resolve, reject) => {
       connection.query(query, [linkFile, courseID], (err) => {
         if (err) {
-          console.log(`Model failed to update avatar for CourseID: ${courseID}. Error: ${err}`);
+          console.log(
+            `Model failed to update avatar for CourseID: ${courseID}. Error: ${err}`
+          );
           return reject(message.course.updateError.description.failed);
         }
         resolve();
@@ -205,7 +209,9 @@ const courseModel = {
     return new Promise((resolve, reject) => {
       connection.query(query, [content, courseID], (err) => {
         if (err) {
-          console.log(`Model failed to update shortcut for CourseID: ${courseID}. Error: ${err}`);
+          console.log(
+            `Model failed to update shortcut for CourseID: ${courseID}. Error: ${err}`
+          );
           return reject(message.course.updateError.description.failed);
         }
         resolve();
@@ -229,7 +235,9 @@ const courseModel = {
     return new Promise((resolve, reject) => {
       connection.query(query, [description, courseID], (err) => {
         if (err) {
-          console.log(`Model failed to update description for CourseID: ${courseID}. Error: ${err}`);
+          console.log(
+            `Model failed to update description for CourseID: ${courseID}. Error: ${err}`
+          );
           return reject(message.course.updateError.description.failed);
         }
         resolve();
@@ -253,7 +261,9 @@ const courseModel = {
     return new Promise((resolve, reject) => {
       connection.query(query, [amount, courseID], (err) => {
         if (err) {
-          console.log(`Model failed to update description for CourseID: ${courseID}. Error: ${err}`);
+          console.log(
+            `Model failed to update description for CourseID: ${courseID}. Error: ${err}`
+          );
           return reject(message.course.updateError.description.failed);
         }
         resolve();

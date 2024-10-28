@@ -7,9 +7,20 @@ const QuizzController = {
       const { type, id } = req.body;
 
       const result = await QuizzService.createQuizz(type, id);
-      sendResponse(res, true, "Quiz created successfully", "", result);
+      sendResponse(res, true, "Quizz created successfully", "", result);
     } catch (error) {
-      sendResponse(res, false, "Failed to create quiz", error.message);
+      sendResponse(res, false, "Failed to create quizz", error.message);
+    }
+  },
+
+  getQuizzById: async (req, res) => {
+    try {
+      const { type, id } = req.body;
+
+      const result = await QuizzService.getQuizzById(type, id);
+      sendResponse(res, true, "Quizz found");
+    } catch (error) {
+      sendResponse(res, false, "Failed to find quizz by ID");
     }
   },
 };

@@ -1,4 +1,4 @@
-import 'package:app_learning/ui/homepage/HomePage.dart';
+import 'package:app_learning/ui/homepage/MainPage.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -25,7 +25,7 @@ class _LoginPageState extends State<Login> {
       // Chuyển hướng đến trang HomePage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const Mainpage()),
       );
     } else {
       // Hiển thị thông báo lỗi nếu đăng nhập không thành công

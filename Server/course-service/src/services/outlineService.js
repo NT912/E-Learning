@@ -1,6 +1,6 @@
 const CourseModel = require('../../models/course/courseModel');
 const OutlineModel = require('../../models/course/outlineModel');
-const message = require('../../../config/message.json');
+const message = require('../../config/message.json');
 
 const outlineService = {
   /**

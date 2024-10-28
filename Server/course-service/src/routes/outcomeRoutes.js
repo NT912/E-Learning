@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const outcomeController = require("../../controllers/course/outcomeController");
-const authMiddleware = require("../../middleware/authMiddleware");
-const outcomeValidator = require("../../validation/outcomeValidation");
+const authMiddleware = require("../middleware/authMiddleware");
+const outcomeValidator = require("../validation/outcomeValidation");
 
-const roleMiddleware = require("../../middleware/roleMiddleware");
-const Role = require("../../../config/data/role");
+const roleMiddleware = require("../middleware/roleMiddleware");
+const Role = require("../../config/data/role");
 
 /*
 Outcome

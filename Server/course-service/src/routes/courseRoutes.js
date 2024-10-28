@@ -1,14 +1,14 @@
 const express = require("express");
 const multer = require("multer");
-const Role = require("../../../config/data/role");
+const Role = require("../../config/data/role");
 const router = express.Router();
 
 const upload = multer({ dest: 'uploads/' });
 
 const courseController = require("../../controllers/course/courseController");
-const authMiddleware = require("../../middleware/authMiddleware");
-const roleMiddleware = require("../../middleware/roleMiddleware");
-const courseValidator = require("../../validation/courseValidation");
+const authMiddleware = require("../middleware/authMiddleware");
+const roleMiddleware = require("../middleware/roleMiddleware");
+const courseValidator = require("../validation/courseValidation");
 
 // Import các route con
 const chapterRoutes = require("./chapterRoutes");

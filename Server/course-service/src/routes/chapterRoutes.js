@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const chapterController = require("../../controllers/course/chapterController");
-const authMiddleware = require("../../middleware/authMiddleware");
-const chapterValidator = require("../../validation/chapterValidation");
-const roleMiddleware = require("../../middleware/roleMiddleware");
-const Role = require("../../../config/data/role");
+const authMiddleware = require("../middleware/authMiddleware");
+const chapterValidator = require("../validation/chapterValidation");
+const roleMiddleware = require("../middleware/roleMiddleware");
+const Role = require("../../config/data/role");
 
 
 /*

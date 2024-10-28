@@ -1,4 +1,4 @@
-const connection = require("../../../config/database/db");
+const connection = require("../../config/database/db");
 
 const categoryOfCourseModel = {
   /**

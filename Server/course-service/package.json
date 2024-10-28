@@ -1,0 +1,12 @@
+{
+  "name": "course-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "prod": "cross-env NODE_ENV=production node -r module-alias/register src/app.js",
+    "dev": "cross-env NODE_ENV=development nodemon -r module-alias/register src/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

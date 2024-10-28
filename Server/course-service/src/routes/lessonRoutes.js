@@ -3,11 +3,11 @@ const router = express.Router();
 const multer = require("multer");
 
 const lessonController = require("../../controllers/course/lessonController");
-const authMiddleware = require("../../middleware/authMiddleware");
-const lessonValidator = require("../../validation/lessonValidation");
+const authMiddleware = require("../middleware/authMiddleware");
+const lessonValidator = require("../validation/lessonValidation");
 
-const roleMiddleware = require("../../middleware/roleMiddleware");
-const Role = require("../../../config/data/role");
+const roleMiddleware = require("../middleware/roleMiddleware");
+const Role = require("../../config/data/role");
 
 const upload = multer({ dest: 'uploads/' });
 

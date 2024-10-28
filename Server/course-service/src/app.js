@@ -11,17 +11,13 @@ dotenv.config({ path: envFile });
 const config = require("../config");
 
 // Import routes
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("~/routes/userRoutes");
 const courseRoutes = require("./routes/course/courseRoutes");
-const quizzRoutes = require("./routes/quizzRoutes");
-const exerciseRoutes = require("./routes/exerciseRoutes");
 
 // Import Swagger config
 const swaggerDocs = require('../config/swagger');
 
 const app = express();
-const PORT = config.PORT || 3002;
+const PORT = config.PORT;
 
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));

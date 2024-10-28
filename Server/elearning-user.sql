@@ -1,0 +1,15 @@
+CREATE TABLE user (
+  UserID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  Email TEXT NOT NULL,
+  HashPassword TEXT NOT NULL,
+  PhoneNumber TEXT DEFAULT NULL,
+  About TEXT DEFAULT NULL,
+  AvatarLink TEXT DEFAULT NULL,
+  BankName TEXT DEFAULT NULL,
+  BankAccountNumber TEXT DEFAULT NULL,
+  Role ENUM('student', 'teacher', 'admin') NOT NULL DEFAULT 'student',
+  CreateAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  IsPremium DATETIME DEFAULT NULL
+);
+
+

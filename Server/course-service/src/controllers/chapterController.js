@@ -1,4 +1,4 @@
-const chapterService = require("../services/course/chapterService");
+const chapterService = require("../services/chapterService");
 
 const chapterController = {
   /**

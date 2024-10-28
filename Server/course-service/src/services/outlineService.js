@@ -1,6 +1,5 @@
-const CourseModel = require('../../models/course/courseModel');
-const OutlineModel = require('../../models/course/outlineModel');
-const message = require('../../config/message.json');
+const CourseModel = require('../models/courseModel');
+const OutlineModel = require('../models/outlineModel');
 
 const outlineService = {
   /**
@@ -12,11 +11,11 @@ const outlineService = {
   createOutline: async (userID, courseID) => {
     const course = await CourseModel.findById(courseID);
     if (!course) {
-      throw new Error(message.outline.creationError.noCourseID);
+      throw new Error("Course not found.");
     }
 
     if (userID !== course.UserID) {
-      throw new Error(message.outline.creationError.noPermission);
+      throw new Error("You do not have permission to create a learning outcome for this course.");
     }
 
     const outComeID = await OutlineModel.addLearningOutcome(courseID);
@@ -27,23 +26,23 @@ const outlineService = {
    * Cập nhật mục tiêu học tập.
    * @param {Number} userID - ID của người dùng yêu cầu cập nhật.
    * @param {Number} outlineID - ID của mục tiêu học tập cần cập nhật.
-   * @param {String} description - Nội dung mới của mục tiêu học tập.
+   * @param {String} content - Nội dung mới của mục tiêu học tập.
    * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
    */
   updateOutline: async (userID, outlineID, content) => {
     const outline = await OutlineModel.findById(outlineID);
     if (!outline) {
-      throw new Error(message.outline.updateError.outlineNotFound);
+      throw new Error("Learning outcome not found.");
     }
 
     const courseID = outline.CourseID;
     const course = await CourseModel.findById(courseID);
     if (!course) {
-      throw new Error(message.outline.updateError.courseNotFound);
+      throw new Error("Course not found.");
     }
 
     if (course.UserID !== userID) {
-      throw new Error(message.outline.updateError.noPermission);
+      throw new Error("You do not have permission to update this learning outcome.");
     }
 
     await OutlineModel.updateLearningOutcome(outlineID, content);
@@ -58,17 +57,17 @@ const outlineService = {
   deleteOutline: async (userID, outlineID) => {
     const outline = await OutlineModel.findById(outlineID);
     if (!outline) {
-      throw new Error(message.outline.deleteError.outlineNotFound);
+      throw new Error("Learning outcome not found.");
     }
 
     const courseID = outline.CourseID;
     const course = await CourseModel.findById(courseID);
     if (!course) {
-      throw new Error(message.outline.deleteError.courseNotFound);
+      throw new Error("Course not found.");
     }
 
     if (course.UserID !== userID) {
-      throw new Error(message.outline.deleteError.noPermission);
+      throw new Error("You do not have permission to delete this learning outcome.");
     }
 
     await OutlineModel.deleteLearningOutcome(outlineID);

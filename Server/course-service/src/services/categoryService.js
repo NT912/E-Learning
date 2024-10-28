@@ -1,4 +1,4 @@
-const categoryModel = require("../../models/course/categoryModel");
+const categoryModel = require("../models/categoryModel");
 
 const categoryService = {
   /**

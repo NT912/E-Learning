@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const outcomeController = require("../../controllers/course/outcomeController");
+const outcomeController = require("../controllers/outcomeController");
 const authMiddleware = require("../middleware/authMiddleware");
 const outcomeValidator = require("../validation/outcomeValidation");
 

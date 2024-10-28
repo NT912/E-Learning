@@ -1,4 +1,4 @@
-const lessonService = require("../services/course/lessonService");
+const lessonService = require("../services/lessonService");
 
 const lessonController = {
   /**

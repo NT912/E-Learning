@@ -4,7 +4,7 @@ const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 const roleMiddleware = require("../middleware/roleMiddleware");
 const Role = require("../../config/data/role");
-const CategoryController = require("../../controllers/course/categoryController");
+const CategoryController = require("../controllers/categoryController");
 
 /*
 Category Routes

@@ -1,4 +1,4 @@
-const courseService = require("../services/course/courseService");
+const courseService = require("../services/courseService");
 const CourseStatus = require("../../config");
 
 const courseController = {

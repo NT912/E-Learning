@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const chapterController = require("../../controllers/course/chapterController");
+const chapterController = require("../controllers/chapterController");
 const authMiddleware = require("../middleware/authMiddleware");
 const chapterValidator = require("../validation/chapterValidation");
 const roleMiddleware = require("../middleware/roleMiddleware");

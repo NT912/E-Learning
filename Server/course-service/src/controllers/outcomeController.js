@@ -1,4 +1,4 @@
-const outlineService = require('../services/course/outlineService');
+const outlineService = require('../services/outlineService');
 
 const outcomeController = {
   /**

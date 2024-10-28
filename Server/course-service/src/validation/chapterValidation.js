@@ -1,6 +1,4 @@
 const { check, validationResult } = require("express-validator");
-const message = require("../../config/message.json");
-const { updateName } = require("../models/course/courseModel");
 
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
@@ -16,7 +14,7 @@ const chapterValidator = {
   updateName: [
     check("chapterName")
       .notEmpty()
-      .withMessage(message.chapter.creationError.missNameChapter), 
+      .withMessage("Chapter name is required."), 
     handleValidationErrors,
   ],
 };

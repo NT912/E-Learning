@@ -5,8 +5,7 @@ const router = express.Router();
 
 const upload = multer({ dest: 'uploads/' });
 
-const courseController = require("../../controllers/course/courseController");
-const authMiddleware = require("../middleware/authMiddleware");
+const courseController = require("../controllers/courseController");
 const roleMiddleware = require("../middleware/roleMiddleware");
 const courseValidator = require("../validation/courseValidation");
 
@@ -33,7 +32,7 @@ Course
  *       400:
  *         description: Invalid input or missing fields
  */
-router.post("/create", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseController.createCourse);
+router.post("/create", roleMiddleware.checkRole(Role.TEACHER), courseController.createCourse);
 
 /**
  * @swagger
@@ -65,7 +64,7 @@ router.post("/create", authMiddleware.verifyToken, roleMiddleware.checkRole(Role
  *       200:
  *         description: Course name updated successfully
  */
-router.post("/:courseID/update/name", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseName, courseController.updateCourseName);
+router.post("/:courseID/update/name", roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseName, courseController.updateCourseName);
 
 /**
  * @swagger
@@ -97,7 +96,7 @@ router.post("/:courseID/update/name", authMiddleware.verifyToken, roleMiddleware
  *       200:
  *         description: Course avatar updated successfully
  */
-router.post("/:courseID/update/avatar", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), upload.single('file'), courseController.updateCourseAvatar);
+router.post("/:courseID/update/avatar", roleMiddleware.checkRole(Role.TEACHER), upload.single('file'), courseController.updateCourseAvatar);
 
 /**
  * @swagger
@@ -118,7 +117,7 @@ router.post("/:courseID/update/avatar", authMiddleware.verifyToken, roleMiddlewa
  *       200:
  *         description: Course confirmed successfully
  */
-router.post("/:courseID/confirm", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseController.confirm);
+router.post("/:courseID/confirm", roleMiddleware.checkRole(Role.TEACHER), courseController.confirm);
 
 /**
  * @swagger
@@ -150,7 +149,7 @@ router.post("/:courseID/confirm", authMiddleware.verifyToken, roleMiddleware.che
  *       200:
  *         description: Course shortcut updated successfully
  */
-router.post("/:courseID/update/shortcut", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseShortcut, courseController.updateCourseShortcut);
+router.post("/:courseID/update/shortcut", roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseShortcut, courseController.updateCourseShortcut);
 
 /**
  * @swagger
@@ -182,7 +181,7 @@ router.post("/:courseID/update/shortcut", authMiddleware.verifyToken, roleMiddle
  *       200:
  *         description: Course description updated successfully
  */
-router.post("/:courseID/update/description", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseDescription, courseController.updateCourseDescription);
+router.post("/:courseID/update/description", roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseDescription, courseController.updateCourseDescription);
 
 /**
  * @swagger
@@ -214,7 +213,7 @@ router.post("/:courseID/update/description", authMiddleware.verifyToken, roleMid
  *       200:
  *         description: Course cost updated successfully
  */
-router.post("/:courseID/update/cost", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseCost, courseController.updateCourseCost);
+router.post("/:courseID/update/cost", roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseCost, courseController.updateCourseCost);
 
 
 router.use("/chapter", chapterRoutes);  

@@ -1,25 +1,9 @@
 const Quizz = require("../../models/quizz/quizzModel");
 
 const QuizzService = {
-  createQuiz: async (chapterId, title) => {
-    const quizId = await Quizz.create(chapterId, title);
+  createQuizz: async (type, id) => {
+    const quizId = await Quizz.create(type, id);
     return { quizId };
-  },
-
-  addQuestionToQuiz: async (quizId, questionData) => {
-    const { content, picture, answers } = questionData;
-    const questionId = await Quizz.addQuestion(quizId, content, picture);
-
-    for (const answer of answers) {
-      await Quizz.addAnswer(questionId, answer.content, answer.isCorrect);
-    }
-
-    return { questionId };
-  },
-
-  submitQuiz: async (userId, quizId, answers) => {
-    const score = await Quizz.submitAnswers(userId, quizId, answers);
-    return { score };
   },
 };
 

@@ -1,6 +1,6 @@
 const authService = require("../services/authService");
 const sendResponse = require("../helpers/sendResponse");
-const messages = require("../config/message.json");
+const messages = require("../../config/message.json");
 
 const auth = {
   signup: async (req, res) => {
@@ -30,8 +30,7 @@ const auth = {
         res,
         true,
         messages.auth.loginSuccess.title,
-        messages.auth.loginSuccess.description,
-        { token: result.token } // Trả về token nếu đăng nhập thành công
+        { token: result.token },
       );
     } catch (error) {
       return sendResponse(

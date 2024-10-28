@@ -1,6 +1,6 @@
 const { check, validationResult } = require("express-validator");
 const sendResponse = require("../helpers/sendResponse");
-const messages = require("../config/message.json");
+const messages = require("../../config/message.json");
 
 exports.validateSignup = [
   check("email")

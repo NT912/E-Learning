@@ -4,6 +4,7 @@ const {
   validateSignup,
   validateLogin,
 } = require("../validation/authValidation");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -87,5 +88,65 @@ router.post("/signup", validateSignup, authController.signup);
  *         description: Unauthorized - Incorrect email or password
  */
 router.post("/login", validateLogin, authController.login);
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []  # Yêu cầu token trong header Authorization
+ *     responses:
+ *       200:
+ *         description: Logout successful, user token has been invalidated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 title:
+ *                   type: string
+ *                   example: "Logout successful"
+ *                 description:
+ *                   type: string
+ *                   example: "You have been successfully logged out."
+ *       401:
+ *         description: Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Token fail"
+ *                 description:
+ *                   type: string
+ *                   example: "Require Token."
+ *       403:
+ *         description: Token is blacklisted or failed decoding
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Token fail"
+ *                 description:
+ *                   type: string
+ *                   example: "Fail decode Token."
+ */
+router.post("/logout", authMiddleware.verifyToken, authController.logout);
 
 module.exports = router;

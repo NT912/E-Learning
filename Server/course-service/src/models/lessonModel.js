@@ -44,6 +44,27 @@ const Lesson = {
     });
   },
 
+  getLessonsByChapterID: async (chapterID) => {
+    const query = `SELECT * FROM lesson WHERE ChapterID = ?`;
+    return new Promise((resolve, reject) => {
+      connection.query(query, [chapterID], (err, result) => {
+        if (err) reject(new Error("Error retrieving lessons"));
+        resolve(result);
+      });
+    });
+  },
+
+  getLessonsByChapterIDs: async (chapterIDs) => {
+    const placeholders = chapterIDs.map(() => '?').join(',');
+    const query = `SELECT * FROM lesson WHERE ChapterID IN (${placeholders})`;
+    return new Promise((resolve, reject) => {
+      connection.query(query, chapterIDs, (err, results) => {
+        if (err) reject(new Error("Failed to fetch lessons"));
+        resolve(results);
+      });
+    });
+  },
+  
   /**
    * Cập nhật tiêu đề và mô tả của bài học.
    * @param {Number} lessonID - ID của bài học.
@@ -51,15 +72,15 @@ const Lesson = {
    * @param {String} description - Mô tả mới của bài học.
    * @return {Promise<void>} - Promise không trả về giá trị.
    */
-  updateLesson: (lessonID, title, description, fileLink) => {
+  updateLesson: (lessonID, title, description, fileLink, fileType, duration) => {
     const query = `
       UPDATE Lesson
-      SET Title = ?, Description = ?, FileLink = ?
+      SET Title = ?, Description = ?, FileLink = ?, Type = ?, Duration = ?
       WHERE LessonID = ?;
     `;
 
     return new Promise((resolve, reject) => {
-        connection.query(query, [title, description, fileLink, lessonID], (err, result) => {
+        connection.query(query, [title, description, fileLink, fileType, duration, lessonID,], (err, result) => {
             if (err) {
                 console.log(`Failed to update lesson: ${err}`);
                 return reject(err);

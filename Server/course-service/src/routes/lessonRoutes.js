@@ -3,17 +3,14 @@ const router = express.Router();
 const multer = require("multer");
 
 const lessonController = require("../controllers/lessonController");
-const authMiddleware = require("../middleware/authMiddleware");
 const lessonValidator = require("../validation/lessonValidation");
 
-const roleMiddleware = require("../middleware/roleMiddleware");
-const Role = require("../../config/data/role");
+const upload = multer({ dest: "uploads/" });
 
-const upload = multer({ dest: 'uploads/' });
+/**
+ * Lesson Routes
+ */
 
-/*
-Lesson
-*/
 /**
  * @swagger
  * /course/lesson/create/{chapterID}:
@@ -27,8 +24,17 @@ Lesson
  *         description: The ID of the chapter to add the lesson to
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
+ *     requestBody:
+ *       description: The user ID required to create a lesson
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userID:
+ *                 type: integer
+ *                 description: The ID of the user creating the lesson
  *     responses:
  *       201:
  *         description: Lesson created successfully
@@ -43,7 +49,9 @@ Lesson
  *       400:
  *         description: Error creating lesson
  */
-router.post("/create/:chapterID", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.create);
+router.post("/create/:chapterID", lessonValidator.create, lessonController.create);
+
+
 /**
  * @swagger
  * /course/lesson/{lessonID}/update:
@@ -65,31 +73,31 @@ router.post("/create/:chapterID", authMiddleware.verifyToken, roleMiddleware.che
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               userID:
+ *                 type: integer
+ *                 description: The ID of the user updating the lesson
+ *               title:
  *                 type: string
- *                 required: true
  *                 description: The new title for the lesson
  *               description:
  *                 type: string
  *                 description: The new description for the lesson
  *               file:
  *                 type: string
- *                 required: true
  *                 format: binary
- *                 description: An optional file to upload for the lesson (video, pdf, zip, word)
- *     security:
- *       - bearerAuth: []
+ *                 description: Optional file upload for the lesson (video, PDF, ZIP, Word)
  *     responses:
  *       200:
  *         description: Lesson updated successfully
  *       400:
  *         description: Error updating lesson
  */
-router.post("/:lessonID/update", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), upload.single('file'), lessonValidator.update, lessonController.updateLesson);
+router.post("/:lessonID/update",upload.single("file"),lessonValidator.update,lessonController.updateLesson);
+
 /**
  * @swagger
  * /course/lesson/{lessonID}/delete:
- *   post:
+ *   delete:
  *     summary: Delete a lesson
  *     tags: [Lesson]
  *     parameters:
@@ -99,18 +107,28 @@ router.post("/:lessonID/update", authMiddleware.verifyToken, roleMiddleware.chec
  *         description: The ID of the lesson to delete
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
+ *     requestBody:
+ *       description: The user ID required to delete the lesson
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userID:
+ *                 type: integer
+ *                 description: The ID of the user requesting the delete
  *     responses:
  *       200:
  *         description: Lesson deleted successfully
  *       400:
  *         description: Error deleting lesson
  */
-router.post("/:lessonID/delete", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.delete);
+router.delete("/:lessonID/delete", lessonValidator.delete, lessonController.delete);
+
 /**
  * @swagger
- * /lesson/{lessonID}/update/allowDemo:
+ * /course/lesson/{lessonID}/update/allowDemo:
  *   post:
  *     summary: Update lesson to allow demo access
  *     tags: [Lesson]
@@ -121,14 +139,48 @@ router.post("/:lessonID/delete", authMiddleware.verifyToken, roleMiddleware.chec
  *         description: The ID of the lesson to update demo access
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
+ *     requestBody:
+ *       description: The user ID required to update demo access
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userID:
+ *                 type: integer
+ *                 description: The ID of the user updating demo access
  *     responses:
  *       200:
  *         description: Lesson demo access updated successfully
  *       400:
  *         description: Error updating lesson demo access
  */
-router.post("/:lessonID/update/allowDemo", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.updateLessonAllowDemo);
+router.post("/:lessonID/update/allowDemo",lessonValidator.updateAllowDemo,lessonController.updateLessonAllowDemo);
+
+/**
+ * @swagger
+ * /course/lesson/{lessonID}:
+ *   get:
+ *     summary: Get detailed information of a lesson
+ *     tags: [Lesson]
+ *     parameters:
+ *       - in: path
+ *         name: lessonID
+ *         required: true
+ *         description: The ID of the lesson to retrieve
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lesson details retrieved successfully
+ * 
+ *       400:
+ *         description: Error retrieving lesson details
+ *
+ *       404:
+ *         description: Lesson not found
+ */
+router.get("/:lessonID",lessonValidator.get,lessonController.getALesson);
 
 module.exports = router;

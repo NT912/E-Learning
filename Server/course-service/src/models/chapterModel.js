@@ -44,6 +44,16 @@ const Chapter = {
     });
   },
 
+  getChaptersByCourseID: async (courseID) => {
+    const query = `SELECT * FROM chapter WHERE CourseID = ?`;
+    return new Promise((resolve, reject) => {
+      connection.query(query, [courseID], (err, result) => {
+        if (err) reject(new Error("Error retrieving chapters"));
+        resolve(result);
+      });
+    });
+  },
+
   /**
    * Cập nhật tiêu đề của chapter.
    * @param {Number} chapterID - ID của chapter.

@@ -2,15 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const outcomeController = require("../controllers/outcomeController");
-const authMiddleware = require("../middleware/authMiddleware");
 const outcomeValidator = require("../validation/outcomeValidation");
 
-const roleMiddleware = require("../middleware/roleMiddleware");
-const Role = require("../../config/data/role");
+/**
+ * Outcome Routes
+ */
 
-/*
-Outcome
-*/
 /**
  * @swagger
  * /course/outcome/create/{courseID}:
@@ -24,15 +21,37 @@ Outcome
  *         description: ID of the course to add the outcome to
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
+ *     requestBody:
+ *       description: User ID and details to create an outcome
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userID:
+ *                 type: integer
+ *                 description: The ID of the user creating the outcome
  *     responses:
  *       201:
  *         description: Outcome created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 outComeID:
+ *                   type: integer
+ *                   description: The ID of the newly created outcome
  *       400:
  *         description: Error creating outcome
  */
-router.post("/create/:courseID", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), outcomeController.create);
+router.post(
+  "/create/:courseID",
+  outcomeValidator.create,
+  outcomeController.create
+);
+
 /**
  * @swagger
  * /course/outcome/{outcomeID}/update/name:
@@ -47,7 +66,7 @@ router.post("/create/:courseID", authMiddleware.verifyToken, roleMiddleware.chec
  *         schema:
  *           type: integer
  *     requestBody:
- *       description: The updated name for the outcome
+ *       description: Updated name of the outcome
  *       required: true
  *       content:
  *         application/json:
@@ -57,19 +76,25 @@ router.post("/create/:courseID", authMiddleware.verifyToken, roleMiddleware.chec
  *               content:
  *                 type: string
  *                 description: The new name of the outcome
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
+ *               userID:
+ *                 type: integer
+ *                 description: The ID of the user updating the outcome
  *     responses:
  *       200:
  *         description: Outcome name updated successfully
  *       400:
  *         description: Error updating outcome name
  */
-router.post("/:outcomeID/update/name", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), outcomeValidator.update, outcomeController.update);
+router.post(
+  "/:outcomeID/update/name",
+  outcomeValidator.update,
+  outcomeController.update
+);
+
 /**
  * @swagger
- * /outcome/{outcomeID}/delete:
- *   post:
+ * /course/outcome/{outcomeID}/delete:
+ *   delete:
  *     summary: Delete an outcome
  *     tags: [Outcome]
  *     parameters:
@@ -79,14 +104,23 @@ router.post("/:outcomeID/update/name", authMiddleware.verifyToken, roleMiddlewar
  *         description: ID of the outcome to delete
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
+ *     requestBody:
+ *       description: User ID to authorize deletion
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userID:
+ *                 type: integer
+ *                 description: The ID of the user deleting the outcome
  *     responses:
  *       200:
  *         description: Outcome deleted successfully
  *       400:
  *         description: Error deleting outcome
  */
-router.post("/:outcomeID/delete", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), outcomeController.delete);
+router.delete("/:outcomeID/delete",outcomeValidator.delete,outcomeController.delete);
 
 module.exports = router;

@@ -2,6 +2,7 @@ const LessonModel = require("../models/lessonModel");
 const courseModel = require("../models/courseModel");
 
 const firebaseHelper = require("../helpers/firebaseHelper");
+const { getVideoDurationInSeconds } = require('get-video-duration')
 
 const lessonService = {
   /**
@@ -25,6 +26,18 @@ const lessonService = {
   },
 
   /**
+   * Get detailed information of a lesson, verifying user's ownership or access rights.
+   * @param {Number} userID - ID of the user making the request.
+   * @param {Number} lessonID - ID of the lesson to retrieve.
+   * @return {Promise<Object>} - Returns lesson details or throws an error if access is denied.
+   */
+  getLessonDetails: async (lessonID) => {
+    const lesson = await LessonModel.findById(lessonID);
+    if (!lesson) throw new Error("Lesson not found");
+    return lesson;
+  },
+
+  /**
    * Cập nhật bài học.
    * @param {Number} userID - ID của người dùng yêu cầu cập nhật bài học.
    * @param {Number} lessonID - ID của bài học cần cập nhật.
@@ -34,32 +47,40 @@ const lessonService = {
    * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
    */
   updateLesson: async (userID, lessonID, title, description, file) => {
-    if (!file) {
-      throw new Error("File is required for updating the lesson.");
-    }
-
     const lesson = await LessonModel.findById(lessonID);
-    if (!lesson) {
-      throw new Error("Lesson not found.");
-    }
+    if (!lesson) throw new Error("Lesson not found.");
 
     const course = await courseModel.findCourseByLessonID(lessonID);
-    if (!course) {
-      throw new Error("Course not found.");
-    }
-
-    if (course.UserID !== userID) {
+    if (!course || course.UserID != userID) {
       throw new Error("You do not have permission to update this lesson.");
     }
 
     let fileLink = lesson.FileLink;
-    if (fileLink) {
-      await firebaseHelper.deleteFile(fileLink);
-    }
-    fileLink = await firebaseHelper.uploadVideo(file);
+    let duration = lesson.duration; // Giữ nguyên duration nếu không có file mới
+    const fileType = file?.mimetype;
 
-    await LessonModel.updateLesson(lessonID, title, description, fileLink);
+    if (file) {
+      try {
+        // Xóa file cũ nếu có trước khi tải file mới
+        if (fileLink) await firebaseHelper.deleteFile(fileLink);
+
+        // Kiểm tra và lấy thời lượng video
+        if (fileType === "video/mp4") {
+          duration = await getVideoDurationInSeconds(file.path);
+        }
+
+        // Upload file mới và lấy đường dẫn
+        fileLink = await firebaseHelper.uploadVideo(file);
+      } catch (err) {
+        console.error("File upload error:", err);
+        throw new Error("Error uploading new file.");
+      }
+    }
+
+    // Cập nhật lesson với thông tin mới
+    await LessonModel.updateLesson(lessonID, title, description, fileLink, fileType, duration);
   },
+
 
   /**
    * Cập nhật trạng thái demo cho bài học.

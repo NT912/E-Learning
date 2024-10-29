@@ -1,21 +1,53 @@
 const { check, validationResult } = require("express-validator");
-const message = require("../../config/message.json");
 
 const outcomeValidator = {
-
   update: [
     check("content")
       .notEmpty()
-      .withMessage(message.outline.updateError.missDescription), 
+      .withMessage("Content is required."),
+    check("userID")
+      .notEmpty()
+      .withMessage("User ID is required.")
+      .isInt()
+      .withMessage("User ID must be an integer."),
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return response(
-          res,
-          false,
-          message.course.creationError.title,
-          errors.array().map(err => err.msg).join(", ")
-        );
+        return res.status(400).json({
+          errors: errors.array().map((err) => err.msg).join(", ")
+        });
+      }
+      next();
+    },
+  ],
+  create: [
+    check("userID")
+      .notEmpty()
+      .withMessage("User ID is required.")
+      .isInt()
+      .withMessage("User ID must be an integer."),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array().map((err) => err.msg).join(", ")
+        });
+      }
+      next();
+    },
+  ],
+  delete: [
+    check("userID")
+      .notEmpty()
+      .withMessage("User ID is required.")
+      .isInt()
+      .withMessage("User ID must be an integer."),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array().map((err) => err.msg).join(", ")
+        });
       }
       next();
     },

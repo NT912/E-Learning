@@ -1,4 +1,6 @@
-const CourseModel = require("../models/courseModel");
+const chapterModel = require("../models/chapterModel");
+const lessonModel = require("../models/lessonModel");
+const courseModel = require("../models/courseModel");
 const firebaseHelper = require("../helpers/firebaseHelper");
 
 const courseService = {
@@ -9,13 +11,45 @@ const courseService = {
    */
   create: async (userID) => {
     try {
-      const courseID = await CourseModel.createCourse(userID, new Date());
+      const courseID = await courseModel.createCourse(userID, new Date());
       return courseID;
     } catch (err) {
       console.log(`Error creating course: ${err.message}`);
-      throw err;
+      throw err;  
     }
   },
+
+  /**
+ * Get detailed information of a course with chapters and lessons
+ * @param {Number} courseID - ID of the course
+ * @param {Number} userID - ID of the user (for ownership verification)
+ * @return {Promise<Object>} - Course details with chapters and lessons
+ */
+  getCourseDetails: async (courseID, userID) => {
+    // Fetch course details
+    const course = await courseModel.findById(courseID);
+    if (!course) throw new Error("Course not found");
+
+    // Fetch all chapters for the course in one query
+    const chapters = await chapterModel.getChaptersByCourseID(courseID);
+    const chapterIDs = chapters.map(chapter => chapter.ChapterID);
+
+    const lessons = await lessonModel.getLessonsByChapterIDs(chapterIDs);
+
+    const lessonsByChapter = lessons.reduce((acc, lesson) => {
+      if (!acc[lesson.ChapterID]) acc[lesson.ChapterID] = [];
+      acc[lesson.ChapterID].push(lesson);
+      return acc;
+    }, {});
+
+    const chaptersWithLessons = chapters.map((chapter) => ({
+      ...chapter,
+      lessons: lessonsByChapter[chapter.ChapterID] || [],
+    }));
+
+    return { ...course, chapters: chaptersWithLessons };
+  },
+
 
   /**
    * Cập nhật tên khóa học.
@@ -26,7 +60,7 @@ const courseService = {
    */
   updateCourseName: async (userID, courseID, name) => {
     try {
-      const course = await CourseModel.findById(courseID);
+      const course = await courseModel.findById(courseID);
       if (!course) {
         throw new Error("Course not found.");
       }
@@ -41,7 +75,7 @@ const courseService = {
         throw new Error("Course name is not available.");
       }
 
-      await CourseModel.updateName(courseID, name);
+      await courseModel.updateName(courseID, name);
     } catch (err) {
       throw err;
     }
@@ -52,18 +86,14 @@ const courseService = {
    * @param {Number} userID - ID của người dùng yêu cầu tạo khóa học.
    * @return {Promise<Number>} - Promise chứa ID của khóa học mới tạo hoặc lỗi.
    */
-  updateCourseStatus: async (userID, courseID, newStatus) => {
+  updateCourseStatus: async (courseID, newStatus) => {
     try {
-      const course = await CourseModel.findById(courseID);
+      const course = await courseModel.findById(courseID);
       if (!course) {
         throw new Error("Course not found.");
       }
 
-      if (course.UserID !== userID) {
-        throw new Error("You do not have permission to update this course.");
-      }
-
-      CourseModel.updateStatus(courseID, newStatus);
+      courseModel.updateStatus(courseID, newStatus);
     } catch (err) {
       console.log(`Error updating course status: ${err.message}`);
       throw err;
@@ -76,12 +106,12 @@ const courseService = {
         throw new Error("File is required for updating course avatar.");
       }
 
-      const course = await CourseModel.findById(courseID);
+      const course = await courseModel.findById(courseID);
       if (!course) {
         throw new Error("Course not found.");
       }
-
-      if (course.UserID !== userID) {
+      
+      if (course.UserID != userID) {
         throw new Error("You do not have permission to update this course.");
       }
 
@@ -91,7 +121,7 @@ const courseService = {
       }
       fileLink = await firebaseHelper.uploadAvatarCourse(file);
 
-      CourseModel.updateAvatar(courseID, fileLink);
+      courseModel.updateAvatar(courseID, fileLink);
     } catch (err) {
       console.log(`Error updating course avatar: ${err.message}`);
       throw err;
@@ -100,7 +130,7 @@ const courseService = {
 
   updateCourseShortcut: async (userID, courseID, content) => {
     try {
-      const course = await CourseModel.findById(courseID);
+      const course = await courseModel.findById(courseID);
       if (!course) {
         throw new Error("Course not found.");
       }
@@ -109,7 +139,7 @@ const courseService = {
         throw new Error("You do not have permission to update this course.");
       }
 
-      CourseModel.updateShortcut(courseID, content);
+      courseModel.updateShortcut(courseID, content);
     } catch (err) {
       console.log(`Error updating course shortcut: ${err.message}`);
       throw err;
@@ -118,7 +148,7 @@ const courseService = {
 
   updateCourseDescription: async (userID, courseID, content) => {
     try {
-      const course = await CourseModel.findById(courseID);
+      const course = await courseModel.findById(courseID);
       if (!course) {
         throw new Error("Course not found.");
       }
@@ -127,7 +157,7 @@ const courseService = {
         throw new Error("You do not have permission to update this course.");
       }
 
-      CourseModel.updateDescription(courseID, content);
+      CcurseModel.updateDescription(courseID, content);
     } catch (err) {
       console.log(`Error updating course description: ${err.message}`);
       throw err;
@@ -136,7 +166,7 @@ const courseService = {
 
   updateCourseCost: async (userID, courseID, amount) => {
     try {
-      const course = await CourseModel.findById(courseID);
+      const course = await courseModel.findById(courseID);
       if (!course) {
         throw new Error("Course not found.");
       }
@@ -145,7 +175,7 @@ const courseService = {
         throw new Error("You do not have permission to update this course.");
       }
 
-      CourseModel.updateCost(courseID, amount);
+      courseModel.updateCost(courseID, amount);
     } catch (err) {
       console.log(`Error updating course cost: ${err.message}`);
       throw err;

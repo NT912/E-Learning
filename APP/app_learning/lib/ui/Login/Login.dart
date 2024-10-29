@@ -17,7 +17,7 @@ class _LoginPageState extends State<Login> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    // Giả định tài khoản và mật khẩu đúng là:
+    // Giả định tài khoản và mật khẩu đúng là:NN
     String correctEmail = "bao@gmail.com";
     String correctPassword = "bao123";
 

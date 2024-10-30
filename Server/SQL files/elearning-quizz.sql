@@ -1,6 +1,6 @@
 -- Database: quizz_db
-CREATE DATABASE IF NOT EXISTS quizz_db;
-USE quizz_db;
+CREATE DATABASE IF NOT EXISTS elearning_quizz;
+USE elearning_quizz;
 
 -- Bảng quizz
 CREATE TABLE quizz (

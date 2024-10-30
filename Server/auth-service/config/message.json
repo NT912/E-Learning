@@ -39,12 +39,14 @@
         "failDecodeToken": "Fail decode Token.",
         "userNotFound": "User not found."
       }
-    }
-  },
-  "permission": {
-    "title": "Denied access",
-    "description": {
-      "feature": "Your account do not have permission to perform thisaction"
+    },
+    "logoutSuccess": {
+      "title": "Logout successful",
+      "description": "You have been successfully logged out."
+    },
+    "logoutError": {
+      "title": "Logout failed",
+      "description": "There was an error logging you out. Please try again."
     }
   }
 }

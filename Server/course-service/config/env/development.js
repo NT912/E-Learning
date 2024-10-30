@@ -1,6 +1,6 @@
 
 module.exports = {
-    port: process.env.PORT || 3000,
+    port: process.env.PORT,
     db: {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,

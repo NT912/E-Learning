@@ -1,18 +1,12 @@
-const courseService = require("../services/course/courseService");
-const CourseStatus = require("../../config");
+const courseService = require("../services/courseService");
+const CourseStatus = require("../../config/data/courseState");
 
 const courseController = {
-  /**
-   * Tạo khóa học mới.
-   * Hàm này nhận yêu cầu tạo một khóa học mới từ người dùng. Nó gọi hàm `create` của `courseService`,
-   * truyền vào `user.id` từ đối tượng req. Nếu thành công, nó trả về `courseID` của khóa học mới tạo.
-   * Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
   createCourse: async (req, res) => {
-    const user = req.user;
+    const { userID } = req.body;
     
     try {
-      const result = await courseService.create(user.id);
+      const result = await courseService.create(userID);
       res.status(201).json({
         courseID: result
       });
@@ -23,20 +17,28 @@ const courseController = {
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
+   /**
+   * Get detailed course information
    */
+   getCourseDetails: async (req, res) => {
+    const { courseID } = req.params;
+    const { userID } = req.query; // Get userID from query parameter
+
+    try {
+      const courseDetails = await courseService.getCourseDetails(courseID, userID);
+      res.status(200).json(courseDetails);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  },
+
   updateCourseName: async (req, res) => {
     const { courseID } = req.params;
-    const name = req.body.courseName;
-    const user = req.user;
+    const { userID, courseName: name } = req.body;
 
     try {
       // Cập nhật tên khóa học
-      await courseService.updateCourseName(user.id, courseID, name);
+      await courseService.updateCourseName(userID, courseID, name);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({
@@ -45,20 +47,14 @@ const courseController = {
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
   updateCourseAvatar: async (req, res) => {
     const { courseID } = req.params;
-    const user = req.user;
+    const { userID } = req.body;
     const file = req.file;
 
     try {
-      // Cập nhật tên khóa học
-      await courseService.updateCourseAvatar(user.id, courseID, file);
+      // Cập nhật avatar khóa học
+      await courseService.updateCourseAvatar(userID, courseID, file);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({
@@ -67,20 +63,13 @@ const courseController = {
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
   updateCourseShortcut: async (req, res) => {
     const { courseID } = req.params;
-    const { content } = req.body;
-    const user = req.user;
+    const { userID, content } = req.body;
 
     try {
-      // Cập nhật tên khóa học
-      await courseService.updateCourseShortcut(user.id, courseID, content);
+      // Cập nhật shortcut khóa học
+      await courseService.updateCourseShortcut(userID, courseID, content);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({
@@ -89,20 +78,13 @@ const courseController = {
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
   updateCourseDescription: async (req, res) => {
     const { courseID } = req.params;
-    const { content } = req.body;
-    const user = req.user;
+    const { userID, content } = req.body;
 
     try {
-      // Cập nhật tên khóa học
-      await courseService.updateCourseDescription(user.id, courseID, content);
+      // Cập nhật mô tả khóa học
+      await courseService.updateCourseDescription(userID, courseID, content);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({
@@ -111,38 +93,12 @@ const courseController = {
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
   updateCourseCost: async (req, res) => {
     const { courseID } = req.params;
-    const { amount } = req.body;
-    const user = req.user;
+    const { userID, amount } = req.body;
 
     try {
-      await courseService.updateCourseCost(user.id, courseID, amount);
-      res.status(200).json("Course cost updated successfully");
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
-      });
-    }
-  },
-
-  /**
-   * Xác nhận đăng khoá học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
-  confirm: async (req, res) => {
-    const { courseID } = req.params;
-    const user = req.user;
-    try {
-      await courseService.updateCourseStatus(user.id, courseID, CourseStatus.CONFIRMED);
+      await courseService.updateCourseCost(userID, courseID, amount);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({
@@ -150,6 +106,53 @@ const courseController = {
       });
     }
   },
+
+  confirm: async (req, res) => {
+    const { courseID } = req.params;
+    const { userID } = req.body;
+    try {
+      await courseService.updateCourseStatus(courseID, CourseStatus.CONFIRMED);
+      res.status(200).json();
+    } catch (err) {
+      res.status(400).json({
+        error: err.message
+      });
+    }
+  },
+
+ /**
+   * Xử lý yêu cầu cập nhật trạng thái của một khóa học.
+   */
+  update_state: async (req, res) => {
+    const { courseID } = req.params;
+    const { state } = req.query;
+
+    try {
+      if (!Object.values(CourseStatus).includes(state)) {
+        return res.status(400).json({ error: "Invalid course status" });
+      }
+
+      await courseService.updateCourseStatus(courseID, state);
+      res.status(200).json({ message: `Course status updated to ${state}` });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  },
+
+  /**
+   * Xử lý yêu cầu xoa một khóa học.
+   */
+  deleteCourse: async (req, res) => {
+    const { courseID } = req.params;
+    const { userID } = req.query;
+
+    try {
+      await courseService.deleteCourse(courseID, userID);
+      res.status(200).json({ message: `Course status updated to ${state}` });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
 };
 
 module.exports = courseController;

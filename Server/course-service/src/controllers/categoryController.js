@@ -1,4 +1,4 @@
-const categoryService = require("../services/course/categoryService");
+const categoryService = require("../services/categoryService");
 
 const CategoryController = {
   /**

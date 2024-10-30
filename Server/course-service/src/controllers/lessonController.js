@@ -1,23 +1,20 @@
-const lessonService = require("../services/course/lessonService");
+const lessonService = require("../services/lessonService");
 
 const lessonController = {
   /**
    * Tạo một bài học mới.
-   * @param {Object} req - Yêu cầu từ client. Chứa thông tin chapterID và user.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
    */
   create: async (req, res) => {
     const { chapterID } = req.params;
-    const user = req.user;
+    const { userID } = req.body;
 
     try {
-      const result = await lessonService.createLesson(user.id, chapterID);
+      const result = await lessonService.createLesson(userID, chapterID);
       res.status(201).json({
         lessonID: result
       });
     } catch (err) {
       console.error("Error during lesson creation:", err);
-      // Phản hồi lỗi
       res.status(400).json({
         error: err.message
       });
@@ -25,40 +22,72 @@ const lessonController = {
   },
 
   /**
-   * Cập nhật thông tin bài học.
-   * @param {Object} req - Yêu cầu từ client. Chứa lessonID trong params và thông tin cập nhật trong body.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
+   * Get details of a single lesson.
    */
-  updateLesson: async (req, res) => {
+  getALesson: async (req, res) => {
     const { lessonID } = req.params;
-    const { title, description } = req.body;
-    const user = req.user;
-    const file = req.file; 
-
     try {
-      await lessonService.updateLesson(user.id, lessonID, title, description, file);
-      res.status(200).json();
+      const lesson = await lessonService.getLessonDetails(lessonID);
+      
+      res.status(200).json(lesson);
     } catch (err) {
-      res.status(400) .json({
-        error: err.message
+      console.error("Error fetching lesson details:", err);
+      res.status(400).json({
+        error: err.message || "An error occurred while fetching the lesson."
       });
     }
   },
 
   /**
-   * Cập nhật thông tin bài học.
-   * @param {Object} req - Yêu cầu từ client. Chứa lessonID trong params và thông tin cập nhật trong body.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
+   * update a lesson
+   */
+  updateLesson: async (req, res) => {
+    const { lessonID } = req.params;
+    const { title, description, userID } = req.body;
+    const file = req.file;
+
+    try {
+      if (file) {
+        const fileType = file.mimetype;
+
+        const allowedTypes = [
+          "application/pdf",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "video/mp4", 
+          "image/jpeg", 
+          "image/png", 
+          "application/vnd.ms-excel", 
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+          "application/zip" 
+        ];
+        
+        if (!allowedTypes.includes(fileType)) {
+          throw new Error("File type is not supported. Allowed types: PDF, Word, Video, Image, Excel.");
+        }
+      }
+
+      await lessonService.updateLesson(userID, lessonID, title, description, file);
+      res.status(200).json();
+    } catch (err) {
+      res.status(400).json({
+        error: err.message,
+      });
+    }
+  },
+
+
+  /**
+   * Cập nhật trạng thái cho phép demo của bài học.
    */
   updateLessonAllowDemo: async (req, res) => {
     const { lessonID } = req.params;
-    const user = req.user;
+    const { userID } = req.body;
 
     try {
-      await lessonService.updateLessonAllowDemo(user.id, lessonID);
+      await lessonService.updateLessonAllowDemo(userID, lessonID);
       res.status(200).json();
     } catch (err) {
-      res.status(400) .json({
+      res.status(400).json({
         error: err.message
       });
     }
@@ -66,15 +95,13 @@ const lessonController = {
 
   /**
    * Xóa bài học.
-   * @param {Object} req - Yêu cầu từ client. Chứa lessonID và userID trong body.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
    */
   delete: async (req, res) => {
     const { lessonID } = req.params;
-    const user = req.user;
+    const { userID } = req.body;
 
     try {
-      await lessonService.deleteLesson(user.id, lessonID);
+      await lessonService.deleteLesson(userID, lessonID);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({

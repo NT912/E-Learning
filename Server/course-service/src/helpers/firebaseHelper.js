@@ -13,7 +13,7 @@ const firebaseHelper = {
         try {
             const timestamp = Date.now();
             const fileName = `${timestamp}_${videoFile.originalname}`;
-            const storageRef = ref(storage, `videos/${fileName}`);
+            const storageRef = ref(storage, `lesson/${fileName}`);
             await uploadBytes(storageRef, videoFile.buffer); 
             const downloadURL = await getDownloadURL(storageRef); 
             return downloadURL; 

@@ -1,1 +1,2 @@
 auth-service: 3001
+course-service: 3002

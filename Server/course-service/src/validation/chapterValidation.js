@@ -1,6 +1,4 @@
 const { check, validationResult } = require("express-validator");
-const message = require("../../config/message.json");
-const { updateName } = require("../models/course/courseModel");
 
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
@@ -13,10 +11,33 @@ const handleValidationErrors = (req, res, next) => {
 };
 
 const chapterValidator = {
+  create: [
+    check("userID")
+      .notEmpty()
+      .withMessage("User ID is required.")
+      .isInt()
+      .withMessage("User ID must be an integer."),
+    handleValidationErrors,
+  ],
+
   updateName: [
+    check("userID")
+      .notEmpty()
+      .withMessage("User ID is required.")
+      .isInt()
+      .withMessage("User ID must be an integer."),
     check("chapterName")
       .notEmpty()
-      .withMessage(message.chapter.creationError.missNameChapter), 
+      .withMessage("Chapter name is required."),
+    handleValidationErrors,
+  ],
+
+  delete: [
+    check("userID")
+      .notEmpty()
+      .withMessage("User ID is required.")
+      .isInt()
+      .withMessage("User ID must be an integer."),
     handleValidationErrors,
   ],
 };

@@ -1,74 +1,72 @@
-const categoryOfCourseModel = require("../../models/course/categoryOfCourseModel");
-const courseModel = require("../../models/course/courseModel"); // Model để kiểm tra quyền sở hữu khóa học.
+import categoryOfCourseModel from "../../models/course/categoryOfCourseModel";
+import courseModel from "../../models/course/courseModel";
 
 const categoryOfCourseService = {
   /**
    * Kiểm tra xem userID có phải là chủ của khóa học không.
-   * @param {Number} userID - ID của người dùng.
-   * @param {Number} courseID - ID của khóa học.
-   * @return {Promise<Boolean>}
+   * @param userID - ID của người dùng.
+   * @param courseID - ID của khóa học.
+   * @return Promise<boolean>
    */
-  checkCourseOwnership: async (userID, courseID) => {
+  checkCourseOwnership: async (userID: number, courseID: number): Promise<boolean> => {
     const course = await courseModel.getCourseByID(courseID);
     if (!course) throw new Error("Course not found.");
     return course.UserID === userID;
   },
 
-    /**
+  /**
    * Thêm danh mục vào một khóa học.
-   * @param {Number} userID - ID của người dùng.
-   * @param {Number} courseID - ID của khóa học.
-   * @param {Array} categoryIDs - Mảng chứa các ID của danh mục.
-   * @return {Promise<void>}
+   * @param userID - ID của người dùng.
+   * @param courseID - ID của khóa học.
+   * @param categoryIDs - Mảng chứa các ID của danh mục.
+   * @return Promise<void>
    */
-  addCategoriesToCourse: async (userID, courseID, categoryIDs) => {
+  addCategoriesToCourse: async (userID: number, courseID: number, categoryIDs: number[]): Promise<void> => {
     try {
       const isOwner = await categoryOfCourseService.checkCourseOwnership(userID, courseID);
       if (!isOwner) throw new Error("User does not have permission for this course.");
-  
+
       await Promise.all(
         categoryIDs.map((categoryID) => 
           categoryOfCourseModel.addCategoryToCourse(courseID, categoryID)
         )
       );
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(`Failed to add categories to course: ${err.message}`);
     }
   },
 
-
   /**
    * Xóa danh mục khỏi một khóa học.
-   * @param {Number} userID - ID của người dùng.
-   * @param {Number} courseID - ID của khóa học.
-   * @param {Number} categoryID - ID của danh mục.
-   * @return {Promise<void>}
+   * @param userID - ID của người dùng.
+   * @param courseID - ID của khóa học.
+   * @param categoryID - ID của danh mục.
+   * @return Promise<void>
    */
-  removeCategoryFromCourse: async (userID, courseID, categoryID) => {
+  removeCategoryFromCourse: async (userID: number, courseID: number, categoryID: number): Promise<void> => {
     try {
       const isOwner = await categoryOfCourseService.checkCourseOwnership(userID, courseID);
-      if (!isOwner) throw new Error("User do not have permission of the course.");
+      if (!isOwner) throw new Error("User does not have permission for this course.");
 
       await categoryOfCourseModel.removeCategoryFromCourse(courseID, categoryID);
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(`Failed to remove category from course: ${err.message}`);
     }
   },
 
   /**
    * Lấy tất cả danh mục của một khóa học.
-   * @param {Number} userID - ID của người dùng.
-   * @param {Number} courseID - ID của khóa học.
-   * @return {Promise<Array>}
+   * @param courseID - ID của khóa học.
+   * @return Promise<Array>
    */
-  getCategoriesOfCourse: async (courseID) => {
+  getCategoriesOfCourse: async (courseID: number): Promise<any[]> => {
     try {
       const categories = await categoryOfCourseModel.getCategoriesOfCourse(courseID);
       return categories;
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(`Failed to get categories of course: ${err.message}`);
     }
   }
 };
 
-module.exports = categoryOfCourseService;
+export default categoryOfCourseService;

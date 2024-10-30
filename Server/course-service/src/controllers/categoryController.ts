@@ -1,60 +1,61 @@
-const categoryService = require("../services/categoryService");
+import { Request, Response } from 'express';
+import categoryService from '../services/categoryService';
 
-const CategoryController = {
+class CategoryController {
   /**
    * Tạo một danh mục mới.
    */
-  create: async (req, res) => {
+  async create(req: Request, res: Response): Promise<void> {
     const { name, description } = req.body;
     
     try {
       const categoryID = await categoryService.createCategory(name, description);
       res.status(201).json({ message: "Category created successfully", categoryID });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: (err as Error).message });
     }
-  },
+  }
 
   /**
    * Cập nhật danh mục.
    */
-  update: async (req, res) => {
+  async update(req: Request, res: Response): Promise<void> {
     const { categoryID } = req.params;
     const { name, description } = req.body;
     
     try {
-      await categoryService.updateCategory(categoryID, name, description);
+      await categoryService.updateCategory(Number(categoryID), name, description);
       res.status(200).json({ message: "Category updated successfully" });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: (err as Error).message });
     }
-  },
+  }
 
   /**
    * Xóa danh mục.
    */
-  delete: async (req, res) => {
+  async delete(req: Request, res: Response): Promise<void> {
     const { categoryID } = req.params;
     
     try {
-      await categoryService.deleteCategory(categoryID);
+      await categoryService.deleteCategory(Number(categoryID));
       res.status(200).json({ message: "Category deleted successfully" });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: (err as Error).message });
     }
-  },
+  }
 
   /**
    * Lấy tất cả danh mục.
    */
-  getAll: async (req, res) => {
+  async getAll(req: Request, res: Response): Promise<void> {
     try {
       const categories = await categoryService.getAllCategories();
       res.status(200).json(categories);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: (err as Error).message });
     }
   }
-};
+}
 
-module.exports = CategoryController;
+export default new CategoryController();

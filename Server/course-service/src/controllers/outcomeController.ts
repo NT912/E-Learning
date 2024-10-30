@@ -1,10 +1,11 @@
-const outlineService = require('../services/outlineService');
+import { Request, Response } from 'express';
+import outlineService from '../services/outlineService';
 
-const outcomeController = {
+class OutcomeController {
   /**
    * Xử lý yêu cầu tạo mục tiêu học tập mới cho khóa học.
    */
-  create: async (req, res) => {
+  async create(req: Request, res: Response): Promise<void> {
     const { courseID } = req.params;
     const { userID } = req.body;
 
@@ -13,14 +14,14 @@ const outcomeController = {
       res.status(201).json({ outComeID: result });
     } catch (err) {
       console.error(err);
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: (err as Error).message });
     }
-  },
+  }
 
   /**
    * Xử lý yêu cầu cập nhật mục tiêu học tập.
    */
-  update: async (req, res) => {
+  async update(req: Request, res: Response): Promise<void> {
     const { content, userID } = req.body;
     const { outcomeID } = req.params;
 
@@ -28,14 +29,14 @@ const outcomeController = {
       await outlineService.updateOutline(userID, outcomeID, content);
       res.status(200).json();
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: (err as Error).message });
     }
-  },
+  }
 
   /**
    * Xử lý yêu cầu xóa mục tiêu học tập.
    */
-  delete: async (req, res) => {
+  async delete(req: Request, res: Response): Promise<void> {
     const { outcomeID } = req.params;
     const { userID } = req.body;
 
@@ -43,9 +44,9 @@ const outcomeController = {
       await outlineService.deleteOutline(userID, outcomeID);
       res.status(200).json();
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: (err as Error).message });
     }
   }
-};
+}
 
-module.exports = outcomeController;
+export default new OutcomeController();

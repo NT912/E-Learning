@@ -1,14 +1,14 @@
-const CourseModel = require('../models/courseModel');
-const ChapterModel = require('../models/chapterModel');
+import CourseModel from "../models/courseModel";
+import ChapterModel from "../models/chapterModel";
 
 const chapterService = {
   /**
    * Tạo một chapter mới cho khóa học.
-   * @param {Number} userID - ID của người dùng yêu cầu tạo chapter.
-   * @param {Number} courseID - ID của khóa học mà chapter sẽ được thêm vào.
-   * @return {Promise<Number>} - Promise chứa ID của chapter mới tạo hoặc lỗi.
+   * @param userID - ID của người dùng yêu cầu tạo chapter.
+   * @param courseID - ID của khóa học mà chapter sẽ được thêm vào.
+   * @return Promise<number> - Promise chứa ID của chapter mới tạo hoặc lỗi.
    */
-  createChapter: async (userID, courseID) => {
+  createChapter: async (userID: number, courseID: number): Promise<number> => {
     // Tìm khóa học theo ID
     const course = await CourseModel.findById(courseID);
     if (!course) {
@@ -25,12 +25,12 @@ const chapterService = {
 
   /**
    * Cập nhật tên chapter.
-   * @param {Number} userID - ID của người dùng yêu cầu cập nhật.
-   * @param {Number} chapterID - ID của chapter cần cập nhật.
-   * @param {String} name - Tên mới của chapter.
-   * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
+   * @param userID - ID của người dùng yêu cầu cập nhật.
+   * @param chapterID - ID của chapter cần cập nhật.
+   * @param name - Tên mới của chapter.
+   * @return Promise<void> - Promise không trả về giá trị hoặc lỗi.
    */
-  updateChapterName: async (userID, chapterID, name) => {
+  updateChapterName: async (userID: number, chapterID: number, name: string): Promise<void> => {
     const chapter = await ChapterModel.findById(chapterID);
     if (!chapter) {
       throw new Error("Chapter not found.");
@@ -51,11 +51,11 @@ const chapterService = {
 
   /**
    * Xoá một chapter.
-   * @param {Number} userID - ID của người dùng yêu cầu.
-   * @param {Number} chapterID - ID của chapter cần xóa.
-   * @return {Promise<void>} - Promise không trả về giá trị hoặc lỗi.
+   * @param userID - ID của người dùng yêu cầu.
+   * @param chapterID - ID của chapter cần xóa.
+   * @return Promise<void> - Promise không trả về giá trị hoặc lỗi.
    */
-  deleteChapter: async (userID, chapterID) => {
+  deleteChapter: async (userID: number, chapterID: number): Promise<void> => {
     const chapter = await ChapterModel.findById(chapterID);
     if (!chapter) {
       throw new Error("Chapter not found.");
@@ -75,4 +75,4 @@ const chapterService = {
   }
 };
 
-module.exports = chapterService;
+export default chapterService;

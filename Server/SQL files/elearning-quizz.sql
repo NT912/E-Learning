@@ -1,6 +1,4 @@
 -- Database: quizz_db
-CREATE DATABASE IF NOT EXISTS quizz_db;
-USE quizz_db;
 
 -- Bảng quizz
 CREATE TABLE quizz (

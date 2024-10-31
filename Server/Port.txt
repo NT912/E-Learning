@@ -1,3 +1,4 @@
 auth-service: 3001
 quizz-service: 3002
 admin-service: 3003
+course-service: 3004

@@ -2,7 +2,8 @@ import courseModel from "../models/courseModel";
 import chapterModel from "../models/chapterModel";
 import lessonModel from "../models/lessonModel";
 import firebaseHelper from "../helpers/firebaseHelper";
-import { Course, Chapter, Lesson } from "../types/models"; // Assuming types are defined for Course, Chapter, and Lesson
+import { Lesson } from "../types/models"; 
+import { CourseLevel } from "../../config/data/levelCoures";
 
 const courseService = {
   /**
@@ -183,6 +184,25 @@ const courseService = {
       await courseModel.updateCost(courseID, amount);
     } catch (err) {
       console.log(`Error updating course cost: ${(err as Error).message}`);
+      throw err;
+    }
+  },
+
+  /**
+   * Cập nhật level khóa học.
+   * @param userID - ID của người dùng yêu cầu cập nhật.
+   * @param courseID - ID của khóa học cần cập nhật.
+   * @param level - Tên mới của khóa học.
+   * @return Promise<void>
+   */
+  updateCourseLevel: async (userID: number, courseID: number, level: typeof CourseLevel ): Promise<void> => {
+    try {
+      const course = await courseModel.findById(courseID);
+      if (!course) throw new Error("Course not found.");
+      if (course.UserID !== userID) throw new Error("You do not have permission to update this course.");
+
+      await courseModel.updateLevel(courseID, level);
+    } catch (err) {
       throw err;
     }
   },

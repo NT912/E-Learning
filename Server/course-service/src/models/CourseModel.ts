@@ -1,6 +1,7 @@
 import db from "../../config/database/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Course } from "../types/models";
+import { CourseLevel } from "../../config/data/levelCoures";
 
 const courseModel = {
   /**
@@ -274,6 +275,20 @@ const courseModel = {
         if (err) {
           console.log(`Failed to update cost for CourseID: ${courseID}. Error: ${err}`);
           return reject("Failed to update course cost.");
+        }
+        resolve();
+      });
+    });
+  },
+
+  updateLevel: (courseID: number, level: typeof CourseLevel): Promise<void> => {
+    const query = `UPDATE course SET Level = ? WHERE CourseID = ?`;
+
+    return new Promise((resolve, reject) => {
+      db.query(query, [level, courseID], (err: Error | null, result: ResultSetHeader) => {
+        if (err) {
+          console.error("Error updating course level:", err);
+          return reject("Failed to update course level.");
         }
         resolve();
       });

@@ -86,7 +86,7 @@ const courseValidator = {
     check("amount")
       .notEmpty()
       .withMessage("Amount is required.")
-      .isFloat({ gt: 0 })
+      .isFloat()
       .withMessage("Amount must be a positive number."),
     handleValidationErrors,
   ],

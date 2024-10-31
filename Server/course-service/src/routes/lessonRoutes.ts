@@ -78,9 +78,11 @@ router.post(
  *             properties:
  *               userID:
  *                 type: integer
+ *                 required: true
  *                 description: The ID of the user updating the lesson
  *               title:
  *                 type: string
+ *                 required: true
  *                 description: The new title for the lesson
  *               description:
  *                 type: string
@@ -89,6 +91,9 @@ router.post(
  *                 type: string
  *                 format: binary
  *                 description: Optional file upload for the lesson (video, PDF, ZIP, Word)
+ *               link:
+ *                 type: string
+ *                 description: Optional link of lesson (youtube video ...)
  *     responses:
  *       200:
  *         description: Lesson updated successfully

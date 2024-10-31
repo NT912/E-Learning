@@ -19,9 +19,6 @@ const chapterValidator = {
     check("userID")
       .notEmpty().withMessage("User ID is required.")
       .isInt().withMessage("User ID must be an integer."),
-    check("chapterName")
-      .notEmpty().withMessage("Chapter name is required.")
-      .isString().withMessage("Chapter name must be a string."),
     handleValidationErrors,
   ],
 

@@ -6,11 +6,11 @@ class LessonController {
    * Tạo một bài học mới.
    */
   async create(req: Request, res: Response): Promise<void> {
-    const chapterID = Number(req.params);
+    const { chapterID } = (req.params);
     const { userID } = req.body;
 
     try {
-      const result = await lessonService.createLesson(userID, chapterID);
+      const result = await lessonService.createLesson(userID, parseInt(chapterID));
       res.status(201).json({ lessonID: result });
     } catch (err) {
       console.error("Error during lesson creation:", err);

@@ -121,7 +121,7 @@ router.delete(
  *         description: Error retrieving dependencies
  */
 router.get(
-  "/course_depend/:courseID/dependencies",
+  "/:courseID/dependencies",
   (req: Request, res: Response) => courseDependController.getCourseDependencies(req, res)
 );
 

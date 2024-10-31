@@ -1,17 +1,17 @@
-const express = require("express");
-const multer = require("multer");
+import express, { Request, Response } from "express";
+import multer from "multer";
+import courseController from "../controllers/courseController";
+import courseValidator from "../validation/courseValidation";
+
+// Importing sub-routes
+import chapterRoutes from "./chapterRoutes";
+import lessonRoutes from "./lessonRoutes";
+import outcomeRoutes from "./outcomeRoutes";
+import categoryRoutes from "./categoryRoutes";
+import courseDependRoutes from "./depenCourseRoutes";
+
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
-
-const courseController = require("../controllers/courseController");
-const courseValidator = require("../validation/courseValidation");
-
-// Các route con
-const chapterRoutes = require("./chapterRoutes");
-const lessonRoutes = require("./lessonRoutes");
-const outcomeRoutes = require("./outcomeRoutes");
-const categoryRoutes = require("./categoryRoutes");
-const courseDependRoutes = require("./depenCourseRoutes");
 
 /**
  * @swagger
@@ -36,7 +36,7 @@ const courseDependRoutes = require("./depenCourseRoutes");
  *       400:
  *         description: Invalid input or missing fields
  */
-router.post("/create", courseValidator.createCourse, courseController.createCourse);
+router.post("/create", courseValidator.createCourse, (req: Request, res: Response) => courseController.createCourse(req, res));
 
 /**
  * @swagger
@@ -63,7 +63,7 @@ router.post("/create", courseValidator.createCourse, courseController.createCour
  *       400:
  *         description: Error retrieving course details
  */
-router.get("/:courseID/details", courseController.getCourseDetails);
+router.get("/:courseID/details", (req: Request, res: Response) => courseController.getCourseDetails(req, res));
 
 /**
  * @swagger
@@ -98,7 +98,7 @@ router.get("/:courseID/details", courseController.getCourseDetails);
  *       400:
  *         description: Error in updating course name
  */
-router.post("/:courseID/update/name", courseValidator.updateCourseName, courseController.updateCourseName);
+router.post("/:courseID/update/name", courseValidator.updateCourseName, (req: Request, res: Response) => courseController.updateCourseName(req, res));
 
 /**
  * @swagger
@@ -134,7 +134,7 @@ router.post("/:courseID/update/name", courseValidator.updateCourseName, courseCo
  *       400:
  *         description: Error in updating course avatar
  */
-router.post("/:courseID/update/avatar", upload.single("file"), courseValidator.updateCourseAvatar, courseController.updateCourseAvatar);
+router.post("/:courseID/update/avatar", upload.single("file"), courseValidator.updateCourseAvatar, (req: Request, res: Response) => courseController.updateCourseAvatar(req, res));
 
 /**
  * @swagger
@@ -166,7 +166,7 @@ router.post("/:courseID/update/avatar", upload.single("file"), courseValidator.u
  *       400:
  *         description: Error in confirming course
  */
-router.post("/:courseID/confirm", courseValidator.confirmCourse, courseController.confirm);
+router.post("/:courseID/confirm", courseValidator.confirmCourse, (req: Request, res: Response) => courseController.confirm(req, res));
 
 /**
  * @swagger
@@ -201,7 +201,7 @@ router.post("/:courseID/confirm", courseValidator.confirmCourse, courseControlle
  *       400:
  *         description: Error in updating course shortcut
  */
-router.post("/:courseID/update/shortcut", courseValidator.updateCourseShortcut, courseController.updateCourseShortcut);
+router.post("/:courseID/update/shortcut", courseValidator.updateCourseShortcut, (req: Request, res: Response) => courseController.updateCourseShortcut(req, res));
 
 /**
  * @swagger
@@ -236,7 +236,7 @@ router.post("/:courseID/update/shortcut", courseValidator.updateCourseShortcut, 
  *       400:
  *         description: Error in updating course description
  */
-router.post("/:courseID/update/description", courseValidator.updateCourseDescription, courseController.updateCourseDescription);
+router.post("/:courseID/update/description", courseValidator.updateCourseDescription, (req: Request, res: Response) => courseController.updateCourseDescription(req, res));
 
 /**
  * @swagger
@@ -271,7 +271,7 @@ router.post("/:courseID/update/description", courseValidator.updateCourseDescrip
  *       400:
  *         description: Error in updating course cost
  */
-router.post("/:courseID/update/cost", courseValidator.updateCourseCost, courseController.updateCourseCost);
+router.post("/:courseID/update/cost", courseValidator.updateCourseCost, (req: Request, res: Response) => courseController.updateCourseCost(req, res));
 
 /**
  * @swagger
@@ -299,17 +299,98 @@ router.post("/:courseID/update/cost", courseValidator.updateCourseCost, courseCo
  *       400:
  *         description: Invalid course status or other error updating course status
  */
-router.post("/:courseID/update-status", courseController.updateCourseCost);
+router.post("/:courseID/update-status", (req: Request, res: Response) => courseController.updateState(req, res));
 
-// router.delete("/:courseID", courseController.delete);
+/**
+ * @swagger
+ * /course/getall:
+ *   get:
+ *     summary: Get a paginated list of courses with optional filters
+ *     tags: [Course]
+ *     parameters:
+ *       - in: query
+ *         name: start
+ *         required: false
+ *         description: The starting position to retrieve courses (default is 0).
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         description: The number of courses to retrieve (default is 20).
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - in: query
+ *         name: category
+ *         required: false
+ *         description: Filter courses by category.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: free
+ *         required: false
+ *         description: Filter for free courses (true or false).
+ *         schema:
+ *           type: boolean
+ *       - in: query
+ *         name: minPrice
+ *         required: false
+ *         description: Minimum price for filtering courses.
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: maxPrice
+ *         required: false
+ *         description: Maximum price for filtering courses.
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: A list of courses retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: Name of the course.
+ *                   avatar:
+ *                     type: string
+ *                     description: URL of the course avatar.
+ *                   cost:
+ *                     type: number
+ *                     description: Cost of the course.
+ *                   lessonCount:
+ *                     type: integer
+ *                     description: Number of lessons in the course.
+ *                   totalDuration:
+ *                     type: number
+ *                     description: Total duration of the course.
+ *       400:
+ *         description: Bad request due to invalid parameters.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message describing the issue.
+ */
+
+router.get("/getall", (req: Request, res: Response) => courseController.getAll(req, res));
 
 
-
-// Các route con
+// Sub-routes
 router.use("/chapter", chapterRoutes);
 router.use("/lesson", lessonRoutes);
 router.use("/outcome", outcomeRoutes);
 router.use("/category", categoryRoutes);
 router.use("/course-depend", courseDependRoutes);
 
-module.exports = router;
+export default router;

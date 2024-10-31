@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
+import express, { Request, Response } from "express";
+import chapterController from "../controllers/chapterController";
+import chapterValidator from "../validation/chapterValidation";
 
-const chapterController = require("../controllers/chapterController");
-const chapterValidator = require("../validation/chapterValidation");
+const router = express.Router();
 
 /**
  * @swagger
@@ -42,7 +42,7 @@ const chapterValidator = require("../validation/chapterValidation");
  *       400:
  *         description: Error creating chapter
  */
-router.post("/create/:courseID", chapterValidator.create, chapterController.create);
+router.post("/create/:courseID", chapterValidator.create, (req: Request, res: Response) => chapterController.create(req, res));
 
 /**
  * @swagger
@@ -77,7 +77,7 @@ router.post("/create/:courseID", chapterValidator.create, chapterController.crea
  *       400:
  *         description: Error updating chapter name
  */
-router.post("/:chapterID/update/name", chapterValidator.updateName, chapterController.updateChapterName);
+router.post("/:chapterID/update/name", chapterValidator.update, (req: Request, res: Response) => chapterController.updateChapterName(req, res));
 
 /**
  * @swagger
@@ -109,6 +109,6 @@ router.post("/:chapterID/update/name", chapterValidator.updateName, chapterContr
  *       400:
  *         description: Error deleting chapter
  */
-router.delete("/:chapterID/delete", chapterValidator.delete, chapterController.deleteChapter);
+router.delete("/:chapterID/delete", chapterValidator.delete, (req: Request, res: Response) => chapterController.deleteChapter(req, res));
 
-module.exports = router;
+export default router;

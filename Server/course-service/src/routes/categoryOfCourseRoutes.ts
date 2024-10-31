@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
+import express, { Request, Response } from "express";
+import categoryOfCourseController from "../controllers/categoryOfCourseController";
 
-const categoryOfCourseController = require("../controllers/categoryOfCourseController");
+const router = express.Router();
 
 /*
 CategoryOfCourse Routes
@@ -42,7 +42,7 @@ CategoryOfCourse Routes
  *       400:
  *         description: Error adding categories
  */
-router.post("/:courseID/add-categories", categoryOfCourseController.addCategoriesToCourse);
+router.post("/:courseID/add-categories", (req: Request, res: Response) => categoryOfCourseController.addCategoriesToCourse(req, res));
 
 /**
  * @swagger
@@ -80,7 +80,7 @@ router.post("/:courseID/add-categories", categoryOfCourseController.addCategorie
  *       400:
  *         description: Error removing category
  */
-router.post("/:courseID/remove-category/:categoryID", categoryOfCourseController.removeCategoryFromCourse);
+router.post("/:courseID/remove-category/:categoryID", (req: Request, res: Response) => categoryOfCourseController.removeCategoryFromCourse(req, res));
 
 /**
  * @swagger
@@ -114,6 +114,6 @@ router.post("/:courseID/remove-category/:categoryID", categoryOfCourseController
  *       400:
  *         description: Error retrieving categories
  */
-router.get("/:courseID/categories", categoryOfCourseController.getCategoriesOfCourse);
+router.get("/:courseID/categories", (req: Request, res: Response) => categoryOfCourseController.getCategoriesOfCourse(req, res));
 
-module.exports = router;
+export default router;

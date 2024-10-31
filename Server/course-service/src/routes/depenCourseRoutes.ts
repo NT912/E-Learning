@@ -1,10 +1,8 @@
-// routes/courseDependRoutes.js
+import express, { Request, Response } from "express";
+import courseDependController from "../controllers/courseDependController";
+import courseDependValidation from "../validation/courseDependValidation";
 
-const express = require("express");
 const router = express.Router();
-
-const courseDependController = require("../controllers/courseDependController");
-const courseDependValidation = require("../validation/courseDependValidation");
 
 /**
  * @swagger
@@ -42,7 +40,11 @@ const courseDependValidation = require("../validation/courseDependValidation");
  *       400:
  *         description: Error adding dependency
  */
-router.post("/:courseID/add-depend", courseDependValidation.addCourseDepend, courseDependController.addCourseDepend);
+router.post(
+  "/:courseID/add-depend",
+  courseDependValidation.addCourseDepend,
+  (req: Request, res: Response) => courseDependController.addCourseDepend(req, res)
+);
 
 /**
  * @swagger
@@ -80,7 +82,11 @@ router.post("/:courseID/add-depend", courseDependValidation.addCourseDepend, cou
  *       400:
  *         description: Error removing dependency
  */
-router.delete("/:courseID/remove-depend/:dependOnCourseID", courseDependValidation.removeCourseDepend, courseDependController.removeCourseDepend);
+router.delete(
+  "/:courseID/remove-depend/:dependOnCourseID",
+  courseDependValidation.removeCourseDepend,
+  (req: Request, res: Response) => courseDependController.removeCourseDepend(req, res)
+);
 
 /**
  * @swagger
@@ -114,6 +120,9 @@ router.delete("/:courseID/remove-depend/:dependOnCourseID", courseDependValidati
  *       400:
  *         description: Error retrieving dependencies
  */
-router.get("/course_depend/:courseID/dependencies", courseDependController.getCourseDependencies);
+router.get(
+  "/:courseID/dependencies",
+  (req: Request, res: Response) => courseDependController.getCourseDependencies(req, res)
+);
 
-module.exports = router;
+export default router;

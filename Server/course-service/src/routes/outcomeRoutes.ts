@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
+import express, { Request, Response } from "express";
+import outcomeController from "../controllers/outcomeController";
+import outcomeValidator from "../validation/outcomeValidation";
 
-const outcomeController = require("../controllers/outcomeController");
-const outcomeValidator = require("../validation/outcomeValidation");
+const router = express.Router();
 
 /**
  * Outcome Routes
@@ -48,8 +48,8 @@ const outcomeValidator = require("../validation/outcomeValidation");
  */
 router.post(
   "/create/:courseID",
-  outcomeValidator.create,
-  outcomeController.create
+  outcomeValidator.updateOutcome,
+  (req: Request, res: Response) => outcomeController.create(req, res)
 );
 
 /**
@@ -87,8 +87,8 @@ router.post(
  */
 router.post(
   "/:outcomeID/update/name",
-  outcomeValidator.update,
-  outcomeController.update
+  outcomeValidator.createOutcome,
+  (req: Request, res: Response) => outcomeController.update(req, res)
 );
 
 /**
@@ -121,6 +121,10 @@ router.post(
  *       400:
  *         description: Error deleting outcome
  */
-router.delete("/:outcomeID/delete",outcomeValidator.delete,outcomeController.delete);
+router.delete(
+  "/:outcomeID/delete",
+  outcomeValidator.deleteOutCome,
+  (req: Request, res: Response) => outcomeController.delete(req, res)
+);
 
-module.exports = router;
+export default router;

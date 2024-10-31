@@ -1,10 +1,10 @@
-const express = require("express");
+import express, { Request, Response } from "express";
+import multer from "multer";
+
+import lessonController from "../controllers/lessonController";
+import lessonValidator from "../validation/lessonValidation";
+
 const router = express.Router();
-const multer = require("multer");
-
-const lessonController = require("../controllers/lessonController");
-const lessonValidator = require("../validation/lessonValidation");
-
 const upload = multer({ dest: "uploads/" });
 
 /**
@@ -49,8 +49,11 @@ const upload = multer({ dest: "uploads/" });
  *       400:
  *         description: Error creating lesson
  */
-router.post("/create/:chapterID", lessonValidator.create, lessonController.create);
-
+router.post(
+  "/create/:chapterID",
+  lessonValidator.create,
+  (req: Request, res: Response) => lessonController.create(req, res)
+);
 
 /**
  * @swagger
@@ -75,9 +78,11 @@ router.post("/create/:chapterID", lessonValidator.create, lessonController.creat
  *             properties:
  *               userID:
  *                 type: integer
+ *                 required: true
  *                 description: The ID of the user updating the lesson
  *               title:
  *                 type: string
+ *                 required: true
  *                 description: The new title for the lesson
  *               description:
  *                 type: string
@@ -86,13 +91,21 @@ router.post("/create/:chapterID", lessonValidator.create, lessonController.creat
  *                 type: string
  *                 format: binary
  *                 description: Optional file upload for the lesson (video, PDF, ZIP, Word)
+ *               link:
+ *                 type: string
+ *                 description: Optional link of lesson (youtube video ...)
  *     responses:
  *       200:
  *         description: Lesson updated successfully
  *       400:
  *         description: Error updating lesson
  */
-router.post("/:lessonID/update",upload.single("file"),lessonValidator.update,lessonController.updateLesson);
+router.post(
+  "/:lessonID/update",
+  upload.single("file"),
+  lessonValidator.update,
+  (req: Request, res: Response) => lessonController.updateLesson(req, res)
+);
 
 /**
  * @swagger
@@ -124,7 +137,11 @@ router.post("/:lessonID/update",upload.single("file"),lessonValidator.update,les
  *       400:
  *         description: Error deleting lesson
  */
-router.delete("/:lessonID/delete", lessonValidator.delete, lessonController.delete);
+router.delete(
+  "/:lessonID/delete",
+  lessonValidator.deleteALesson,
+  (req: Request, res: Response) => lessonController.delete(req, res)
+);
 
 /**
  * @swagger
@@ -156,7 +173,11 @@ router.delete("/:lessonID/delete", lessonValidator.delete, lessonController.dele
  *       400:
  *         description: Error updating lesson demo access
  */
-router.post("/:lessonID/update/allowDemo",lessonValidator.updateAllowDemo,lessonController.updateLessonAllowDemo);
+router.post(
+  "/:lessonID/update/allowDemo",
+  lessonValidator.updateLessonAllowDemo,
+  (req: Request, res: Response) => lessonController.updateLessonAllowDemo(req, res)
+);
 
 /**
  * @swagger
@@ -174,13 +195,15 @@ router.post("/:lessonID/update/allowDemo",lessonValidator.updateAllowDemo,lesson
  *     responses:
  *       200:
  *         description: Lesson details retrieved successfully
- * 
  *       400:
  *         description: Error retrieving lesson details
- *
  *       404:
  *         description: Lesson not found
  */
-router.get("/:lessonID",lessonValidator.get,lessonController.getALesson);
+router.get(
+  "/:lessonID",
+  lessonValidator.getLessonById,
+  (req: Request, res: Response) => lessonController.getALesson(req, res)
+);
 
-module.exports = router;
+export default router;

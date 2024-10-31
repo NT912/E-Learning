@@ -1,16 +1,7 @@
 import db from "../../config/database/db";
 import { OkPacket, RowDataPacket } from "mysql2";
+import { Lesson } from "../types/models";
 
-interface Lesson {
-  LessonID?: number;
-  ChapterID: number;
-  FileLink?: string;
-  Title?: string;
-  Period?: string;
-  OrderNumber?: number;
-  Description?: string;
-  IsAllowDemo?: boolean;
-}
 
 const lessonModel = {
   /**
@@ -44,33 +35,46 @@ const lessonModel = {
     const query = `SELECT * FROM Lesson WHERE LessonID = ?`;
 
     return new Promise((resolve, reject) => {
-      db.query(query, [lessonID], (err: Error | null, results: Lesson[]) => {
+      db.query(query, [lessonID], (err: Error | null, results: RowDataPacket[]) => {
         if (err) {
           console.log(`Failed to find lesson by ID: ${err}`);
           return reject(err);
         }
-        resolve(results[0] || null);
+        const lesson = results[0] as Lesson || null;
+        resolve(lesson);
       });
     });
   },
 
+  /**
+   * Lấy danh sách các bài học theo ChapterID.
+   * @param chapterID - ID của chương.
+   * @return Promise containing the lessons in the chapter.
+   */
   getLessonsByChapterID: (chapterID: number): Promise<Lesson[]> => {
-    const query = `SELECT * FROM lesson WHERE ChapterID = ?`;
+    const query = `SELECT * FROM Lesson WHERE ChapterID = ?`;
+    
     return new Promise((resolve, reject) => {
-      db.query(query, [chapterID], (err: Error | null, results: Lesson[]) => {
-        if (err) return reject(new Error("Error retrieving lessons"));
-        resolve(results);
+      db.query(query, [chapterID], (err: Error | null, results: RowDataPacket[]) => {
+        if (err) return reject("Error retrieving lessons");
+        resolve(results as Lesson[]);
       });
     });
   },
 
+  /**
+   * Lấy danh sách các bài học theo nhiều ChapterID.
+   * @param chapterIDs - Array of chapter IDs.
+   * @return Promise containing the lessons in the specified chapters.
+   */
   getLessonsByChapterIDs: (chapterIDs: number[]): Promise<Lesson[]> => {
     const placeholders = chapterIDs.map(() => '?').join(',');
-    const query = `SELECT * FROM lesson WHERE ChapterID IN (${placeholders})`;
+    const query = `SELECT * FROM Lesson WHERE ChapterID IN (${placeholders})`;
+    
     return new Promise((resolve, reject) => {
-      db.query(query, chapterIDs, (err: Error | null, results: Lesson[]) => {
-        if (err) return reject(new Error("Failed to fetch lessons"));
-        resolve(results);
+      db.query(query, chapterIDs, (err: Error | null, results: RowDataPacket[]) => {
+        if (err) return reject("Failed to fetch lessons");
+        resolve(results as Lesson[]);
       });
     });
   },

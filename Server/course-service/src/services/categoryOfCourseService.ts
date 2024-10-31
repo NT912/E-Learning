@@ -1,5 +1,5 @@
-import categoryOfCourseModel from "../../models/course/categoryOfCourseModel";
-import courseModel from "../../models/course/courseModel";
+import categoryOfCourseModel from "../models/categoryOfCourseModel";
+import courseModel from "../models/courseModel";
 
 const categoryOfCourseService = {
   /**
@@ -9,7 +9,7 @@ const categoryOfCourseService = {
    * @return Promise<boolean>
    */
   checkCourseOwnership: async (userID: number, courseID: number): Promise<boolean> => {
-    const course = await courseModel.getCourseByID(courseID);
+    const course = await courseModel.findById(courseID);
     if (!course) throw new Error("Course not found.");
     return course.UserID === userID;
   },

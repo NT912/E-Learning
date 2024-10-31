@@ -6,7 +6,7 @@ class OutcomeController {
    * Xử lý yêu cầu tạo mục tiêu học tập mới cho khóa học.
    */
   async create(req: Request, res: Response): Promise<void> {
-    const { courseID } = req.params;
+    const courseID = Number(req.params);
     const { userID } = req.body;
 
     try {
@@ -23,7 +23,7 @@ class OutcomeController {
    */
   async update(req: Request, res: Response): Promise<void> {
     const { content, userID } = req.body;
-    const { outcomeID } = req.params;
+    const outcomeID = Number(req.params);
 
     try {
       await outlineService.updateOutline(userID, outcomeID, content);
@@ -37,7 +37,7 @@ class OutcomeController {
    * Xử lý yêu cầu xóa mục tiêu học tập.
    */
   async delete(req: Request, res: Response): Promise<void> {
-    const { outcomeID } = req.params;
+    const outcomeID = Number(req.params);
     const { userID } = req.body;
 
     try {

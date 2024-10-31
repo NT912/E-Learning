@@ -1,13 +1,6 @@
 import connection from "../../config/database/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-
-interface Chapter {
-  ChapterID: number;
-  CourseID: number;
-  OrderNumber?: number;
-  Title?: string;
-  Description?: string;
-}
+import { Chapter } from "../types/models";
 
 const ChapterModel = {
   /**

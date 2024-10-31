@@ -1,18 +1,18 @@
 // src/app.ts
-import "module-alias/register";
 import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocs from "../config/swagger"
 import courseRoutes from "./routes/courseRoutes";
 
 // Load config project
 const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
 dotenv.config({ path: envFile });
+import config from "../config";
 
+import swaggerDocs from "../config/swagger"
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = config.port;
 
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));

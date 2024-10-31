@@ -2,7 +2,7 @@ import LessonModel from "../models/lessonModel";
 import courseModel from "../models/courseModel";
 import firebaseHelper from "../helpers/firebaseHelper";
 import { getVideoDurationInSeconds } from "get-video-duration";
-import { File } from "../types/File"; // Assume a type for file has been defined in a separate file
+import { Express } from "express";
 
 const lessonService = {
   /**
@@ -45,7 +45,7 @@ const lessonService = {
     lessonID: number,
     title: string,
     description: string,
-    file: File | null,
+    file: Express.Multer.File | undefined,
     link: string | null
   ): Promise<void> => {
     const lesson = await LessonModel.findById(lessonID);
@@ -54,9 +54,9 @@ const lessonService = {
     const course = await courseModel.findCourseByLessonID(lessonID);
     if (!course || course.UserID !== userID) throw new Error("You do not have permission to update this lesson.");
 
-    let fileLink = lesson.FileLink;
-    let duration = lesson.duration; // Keep the existing duration if no new file is provided
-    const fileType = file?.mimetype;
+    let fileLink: string = lesson.FileLink? lesson.FileLink : '';
+    const fileType = file? file.mimetype : '';
+    let duration: number = 0;
 
     if (file) {
       try {

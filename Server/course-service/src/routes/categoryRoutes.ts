@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
+import express, { Request, Response } from "express";
+import CategoryController from "../controllers/categoryController";
+import categoryValidator from "../validation/categoryValidation";
 
-const CategoryController = require("../controllers/categoryController");
-const categoryValidator = require("../validation/categoryValidation");
+const router = express.Router();
 
 /*
 Category Routes
@@ -36,7 +36,7 @@ Category Routes
  *       400:
  *         description: Error adding category
  */
-router.post("/add", categoryValidator.create, CategoryController.create);
+router.post("/add", categoryValidator.createCategory, (req: Request, res: Response) => CategoryController.create(req, res));
 
 /**
  * @swagger
@@ -73,7 +73,7 @@ router.post("/add", categoryValidator.create, CategoryController.create);
  *       400:
  *         description: Error updating category
  */
-router.post("/:categoryID/update", categoryValidator.update, CategoryController.update);
+router.post("/:categoryID/update", categoryValidator.updateCategory, (req: Request, res: Response) => CategoryController.update(req, res));
 
 /**
  * @swagger
@@ -96,7 +96,7 @@ router.post("/:categoryID/update", categoryValidator.update, CategoryController.
  *       400:
  *         description: Error deleting category
  */
-router.delete("/:categoryID/delete", CategoryController.delete);
+router.delete("/:categoryID/delete", (req: Request, res: Response) => CategoryController.delete(req, res));
 
 /**
  * @swagger
@@ -128,6 +128,6 @@ router.delete("/:categoryID/delete", CategoryController.delete);
  *       400:
  *         description: Error retrieving categories
  */
-router.get("/getall", CategoryController.getAll);
+router.get("/getall", (req: Request, res: Response) => CategoryController.getAll(req, res));
 
-module.exports = router;
+export default router;

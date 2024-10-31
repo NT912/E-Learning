@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import courseService from '../services/courseService';
-import CourseStatus from '../../config/data/courseState'
+import { CourseStatus } from '../../config/data/courseStatus'
 
 class CourseController {
   async createCourse(req: Request, res: Response): Promise<void> {
@@ -11,6 +11,26 @@ class CourseController {
       res.status(201).json({ courseID: result });
     } catch (err) {
       res.status(400).json({ error: (err as Error).message });
+    }
+  }
+
+  async getAll (req: Request, res: Response): Promise<void> {
+    const { category, free, minPrice, maxPrice, start = 0, limit = 20 } = req.query;
+    
+    try {
+      const courses = await courseService.getAllCourses(
+        category as string | null,
+        free === "true" ? true : free === "false" ? false : null,
+        minPrice ? Number(minPrice) : null,
+        maxPrice ? Number(maxPrice) : null,
+        Number(start),
+        Number(limit)
+      );
+      
+      res.status(200).json(courses);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      res.status(400).json({ error: (error as Error).message });
     }
   }
 
@@ -99,7 +119,7 @@ class CourseController {
     const { userID } = req.body;
 
     try {
-      await courseService.updateCourseStatus(courseID, CourseStatus.CONFIRMED);
+      await courseService.confirmCourse(userID, courseID);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({ error: (err as Error).message });

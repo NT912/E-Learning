@@ -20,7 +20,7 @@ const authRoutes = require("./routes/authRoutes");
 const swaggerDocs = require("../config/swagger");
 
 const app = express();
-const PORT = config.PORT || 3001;
+const PORT = config.port;
 
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));

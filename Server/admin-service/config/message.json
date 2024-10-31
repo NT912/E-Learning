@@ -1,4 +1,52 @@
 {
+  "auth": {
+    "signupSuccess": {
+      "title": "Account Creation Successful",
+      "description": "Your account has been created successfully."
+    },
+    "signupError": {
+      "title": "Signup Error",
+      "description": {
+        "emailExists": "This email is already in use. Please use a different email.",
+        "signupFailed": "Failed to register. Please try again.",
+        "emptyEmail": "Email is required.",
+        "invalidEmail": "Invalid email format.",
+        "emptyPassword": "Password is required.",
+        "passwordTooShort": "Password must be at least 6 characters long."
+      }
+    },
+    "loginSuccess": {
+      "title": "Login Successful",
+      "description": "You have logged in successfully."
+    },
+    "loginError": {
+      "title": "Login Error",
+      "description": {
+        "loginFailed": "Login failed. Check your email or password and try again.",
+        "unauthorized": "You are not authorized to perform this action.",
+        "emptyEmail": "Email is required.",
+        "emptyPassword": "Password is required.",
+        "invalidEmail": "Invalid email format.",
+        "invalidCredentials": "Incorrect email or password."
+      }
+    },
+    "logoutSuccess": {
+      "title": "Logout Successful",
+      "description": "You have logged out successfully."
+    },
+    "logoutError": {
+      "title": "Logout Error",
+      "description": "There was an error logging you out. Please try again."
+    },
+    "token": {
+      "title": "Token Error",
+      "description": {
+        "missToken": "Authorization token is required.",
+        "failDecodeToken": "Failed to decode the token.",
+        "userNotFound": "User not found with provided token."
+      }
+    }
+  },
   "admin": {
     "getAllUsers": {
       "success": {

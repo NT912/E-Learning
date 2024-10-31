@@ -91,6 +91,49 @@ router.post("/login", validateLogin, authController.login);
 
 /**
  * @swagger
+ * /auth/admin/login:
+ *   post:
+ *     summary: Admin login
+ *     tags: [Auth]
+ *     requestBody:
+ *       description: Admin credentials for login
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: Admin email
+ *                 example: "admin@example.com"
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: Admin password
+ *                 example: "admin123"
+ *     responses:
+ *       200:
+ *         description: Login successful, returns a JWT token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT token
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       400:
+ *         description: Invalid input or missing fields
+ *       401:
+ *         description: Unauthorized - Incorrect email or password
+ */
+router.post("/admin/login", validateLogin, authController.adminLogin);
+
+/**
+ * @swagger
  * /auth/logout:
  *   post:
  *     summary: Logout user

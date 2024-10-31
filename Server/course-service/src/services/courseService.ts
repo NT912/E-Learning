@@ -1,6 +1,6 @@
+import courseModel from "../models/courseModel";
 import chapterModel from "../models/chapterModel";
 import lessonModel from "../models/lessonModel";
-import courseModel from "../models/courseModel";
 import firebaseHelper from "../helpers/firebaseHelper";
 import { Course, Chapter, Lesson } from "../types/models"; // Assuming types are defined for Course, Chapter, and Lesson
 
@@ -46,6 +46,36 @@ const courseService = {
     }));
 
     return { ...course, chapters: chaptersWithLessons };
+  },
+
+  /**
+   * Lấy tất cả các khóa học với vị trí bắt đầu và số lượng.
+   * @param start - Vị trí bắt đầu (mặc định là 0).
+   * @param limit - Số lượng bản ghi cần lấy (mặc định là 20).
+   * @returns Promise<Course[]> - Danh sách các khóa học.
+   */
+  getAllCourses: async (
+    category: string | null,
+    free: boolean | null,
+    minPrice: number | null,
+    maxPrice: number | null,
+    offset: number = 0,
+    limit: number = 20
+  ) => {
+    try {
+      const courses = await courseModel.getFilteredCourses(
+        category,
+        free,
+        minPrice,
+        maxPrice,
+        offset,
+        limit
+      );
+      return courses;
+    } catch (error) {
+      console.error("Error retrieving courses:", error);
+      throw new Error("Failed to retrieve courses.");
+    }
   },
 
   /**

@@ -6,4 +6,4 @@ declare const Role: {
   ADMIN: 'admin';
 };
 
-export = Role;
+export default Role;

@@ -4,15 +4,15 @@ import dotenv from "dotenv";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import courseRoutes from "./routes/courseRoutes";
-import config from "../config";
 
 // Load config project
 const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
 dotenv.config({ path: envFile });
+import config from "../config";
 
 import swaggerDocs from "../config/swagger"
 const app = express();
-const PORT = config.port || 3001;
+const PORT = config.port;
 
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));

@@ -114,6 +114,52 @@ const courseModel = {
     });
   },
 
+  getFilteredCourses: (
+    category: string | null,
+    free: boolean | null,
+    minPrice: number | null,
+    maxPrice: number | null,
+    offset: number,
+    limit: number
+  ): Promise<Course[]> => {
+    const conditions: string[] = [];
+    const params: (string | number)[] = [];
+
+    if (category) {
+      conditions.push("category = ?");
+      params.push(category);
+    }
+
+    if (free !== null) {
+      conditions.push("cost = ?");
+      params.push(free ? 0 : minPrice!); // free khóa học có cost là 0
+    } else {
+      if (minPrice !== null) {
+        conditions.push("cost >= ?");
+        params.push(minPrice);
+      }
+      if (maxPrice !== null) {
+        conditions.push("cost <= ?");
+        params.push(maxPrice);
+      }
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+    const query = `SELECT name, avatar, cost FROM course ${whereClause} LIMIT ?, ?`;
+    
+    params.push(offset, limit);
+
+    return new Promise((resolve, reject) => {
+      db.query(query, params, (err, results: RowDataPacket[]) => {
+        if (err) {
+          console.error("Error fetching filtered courses:", err);
+          return reject("Failed to fetch courses.");
+        }
+        resolve(results as Course[]);
+      });
+    });
+  },
+
   /**
   * Update the name of a course.
   * @param courseID - The ID of the course to update.

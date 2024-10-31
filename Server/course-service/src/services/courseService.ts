@@ -1,8 +1,9 @@
+import courseModel from "../models/courseModel";
 import chapterModel from "../models/chapterModel";
 import lessonModel from "../models/lessonModel";
-import courseModel from "../models/courseModel";
 import firebaseHelper from "../helpers/firebaseHelper";
-import { Course, Chapter, Lesson } from "../types/models"; // Assuming types are defined for Course, Chapter, and Lesson
+import { Lesson } from "../types/models"; 
+import { CourseLevel } from "../../config/data/levelCoures";
 
 const courseService = {
   /**
@@ -46,6 +47,36 @@ const courseService = {
     }));
 
     return { ...course, chapters: chaptersWithLessons };
+  },
+
+  /**
+   * Lấy tất cả các khóa học với vị trí bắt đầu và số lượng.
+   * @param start - Vị trí bắt đầu (mặc định là 0).
+   * @param limit - Số lượng bản ghi cần lấy (mặc định là 20).
+   * @returns Promise<Course[]> - Danh sách các khóa học.
+   */
+  getAllCourses: async (
+    category: string | null,
+    free: boolean | null,
+    minPrice: number | null,
+    maxPrice: number | null,
+    offset: number = 0,
+    limit: number = 20
+  ) => {
+    try {
+      const courses = await courseModel.getFilteredCourses(
+        category,
+        free,
+        minPrice,
+        maxPrice,
+        offset,
+        limit
+      );
+      return courses;
+    } catch (error) {
+      console.error("Error retrieving courses:", error);
+      throw new Error("Failed to retrieve courses.");
+    }
   },
 
   /**
@@ -153,6 +184,25 @@ const courseService = {
       await courseModel.updateCost(courseID, amount);
     } catch (err) {
       console.log(`Error updating course cost: ${(err as Error).message}`);
+      throw err;
+    }
+  },
+
+  /**
+   * Cập nhật level khóa học.
+   * @param userID - ID của người dùng yêu cầu cập nhật.
+   * @param courseID - ID của khóa học cần cập nhật.
+   * @param level - Tên mới của khóa học.
+   * @return Promise<void>
+   */
+  updateCourseLevel: async (userID: number, courseID: number, level: typeof CourseLevel ): Promise<void> => {
+    try {
+      const course = await courseModel.findById(courseID);
+      if (!course) throw new Error("Course not found.");
+      if (course.UserID !== userID) throw new Error("You do not have permission to update this course.");
+
+      await courseModel.updateLevel(courseID, level);
+    } catch (err) {
       throw err;
     }
   },

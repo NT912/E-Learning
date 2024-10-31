@@ -273,6 +273,49 @@ router.post("/:courseID/update/description", courseValidator.updateCourseDescrip
  */
 router.post("/:courseID/update/cost", courseValidator.updateCourseCost, (req: Request, res: Response) => courseController.updateCourseCost(req, res));
 
+
+/**
+ * @swagger
+ * /course/{courseID}/update-level:
+ *   post:
+ *     summary: Update the level of a course
+ *     tags: [Course]
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Object containing new level and userID.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              type: object
+ *              required:
+ *                - level
+ *                - userID
+ *              properties:
+ *                level:
+ *                  type: string
+ *                  description: New level for the course
+ *                  enum: [begin, intermediate, advanced, mix]
+ *                userID:
+ *                  type: integer
+ *                  description: ID of the user making the update
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Invalid level, course ID, or user ID; or other error updating course level
+ */
+
+router.post("/:courseID/update-level", courseValidator.updateCourseLevel, (req: Request, res: Response) =>
+    courseController.updateCourseLevel(req, res)
+  );
+
 /**
  * @swagger
  * /course/{courseID}/update-status:
@@ -300,6 +343,90 @@ router.post("/:courseID/update/cost", courseValidator.updateCourseCost, (req: Re
  *         description: Invalid course status or other error updating course status
  */
 router.post("/:courseID/update-status", (req: Request, res: Response) => courseController.updateState(req, res));
+
+/**
+ * @swagger
+ * /course/getall:
+ *   get:
+ *     summary: Get a paginated list of courses with optional filters
+ *     tags: [Course]
+ *     parameters:
+ *       - in: query
+ *         name: start
+ *         required: false
+ *         description: The starting position to retrieve courses (default is 0).
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         description: The number of courses to retrieve (default is 20).
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - in: query
+ *         name: category
+ *         required: false
+ *         description: Filter courses by category.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: free
+ *         required: false
+ *         description: Filter for free courses (true or false).
+ *         schema:
+ *           type: boolean
+ *       - in: query
+ *         name: minPrice
+ *         required: false
+ *         description: Minimum price for filtering courses.
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: maxPrice
+ *         required: false
+ *         description: Maximum price for filtering courses.
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: A list of courses retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: Name of the course.
+ *                   avatar:
+ *                     type: string
+ *                     description: URL of the course avatar.
+ *                   cost:
+ *                     type: number
+ *                     description: Cost of the course.
+ *                   lessonCount:
+ *                     type: integer
+ *                     description: Number of lessons in the course.
+ *                   totalDuration:
+ *                     type: number
+ *                     description: Total duration of the course.
+ *       400:
+ *         description: Bad request due to invalid parameters.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message describing the issue.
+ */
+router.get("/getall", (req: Request, res: Response) => courseController.getAll(req, res));
+
 
 // Sub-routes
 router.use("/chapter", chapterRoutes);

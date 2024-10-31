@@ -1,6 +1,7 @@
 import db from "../../config/database/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Course } from "../types/models";
+import { CourseLevel } from "../../config/data/levelCoures";
 
 const courseModel = {
   /**
@@ -110,6 +111,52 @@ const courseModel = {
         }
         const course = results[0] as Course || null;
         resolve(course);
+      });
+    });
+  },
+
+  getFilteredCourses: (
+    category: string | null,
+    free: boolean | null,
+    minPrice: number | null,
+    maxPrice: number | null,
+    offset: number,
+    limit: number
+  ): Promise<Course[]> => {
+    const conditions: string[] = [];
+    const params: (string | number)[] = [];
+
+    if (category) {
+      conditions.push("category = ?");
+      params.push(category);
+    }
+
+    if (free !== null) {
+      conditions.push("cost = ?");
+      params.push(free ? 0 : minPrice!); // free khóa học có cost là 0
+    } else {
+      if (minPrice !== null) {
+        conditions.push("cost >= ?");
+        params.push(minPrice);
+      }
+      if (maxPrice !== null) {
+        conditions.push("cost <= ?");
+        params.push(maxPrice);
+      }
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+    const query = `SELECT name, avatar, cost FROM course ${whereClause} LIMIT ?, ?`;
+    
+    params.push(offset, limit);
+
+    return new Promise((resolve, reject) => {
+      db.query(query, params, (err, results: RowDataPacket[]) => {
+        if (err) {
+          console.error("Error fetching filtered courses:", err);
+          return reject("Failed to fetch courses.");
+        }
+        resolve(results as Course[]);
       });
     });
   },
@@ -228,6 +275,20 @@ const courseModel = {
         if (err) {
           console.log(`Failed to update cost for CourseID: ${courseID}. Error: ${err}`);
           return reject("Failed to update course cost.");
+        }
+        resolve();
+      });
+    });
+  },
+
+  updateLevel: (courseID: number, level: typeof CourseLevel): Promise<void> => {
+    const query = `UPDATE course SET Level = ? WHERE CourseID = ?`;
+
+    return new Promise((resolve, reject) => {
+      db.query(query, [level, courseID], (err: Error | null, result: ResultSetHeader) => {
+        if (err) {
+          console.error("Error updating course level:", err);
+          return reject("Failed to update course level.");
         }
         resolve();
       });

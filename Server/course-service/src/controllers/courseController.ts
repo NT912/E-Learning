@@ -14,6 +14,26 @@ class CourseController {
     }
   }
 
+  async getAll (req: Request, res: Response): Promise<void> {
+    const { category, free, minPrice, maxPrice, start = 0, limit = 20 } = req.query;
+    
+    try {
+      const courses = await courseService.getAllCourses(
+        category as string | null,
+        free === "true" ? true : free === "false" ? false : null,
+        minPrice ? Number(minPrice) : null,
+        maxPrice ? Number(maxPrice) : null,
+        Number(start),
+        Number(limit)
+      );
+      
+      res.status(200).json(courses);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      res.status(400).json({ error: (error as Error).message });
+    }
+  }
+
   async getCourseDetails(req: Request, res: Response): Promise<void> {
     const courseID = Number(req.params.courseID);
     const userID = Number(req.query.userID);
@@ -120,6 +140,17 @@ class CourseController {
       res.status(200).json({ message: `Course status updated to ${state}` });
     } catch (err) {
       res.status(400).json({ error: (err as Error).message });
+    }
+  }
+
+  async updateCourseLevel (req: Request, res: Response): Promise<void>  {
+    const { courseID } = req.params;
+    const { level, userID }  = req.body;
+    try {
+      await courseService.updateCourseLevel(userID, parseInt(courseID), level);
+      res.status(200).json({ message: "Course level updated successfully." });
+    } catch (error) {
+      res.status(400).json({ error: (error as Error).message });
     }
   }
 

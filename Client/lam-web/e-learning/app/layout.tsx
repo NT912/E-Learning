@@ -1,54 +1,41 @@
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+import React, { ReactNode } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Navbar, Nav } from "react-bootstrap";
+
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export default function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-          integrity="sha384-9ndCyUaPH0lsINA2af3wBaq4UfzF1g86S96knuDw0e38aI5F2bU5Hf/k5j5P7vAO"
-          crossOrigin="anonymous"
-        />
-        <title>E-Learning Platform</title>
-      </head>
       <body>
-        <div className="min-vh-100 d-flex flex-column">
-          {/* Navbar */}
-          <header className="bg-primary text-white p-3 shadow-sm d-flex">
-            <div className="container d-flex justify-content-between align-items-center">
-              <h1 className="fs-4 fw-bold mb-0">E-Learning Platform</h1>
-              <nav className="d-flex gap-3">
-                <a href="/" className="text-white text-decoration-none">
-                  Home
-                </a>
-                <a href="/courses" className="text-white text-decoration-none">
-                  Courses
-                </a>
-                <a href="/about" className="text-white text-decoration-none">
-                  About
-                </a>
-                <a href="/contact" className="text-white text-decoration-none">
-                  Contact
-                </a>
-              </nav>
-            </div>
-          </header>
+        {/* Navbar */}
+        <Navbar bg="primary" variant="dark" expand="lg" className="shadow-sm">
+          <Container>
+            <Navbar.Brand href="/" className="fs-4 fw-bold">E-Learning Platform</Navbar.Brand>
+            <Nav className="ms-auto">
+              <Nav.Link href="/" className="text-white">Home</Nav.Link>
+              <Nav.Link href="/courses" className="text-white">Courses</Nav.Link>
+              <Nav.Link href="/about" className="text-white">About</Nav.Link>
+              <Nav.Link href="/contact" className="text-white">Contact</Nav.Link>
+            </Nav>
+          </Container>
+        </Navbar>
 
-          {/* Main Content */}
-          <main className="flex-grow-1 container py-4">{children}</main>
+        {/* Main Content */}
+        <Container as="main" className="flex-grow-1 py-4">
+          {children}
+        </Container>
 
-          {/* Footer */}
-          <footer className="bg-dark text-white py-3 text-center mt-auto">
-            <div className="container">
-              <p className="mb-0">
-                &copy; {new Date().getFullYear()} E-Learning Platform. All rights reserved.
-              </p>
-            </div>
-          </footer>
-        </div>
+        {/* Footer */}
+        <footer className="bg-dark text-white py-3 text-center mt-auto">
+          <Container>
+            <p className="mb-0">
+              &copy; {new Date().getFullYear()} E-Learning Platform. All rights reserved.
+            </p>
+          </Container>
+        </footer>
       </body>
     </html>
   );

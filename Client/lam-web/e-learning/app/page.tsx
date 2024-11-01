@@ -1,5 +1,5 @@
 import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 
 // Giả định có danh sách khóa học
 const courses = [
@@ -23,23 +23,26 @@ const courses = [
 
 export default function HomePage() {
   return (
-    <div className="container my-5">
+    <Container className="my-5">
       <h1 className="text-center mb-4">Our Courses</h1>
-      <div className="row">
-        {courses.map((course) => (
-          <div key={course.id} className="col-md-4 mb-4">
-            <div className="card h-100 shadow-sm">
-              <div className="card-body">
-                <h5 className="card-title">{course.title}</h5>
-                <p className="card-text">{course.description}</p>
-                <a href={`/courses/${course.id}`} className="btn btn-primary">
-                  View Details
-                </a>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    </Container>
+    // <div className="container my-5">
+    //   <h1 className="text-center mb-4">Our Courses</h1>
+    //   <div className="row">
+    //     {courses.map((course) => (
+    //       <div key={course.id} className="col-md-4 mb-4">
+    //         <div className="card h-100 shadow-sm">
+    //           <div className="card-body">
+    //             <h5 className="card-title">{course.title}</h5>
+    //             <p className="card-text">{course.description}</p>
+    //             <a href={`/courses/${course.id}`} className="btn btn-primary">
+    //               View Details
+    //             </a>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     ))}
+    //   </div>
+    // </div>
   );
 }

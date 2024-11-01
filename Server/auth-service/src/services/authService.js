@@ -5,20 +5,15 @@ const messages = require("../../config/message.json");
 
 const authService = {
   signup: async (userData) => {
-    // Kiểm tra xem email đã tồn tại chưa
     const existingUser = await User.findByEmail(userData.email);
     if (existingUser) {
       throw new Error(messages.auth.signupError.description.emailExists);
     }
 
-    // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     userData.password = hashedPassword;
-
-    // Đặt role mặc định là 'student' nếu không có role được truyền vào
     userData.role = userData.role || "student";
 
-    // Tạo người dùng mới
     const user = await User.create(userData);
     return { message: messages.auth.signupSuccess.title, user };
   },
@@ -34,7 +29,34 @@ const authService = {
       throw new Error(messages.auth.loginError.description.invalidCredentials);
     }
 
-    // Tạo token
+    const token = jwt.sign(
+      { id: user.UserID, role: user.Role },
+      process.env.JWT_SECRET,
+      { expiresIn: "128h" }
+    );
+
+    return { token };
+  },
+
+  adminLogin: async (userData) => {
+    // Kiểm tra xem email có tồn tại không
+    const user = await User.findByEmail(userData.email);
+    if (!user) {
+      throw new Error(messages.auth.loginError.description.invalidCredentials);
+    }
+
+    // Kiểm tra xem người dùng có phải là admin không
+    if (user.Role !== "admin") {
+      throw new Error("Access denied: You must be an admin to log in here.");
+    }
+
+    // Kiểm tra mật khẩu
+    const isMatch = await bcrypt.compare(userData.password, user.HashPassword);
+    if (!isMatch) {
+      throw new Error(messages.auth.loginError.description.invalidCredentials);
+    }
+
+    // Tạo token JWT cho admin
     const token = jwt.sign(
       { id: user.UserID, role: user.Role },
       process.env.JWT_SECRET,

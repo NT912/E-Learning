@@ -31,6 +31,24 @@ const auth = {
         token: result.token,
       });
     } catch (error) {
+      console.log(error);
+      return sendResponse(
+        res,
+        false,
+        messages.auth.loginError.title,
+        error.message || messages.auth.loginError.description.loginFailed
+      );
+    }
+  },
+
+  adminLogin: async (req, res) => {
+    try {
+      const result = await authService.adminLogin(req.body);
+      return sendResponse(res, true, messages.auth.loginSuccess.title, {
+        token: result.token,
+      });
+    } catch (error) {
+      console.error("Login Error:", error);
       return sendResponse(
         res,
         false,
@@ -47,7 +65,6 @@ const auth = {
         return res.status(401).json(messages.auth.token.description.missToken);
       }
 
-      // Thêm token vào blacklist
       addTokenToBlacklist(token);
 
       return sendResponse(

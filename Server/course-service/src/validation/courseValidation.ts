@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 const { check, validationResult, ValidationError, Result } = require("express-validator");
+import { CourseLevel } from "../../config/data/levelCoures";
 
 // Middleware to handle validation errors
 const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
@@ -88,6 +89,13 @@ const courseValidator = {
       .withMessage("Amount is required.")
       .isFloat()
       .withMessage("Amount must be a positive number."),
+    handleValidationErrors,
+  ],
+
+  updateCourseLevel: [
+    check("level")
+      .notEmpty().withMessage("Level is required."),
+      // .isIn(Object.values(CourseLevel)).withMessage("Invalid level value."),
     handleValidationErrors,
   ],
 

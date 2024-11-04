@@ -31,6 +31,7 @@ const auth = {
         token: result.token,
       });
     } catch (error) {
+      console.log(error);
       return sendResponse(
         res,
         false,

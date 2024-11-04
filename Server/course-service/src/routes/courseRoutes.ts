@@ -68,7 +68,7 @@ router.get("/:courseID/details", (req: Request, res: Response) => courseControll
 /**
  * @swagger
  * /course/{courseID}/update/name:
- *   post:
+ *   patch:
  *     summary: Update the course name
  *     tags: [Course]
  *     parameters:
@@ -98,12 +98,12 @@ router.get("/:courseID/details", (req: Request, res: Response) => courseControll
  *       400:
  *         description: Error in updating course name
  */
-router.post("/:courseID/update/name", courseValidator.updateCourseName, (req: Request, res: Response) => courseController.updateCourseName(req, res));
+router.patch("/:courseID/update/name", courseValidator.updateCourseName, (req: Request, res: Response) => courseController.updateCourseName(req, res));
 
 /**
  * @swagger
  * /course/{courseID}/update/avatar:
- *   post:
+ *   patch:
  *     summary: Update the course avatar
  *     tags: [Course]
  *     parameters:
@@ -134,12 +134,12 @@ router.post("/:courseID/update/name", courseValidator.updateCourseName, (req: Re
  *       400:
  *         description: Error in updating course avatar
  */
-router.post("/:courseID/update/avatar", upload.single("file"), courseValidator.updateCourseAvatar, (req: Request, res: Response) => courseController.updateCourseAvatar(req, res));
+router.patch("/:courseID/update/avatar", upload.single("file"), courseValidator.updateCourseAvatar, (req: Request, res: Response) => courseController.updateCourseAvatar(req, res));
 
 /**
  * @swagger
  * /course/{courseID}/confirm:
- *   post:
+ *   patch:
  *     summary: Confirm the course
  *     tags: [Course]
  *     parameters:
@@ -166,12 +166,12 @@ router.post("/:courseID/update/avatar", upload.single("file"), courseValidator.u
  *       400:
  *         description: Error in confirming course
  */
-router.post("/:courseID/confirm", courseValidator.confirmCourse, (req: Request, res: Response) => courseController.confirm(req, res));
+router.patch("/:courseID/confirm", courseValidator.confirmCourse, (req: Request, res: Response) => courseController.confirm(req, res));
 
 /**
  * @swagger
  * /course/{courseID}/update/shortcut:
- *   post:
+ *   patch:
  *     summary: Update the course shortcut
  *     tags: [Course]
  *     parameters:
@@ -201,12 +201,12 @@ router.post("/:courseID/confirm", courseValidator.confirmCourse, (req: Request, 
  *       400:
  *         description: Error in updating course shortcut
  */
-router.post("/:courseID/update/shortcut", courseValidator.updateCourseShortcut, (req: Request, res: Response) => courseController.updateCourseShortcut(req, res));
+router.patch("/:courseID/update/shortcut", courseValidator.updateCourseShortcut, (req: Request, res: Response) => courseController.updateCourseShortcut(req, res));
 
 /**
  * @swagger
  * /course/{courseID}/update/description:
- *   post:
+ *   patch:
  *     summary: Update the course description
  *     tags: [Course]
  *     parameters:
@@ -236,12 +236,12 @@ router.post("/:courseID/update/shortcut", courseValidator.updateCourseShortcut, 
  *       400:
  *         description: Error in updating course description
  */
-router.post("/:courseID/update/description", courseValidator.updateCourseDescription, (req: Request, res: Response) => courseController.updateCourseDescription(req, res));
+router.patch("/:courseID/update/description", courseValidator.updateCourseDescription, (req: Request, res: Response) => courseController.updateCourseDescription(req, res));
 
 /**
  * @swagger
  * /course/{courseID}/update/cost:
- *   post:
+ *   patch:
  *     summary: Update the cost of the course
  *     tags: [Course]
  *     parameters:
@@ -271,13 +271,13 @@ router.post("/:courseID/update/description", courseValidator.updateCourseDescrip
  *       400:
  *         description: Error in updating course cost
  */
-router.post("/:courseID/update/cost", courseValidator.updateCourseCost, (req: Request, res: Response) => courseController.updateCourseCost(req, res));
+router.patch("/:courseID/update/cost", courseValidator.updateCourseCost, (req: Request, res: Response) => courseController.updateCourseCost(req, res));
 
 
 /**
  * @swagger
  * /course/{courseID}/update-level:
- *   post:
+ *   patch:
  *     summary: Update the level of a course
  *     tags: [Course]
  *     parameters:
@@ -311,15 +311,14 @@ router.post("/:courseID/update/cost", courseValidator.updateCourseCost, (req: Re
  *       400:
  *         description: Invalid level, course ID, or user ID; or other error updating course level
  */
-
-router.post("/:courseID/update-level", courseValidator.updateCourseLevel, (req: Request, res: Response) =>
+router.patch("/:courseID/update-level", courseValidator.updateCourseLevel, (req: Request, res: Response) =>
     courseController.updateCourseLevel(req, res)
   );
 
 /**
  * @swagger
  * /course/{courseID}/update-status:
- *   post:
+ *   patch:
  *     summary: Update the status of a course
  *     tags: [Course]
  *     parameters:
@@ -342,7 +341,7 @@ router.post("/:courseID/update-level", courseValidator.updateCourseLevel, (req: 
  *       400:
  *         description: Invalid course status or other error updating course status
  */
-router.post("/:courseID/update-status", (req: Request, res: Response) => courseController.updateState(req, res));
+router.patch("/:courseID/update-status", (req: Request, res: Response) => courseController.updateState(req, res));
 
 /**
  * @swagger

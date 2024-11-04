@@ -4,6 +4,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
 const swaggerUi = require("swagger-ui-express");
+const cors = require("cors");
 
 // Load config project
 const envFile =
@@ -15,19 +16,25 @@ const config = require("../config");
 
 // Import routes
 const authRoutes = require("./routes/authRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 // Import Swagger config
 const swaggerDocs = require("../config/swagger");
 
 const app = express();
 const PORT = config.port;
-
+app.use(cors({
+  origin: "http://localhost:3000", // Địa chỉ nguồn mà bạn muốn cho phép truy cập
+  methods: "GET,POST,PUT,DELETE",  // Các phương thức được phép
+  credentials: true                // Nếu bạn muốn gửi cookie hoặc thông tin xác thực
+}));
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/send-notification", notificationRoutes);
 
 // Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));

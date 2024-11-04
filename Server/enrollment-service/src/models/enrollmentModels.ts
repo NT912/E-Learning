@@ -1,6 +1,8 @@
 import connection from "../../config/database/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Enrollment } from "../types/models/Enrollment";
+import EnrollmentStatus from '../../config/data/EnrolmentStatus';
+
 
 const enrollmentModel = {
   /**
@@ -10,11 +12,11 @@ const enrollmentModel = {
    * @param startDate - Ngày bắt đầu khóa học.
    * @return Promise<number> - ID của bản ghi đăng ký mới tạo.
    */
-  createEnrollment: (userID: number, courseID: number, startDate: Date = new Date()): Promise<number> => {
-    const query = `INSERT INTO enrollment (UserID, CourseID, StartDate, Status) VALUES (?, ?, ?, 'active')`;
-
+  createEnrollment: (userID: number, courseID: number, status: EnrollmentStatus): Promise<number> => {
+    const query = `INSERT INTO enrollment (UserID, CourseID, StartDate, Status) VALUES (?, ?, ?, ?)`;
+    const startDate: Date = new Date();
     return new Promise((resolve, reject) => {
-      connection.query(query, [userID, courseID, startDate], (err: Error | null, result: ResultSetHeader) => {
+      connection.query(query, [userID, courseID, startDate, status], (err: Error | null, result: ResultSetHeader) => {
         if (err) {
           return reject(err);
         }
@@ -29,11 +31,30 @@ const enrollmentModel = {
    * @param status - Trạng thái mới của bản ghi đăng ký.
    * @return Promise<void>
    */
-  updateEnrollmentStatus: (enrollmentID: number, status: 'active' | 'completed' | 'cancelled' | 'suspended'): Promise<void> => {
+  updateEnrollmentStatus: (enrollmentID: number, status: EnrollmentStatus): Promise<void> => {
     const query = `UPDATE enrollment SET Status = ? WHERE EnrollmentID = ?`;
 
     return new Promise((resolve, reject) => {
       connection.query(query, [status, enrollmentID], (err: Error | null) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+  },
+
+  /**
+ * Cập nhật chi phí của bản ghi đăng ký.
+ * @param enrollmentID - ID của bản ghi đăng ký cần cập nhật.
+ * @param cost - Chi phí mới.
+ * @return Promise<void>
+ */
+  updateEnrollmentCost: (enrollmentID: number, cost: number): Promise<void> => {
+    const query = `UPDATE enrollment SET Cost = ? WHERE EnrollmentID = ?`;
+
+    return new Promise((resolve, reject) => {
+      connection.query(query, [cost, enrollmentID], (err: Error | null) => {
         if (err) {
           return reject(err);
         }
@@ -114,7 +135,26 @@ const enrollmentModel = {
         resolve(enrollments);
       });
     });
-  }
+  },
+
+  /**
+   * Cập nhật rating và review cho bản ghi đăng ký.
+   * @param enrollmentID - ID của bản ghi đăng ký.
+   * @param rating - Giá trị đánh giá.
+   * @param review - Nội dung đánh giá tùy chọn.
+   * @return Promise<void>
+   */
+  updateRatingAndReview: (enrollmentID: number, rating: number, review: string | ''): Promise<void> => {
+    const query = `UPDATE enrollment SET Rating = ?, Review = ? WHERE EnrollmentID = ?`;
+    return new Promise((resolve, reject) => {
+      connection.query(query, [rating, review, enrollmentID], (err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+  },
 };
 
 export default enrollmentModel;

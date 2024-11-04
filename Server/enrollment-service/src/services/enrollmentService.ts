@@ -1,5 +1,6 @@
 import EnrollmentModel from '../models/enrollmentModels';
 import { Enrollment } from '../types/models/Enrollment';
+import EnrollmentStatus from '../../config/data/EnrolmentStatus';
 
 const enrollmentService = {
   /**
@@ -8,8 +9,8 @@ const enrollmentService = {
    * @param courseID - ID của khóa học mà người dùng muốn đăng ký.
    * @return Promise<number> - ID của bản ghi đăng ký mới tạo hoặc lỗi.
    */
-  createEnrollment: async (userID: number, courseID: number): Promise<number> => {
-    const enrollmentID = await EnrollmentModel.createEnrollment(userID, courseID);
+  createEnrollment: async (userID: number, courseID: number, status: EnrollmentStatus): Promise<number> => {
+    const enrollmentID = await EnrollmentModel.createEnrollment(userID, courseID, status);
     return enrollmentID;
   },
 
@@ -20,13 +21,24 @@ const enrollmentService = {
    * @param status - Trạng thái mới của bản ghi đăng ký.
    * @return Promise<void>
    */
-  updateEnrollmentStatus: async (userID: number, enrollmentID: number, status: 'active' | 'completed' | 'cancelled' | 'suspended'): Promise<void> => {
+  updateEnrollmentStatus: async (userID: number, enrollmentID: number, status: EnrollmentStatus): Promise<void> => {
     const enrollment = await EnrollmentModel.findById(enrollmentID);
 
     if (!enrollment) throw new Error("Enrollment not found.");
-    if (enrollment.UserID !== userID) throw new Error("You do not have permission to update this enrollment.");
+    if (enrollment.UserID != userID) throw new Error("You do not have permission to update this enrollment.");
 
     await EnrollmentModel.updateEnrollmentStatus(enrollmentID, status);
+  },
+
+  /**
+ * Cập nhật chi phí của bản ghi đăng ký.
+ * @param userID - ID của người dùng yêu cầu cập nhật.
+ * @param enrollmentID - ID của bản ghi đăng ký cần cập nhật.
+ * @param cost - Chi phí mới của bản ghi đăng ký.
+ * @return Promise<void>
+ */
+  updateEnrollmentCost: async (enrollmentID: number, cost: number): Promise<void> => {
+    await EnrollmentModel.updateEnrollmentCost(enrollmentID, cost);
   },
 
   /**
@@ -77,7 +89,25 @@ const enrollmentService = {
     } catch (error) {
       throw error;
     }
-  }
+  },
+
+  /**
+   * Cập nhật rating và review cho bản ghi đăng ký.
+   * @param userID - ID của người dùng yêu cầu đánh giá.
+   * @param enrollmentID - ID của bản ghi đăng ký cần đánh giá.
+   * @param rating - Giá trị đánh giá (1-5).
+   * @param review - Nội dung đánh giá tùy chọn.
+   * @return Promise<void>
+   */
+  rateEnrollment: async (userID: number, enrollmentID: number, rating: number, review?: string): Promise<void> => {
+    const enrollment = await EnrollmentModel.findById(enrollmentID);
+
+    if (!enrollment) throw new Error("Enrollment not found.");
+    if (enrollment.UserID !== userID) throw new Error("You do not have permission to rate this enrollment.");
+    if (rating < 1 || rating > 5) throw new Error("Rating must be between 1 and 5.");
+
+    await EnrollmentModel.updateRatingAndReview(enrollmentID, rating, review || '');
+  },
 };
 
 export default enrollmentService;

@@ -4,11 +4,11 @@ CREATE TABLE enrollment (
   CourseID INT UNSIGNED NOT NULL,
   StartDate DATE DEFAULT CURRENT_DATE,             
   EndDate DATE,                                     
-  Status ENUM('buying', 'cancelled', 'bought', 'learning', completed) DEFAULT 'buying', 
+  Status ENUM('buying', 'cancelled', 'bought', 'learning', 'completed') DEFAULT 'buying' NOT NULL, 
   Rating INT CHECK(Rating BETWEEN 1 AND 5),        
   Review TEXT,                                     
   CompletionDate DATE,    
-  Cost: Float DEFAULT 0                         
+  Cost Float DEFAULT 0                         
 );
 
 CREATE TABLE progress (
@@ -20,8 +20,7 @@ CREATE TABLE progress (
   CompletionDate DATETIME DEFAULT NULL, 
   Attempts INT UNSIGNED DEFAULT 0, 
   LastAccessedAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
-  FOREIGN KEY (EnrollmentID) REFERENCES enrollment(EnrollmentID) ON DELETE CASCADE,
-  FOREIGN KEY (LessonID) REFERENCES lesson(LessonID) ON DELETE CASCADE
+  FOREIGN KEY (EnrollmentID) REFERENCES enrollment(EnrollmentID) ON DELETE CASCADE
 );
 
 

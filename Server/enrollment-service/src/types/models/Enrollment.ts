@@ -4,8 +4,9 @@ export interface Enrollment {
   CourseID: number;
   StartDate?: Date;
   EndDate?: Date;
-  Status?: 'active' | 'completed' | 'cancelled' | 'suspended';
+  Status?: 'buying' | 'cancelled' | 'bought' | 'learning' | 'completed';
   Rating?: number;
   Review?: string;
   CompletionDate?: Date;
+  Cost?: number;
 }

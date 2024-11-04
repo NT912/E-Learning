@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel");
 const messages = require("../../config/message.json");
+const userTokenService = require("./userToken");
 
 const authService = {
   signup: async (userData) => {
@@ -19,6 +20,8 @@ const authService = {
   },
 
   login: async (userData) => {
+    console.log(userData);
+    const { fcmToken } = userData;
     const user = await User.findByEmail(userData.email);
     if (!user) {
       throw new Error(messages.auth.loginError.description.invalidCredentials);
@@ -29,6 +32,10 @@ const authService = {
       throw new Error(messages.auth.loginError.description.invalidCredentials);
     }
 
+    // Lưu FCM token cho người dùng vào bảng `user_tokens`
+    if (fcmToken) {
+      await userTokenService.saveToken(user.UserID, fcmToken, userData.deviceType || "unknown");
+    }
     const token = jwt.sign(
       { id: user.UserID, role: user.Role },
       process.env.JWT_SECRET,

@@ -1,7 +1,9 @@
 import dotenv from 'dotenv';
-dotenv.config();
+type Environment = 'development' | 'production';
 
-const env = (process.env.NODE_ENV || 'development') as 'development' | 'production';
+const env = (process.env.NODE_ENV || 'development') as Environment;
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+dotenv.config({ path: envFile });
 
 const config = {
   development: require('./env/development').default,

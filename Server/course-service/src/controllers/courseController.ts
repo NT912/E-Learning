@@ -73,6 +73,7 @@ class CourseController {
       await courseService.updateCourseAvatar(Number(userID), courseID, file);
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
 }
@@ -86,6 +87,7 @@ class CourseController {
       await courseService.updateCourseShortcut(Number(userID), courseID, content);
       res.status(200).json({ message: "Course shortcut updated successfully." });
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -98,6 +100,7 @@ class CourseController {
       await courseService.updateCourseDescription(Number(userID), courseID, content);
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -110,6 +113,7 @@ class CourseController {
       await courseService.updateCourseCost(Number(userID), courseID, Number(amount));
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -122,6 +126,7 @@ class CourseController {
       await courseService.confirmCourse(userID, courseID);
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -139,6 +144,7 @@ class CourseController {
       await courseService.updateCourseStatus(courseID, userID, state as typeof CourseStatus[keyof typeof CourseStatus]);
       res.status(200).json({ message: `Course status updated to ${state}` });
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -150,6 +156,7 @@ class CourseController {
       await courseService.updateCourseLevel(userID, parseInt(courseID), level);
       res.status(200).json({ message: "Course level updated successfully." });
     } catch (error) {
+      console.log(error)
       res.status(400).json({ error: (error as Error).message });
     }
   }
@@ -162,6 +169,7 @@ class CourseController {
       await courseService.deleteCourse(userID, courseID);
       res.status(200).json({ message: "Course deleted successfully" });
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }

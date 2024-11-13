@@ -1,12 +1,9 @@
 
 module.exports = {
-    port: process.env.PORT || 3000,
-    db: {
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+    port: process.env.PORT,
+    service_host: {
+      auth: process.env.AUTH_SERVICE,
+      course: process.env.COURSE_SERVICE,
     },
-    jwtSecret: process.env.JWT_SECRET,
   };
   

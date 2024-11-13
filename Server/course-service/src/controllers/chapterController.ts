@@ -6,8 +6,7 @@ class ChapterController {
    * Xử lý yêu cầu tạo chapter mới cho khóa học.
    */
   async create(req: Request, res: Response): Promise<void> {
-    const { courseID } = req.params;
-    const { userID } = req.body;
+    const { userID, courseID } = req.body;
 
     try {
       const result = await chapterService.createChapter(userID, Number(courseID));
@@ -26,11 +25,11 @@ class ChapterController {
    * Xử lý yêu cầu cập nhật tên chapter.
    */
   async updateChapterName(req: Request, res: Response): Promise<void> {
-    const { chapterName, userID } = req.body;
+    const { title, userID, description } = req.body;
     const { chapterID } = req.params;
 
     try {
-      await chapterService.updateChapterName(userID, Number(chapterID), chapterName);
+      await chapterService.updateChapterName(userID, Number(chapterID), title, description);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({
@@ -44,12 +43,12 @@ class ChapterController {
    */
   async deleteChapter(req: Request, res: Response): Promise<void> {
     const { chapterID } = req.params;
-    const { userID } = req.body;
-
+    const userID = req.body.userID; // Lấy `userID` từ `req.body` hoặc `req.user`
     try {
       await chapterService.deleteChapter(userID, Number(chapterID));
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({
         error: (err as Error).message,
       });

@@ -1,6 +1,7 @@
 const axios = require("axios");
+const config = require("../../config/index")
 
-const AUTH_SERVICE_URL = "http://localhost:3001"; 
+const AUTH_SERVICE_URL = config.service_host.auth; 
 
 const authMiddleware = {
   loginRequire: async (req, res, next) => {

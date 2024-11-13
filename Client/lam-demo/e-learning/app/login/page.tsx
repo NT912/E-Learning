@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getToken, messaging } from '../../config/firsebase'; // Import hàm lấy FCM token
 
 const LoginPage = () => {

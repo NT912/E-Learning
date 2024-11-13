@@ -6,8 +6,7 @@ class LessonController {
    * Tạo một bài học mới.
    */
   async create(req: Request, res: Response): Promise<void> {
-    const { chapterID } = (req.params);
-    const { userID } = req.body;
+    const { userID, chapterID } = req.body;
 
     try {
       const result = await lessonService.createLesson(userID, parseInt(chapterID));

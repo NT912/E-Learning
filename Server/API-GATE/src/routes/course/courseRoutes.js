@@ -4,6 +4,9 @@ const courseController = require("../../controllers/course/courseController");
 const authMiddleware = require("../../middleware/authMiddleware");
 const courseValidator = require("../../validation/course/courseValidator");
 
+const chapterRoutes = require("./chapterRoutes")
+const lessonRoutes = require("./lessonRoutes")
+
 const router = express.Router();
 const upload = multer(); 
 
@@ -33,6 +36,7 @@ const upload = multer();
  */
 
 router.post("/create", authMiddleware.techerRequire ,courseController.createCourse);
+
 router.get("/:courseID/details", courseController.getCourseDetails);
 
 /**
@@ -199,9 +203,32 @@ router.patch("/:courseID/update/shortcut", authMiddleware.techerRequire, courseV
  */
 router.patch("/:courseID/confirm", authMiddleware.techerRequire, courseController.confirmCourse);
 
+// /**
+//  * @swagger
+//  * /course/{courseID}/rejected:
+//  *   patch:
+//  *     summary: Set course status to "rejected"
+//  *     tags: [Course]
+//  *     security:
+//  *       - bearerAuth: []
+//  *     parameters:
+//  *       - in: path
+//  *         name: courseID
+//  *         required: true
+//  *         description: ID of the course to update status
+//  *         schema:
+//  *           type: integer
+//  *     responses:
+//  *       200:
+//  *         description: Course status updated to "rejected" successfully
+//  *       400:
+//  *         description: Error in updating course status
+//  */
+// router.patch("/:courseID/rejected", authMiddleware.adminRequire, courseController.rejectCourse);
+
 /**
  * @swagger
- * /course/{courseID}/status/rejected:
+ * /course/{courseID}/reject:
  *   patch:
  *     summary: Set course status to "rejected"
  *     tags: [Course]
@@ -220,11 +247,187 @@ router.patch("/:courseID/confirm", authMiddleware.techerRequire, courseControlle
  *       400:
  *         description: Error in updating course status
  */
-router.patch("/:courseID/status/rejected", authMiddleware.techerRequire, (req, res) => courseController.updateStatus(req, res, "rejected"));
-router.patch("/:courseID/update/description", courseController.updateCourseDescription);
-router.patch("/:courseID/update/cost", courseController.updateCourseCost);
-router.patch("/:courseID/update-level", courseController.updateCourseLevel);
-router.patch("/:courseID/update-status", courseController.updateCourseStatus);
+router.patch("/:courseID/reject", authMiddleware.adminRequire, courseController.rejectCourse);
+
+/**
+ * @swagger
+ * /course/{courseID}/approve:
+ *   patch:
+ *     summary: Set course status to "approval"
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update status
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Course status updated to "rejected" successfully
+ *       400:
+ *         description: Error in updating course status
+ */
+router.patch("/:courseID/approve", authMiddleware.adminRequire, courseController.approveCourse);
+
+/**
+ * @swagger
+ * /course/{courseID}/active:
+ *   patch:
+ *     summary: Set course status to "active"
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update status
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Course status updated to "active" successfully
+ *       400:
+ *         description: Error in updating course status
+ */
+router.patch("/:courseID/active", authMiddleware.techerRequire, courseController.activeCourse);
+
+/**
+ * @swagger
+ * /course/{courseID}/block:
+ *   patch:
+ *     summary: Set course status to "block"
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update status
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Course status updated to "blocked" successfully
+ *       400:
+ *         description: Error in updating course status
+ */
+router.patch("/:courseID/block", authMiddleware.adminRequire, courseController.blockCourse);
+
+/**
+ * @swagger
+ * /course/{courseID}/update/cost:
+ *   patch:
+ *     summary: Update the cost of a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update cost
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Updated cost for the course
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               amount:
+ *                 type: number
+ *                 description: The new cost for the course
+ *                 example: 100.0
+ *     responses:
+ *       200:
+ *         description: Course cost updated successfully
+ *       400:
+ *         description: Error in updating course cost
+ */
+router.patch("/:courseID/update/cost", authMiddleware.techerRequire, courseValidator.updateCost, courseController.updateCourseCost);
+
+/**
+ * @swagger
+ * /course/{courseID}/update/description:
+ *   patch:
+ *     summary: Update the description of a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update description
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Updated description for the course
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The new description for the course
+ *                 example: "This is a detailed description of the course."
+ *     responses:
+ *       200:
+ *         description: Course description updated successfully
+ *       400:
+ *         description: Error in updating course description
+ */
+router.patch("/:courseID/update/description", authMiddleware.techerRequire, courseValidator.updateDescription, courseController.updateCourseDescription);
+
+/**
+ * @swagger
+ * /course/{courseID}/update/level:
+ *   patch:
+ *     summary: Update the level of a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update level
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Updated level for the course
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               level:
+ *                 type: string
+ *                 description: The new level for the course
+ *                 enum: [begin, intermediate, advanced, mix]
+ *                 example: "intermediate"
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Error in updating course level
+ */
+router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseValidator.updateLevel, courseController.updateCourseLevel);
+
 router.get("/getall", courseController.getAll);
+
+
+router.use("/chapter", chapterRoutes);
+router.use("/lesson", lessonRoutes);
 
 module.exports = router;

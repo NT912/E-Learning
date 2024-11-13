@@ -2,7 +2,9 @@ const axios = require("axios");
 const { request } = require("express");
 const FormData = require("form-data");
 const courseStatus = require("../../../config/data/courseState")
-const COURSE_SERVICE_URL = "http://localhost:3004"; 
+
+const config = require("../../../config/index")
+const COURSE_SERVICE_URL = config.service_host.course; 
 
 const courseApiController = {
   async createCourse(req, res) {
@@ -88,62 +90,88 @@ const courseApiController = {
     }
   },
 
-  async confirmCourse(req, res) {
+  async updateCourseStatus(req, res, status) {
     const { courseID } = req.params;
+
     try {
       const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/status`, {
         userID: req.user.id,
-        state: courseStatus.CONFIRMED
+        state: status,
       });
-      res.status(response.status).json(response.data || { message: "Conrim course successfully." });
+      res.status(response.status).json(response.data || { message: `${status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()} course successfully.` });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(error.response?.status || 500).json({
-        error: error.response?.data?.error || "Error confirming course.",
+        error: error.response?.data?.error || `Error updating course status to ${status}.`,
       });
     }
+  },
+
+  confirmCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.CONFIRMED);
+  },
+
+  rejectCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.REJECTED);
+  },
+
+  approveCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.APPROVAL);
+  },
+
+  activeCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.ACTIVE);
+  },
+
+  blockCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.BLOCKED);
   },
 
   async updateCourseDescription(req, res) {
     const { courseID } = req.params;
     try {
-      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/description`, req.body);
-      res.status(response.status).json(response.data);
-    } catch (error) {
-      res.status(error.response?.status || 500).json({ error: error.message });
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/description`, {
+        userID: req.user.id,
+        content: req.body.content
+      });
+      res.status(response.status).json(response.data || { message: "Updated description of course successfully." });
+    }  catch (error) {
+      console.error(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating description`,
+      });
     }
   },
 
   async updateCourseCost(req, res) {
     const { courseID } = req.params;
     try {
-      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/cost`, req.body);
-      res.status(response.status).json(response.data);
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/cost`,{
+        userID: req.user.id,
+        amount: req.body.amount
+      });
+      res.status(response.status).json(response.data || { message: "Updated cost of course successfully." });
     } catch (error) {
-      res.status(error.response?.status || 500).json({ error: error.message });
+      console.error(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating cost`,
+      });
     }
   },
 
   async updateCourseLevel(req, res) {
     const { courseID } = req.params;
     try {
-      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update-level`, req.body);
-      res.status(response.status).json(response.data);
-    } catch (error) {
-      res.status(error.response?.status || 500).json({ error: error.message });
-    }
-  },
-
-  async updateCourseStatus(req, res) {
-    const { courseID } = req.params;
-    const { state } = req.query;
-    try {
-      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update-status`, null, {
-        params: { state },
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/level`, {
+        userID: req.user.id,
+        level: req.body.level
       });
-      res.status(response.status).json(response.data);
+      res.status(response.status).json(response.data || { message: "Updated level of course successfully." });
     } catch (error) {
-      res.status(error.response?.status || 500).json({ error: error.message });
+        console.error(error);
+        res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating level`,
+      });
     }
   },
 

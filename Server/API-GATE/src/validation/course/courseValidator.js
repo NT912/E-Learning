@@ -1,4 +1,5 @@
 const { check, validationResult } = require("express-validator");
+const CourseLevel = require("../../../config/data/courseLevel");
 
 // Middleware to handle validation errors
 const handleValidationErrors = (req, res, next) => {
@@ -40,6 +41,29 @@ const courseValidator = {
         .isLength({ max: 300 })
         .withMessage("Course name must not exceed 300 characters."),
         handleValidationErrors,
+    ],
+
+    updateCost: [
+      check("amount")
+      .notEmpty()
+      .withMessage("Amount is required."),
+      handleValidationErrors,
+    ],
+
+    updateDescription: [
+      check("content")
+      .notEmpty()
+      .withMessage("Content is required."),
+      handleValidationErrors,
+    ],
+
+    updateLevel: [
+      check("level")
+      .notEmpty()
+      .withMessage("Level is required.")
+      .isIn(Object.values(CourseLevel)) 
+      .withMessage("Invalid level. Must be one of: begin, intermediate, advanced, mix."),
+      handleValidationErrors,
     ],
 };
 

@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 app.use(cors({
-  origin: `http://localhost:${config.port}`,  
+  origin: `http://localhost:2999`,  
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));

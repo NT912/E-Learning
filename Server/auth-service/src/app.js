@@ -24,9 +24,9 @@ const swaggerDocs = require("../config/swagger");
 const app = express();
 const PORT = config.port;
 app.use(cors({
-  origin: "http://localhost:3000", // Địa chỉ nguồn mà bạn muốn cho phép truy cập
-  methods: "GET,POST,PUT,DELETE",  // Các phương thức được phép
-  credentials: true                // Nếu bạn muốn gửi cookie hoặc thông tin xác thực
+  origin: "http://localhost:2999", 
+  methods: "GET,POST,PUT,DELETE, PATCH",  
+  credentials: true                
 }));
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));

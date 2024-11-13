@@ -36,7 +36,7 @@ const upload = multer({ dest: "uploads/" });
  *       400:
  *         description: Invalid input or missing fields
  */
-router.post("/create", courseValidator.createCourse, (req: Request, res: Response) => courseController.createCourse(req, res));
+router.post("/create", (req: Request, res: Response) => courseController.createCourse(req, res));
 
 /**
  * @swagger
@@ -98,7 +98,7 @@ router.get("/:courseID/details", (req: Request, res: Response) => courseControll
  *       400:
  *         description: Error in updating course name
  */
-router.patch("/:courseID/update/name", courseValidator.updateCourseName, (req: Request, res: Response) => courseController.updateCourseName(req, res));
+router.patch("/:courseID/update/name", (req: Request, res: Response) => courseController.updateCourseName(req, res));
 
 /**
  * @swagger
@@ -201,7 +201,7 @@ router.patch("/:courseID/confirm", courseValidator.confirmCourse, (req: Request,
  *       400:
  *         description: Error in updating course shortcut
  */
-router.patch("/:courseID/update/shortcut", courseValidator.updateCourseShortcut, (req: Request, res: Response) => courseController.updateCourseShortcut(req, res));
+router.patch("/:courseID/update/shortcut", (req: Request, res: Response) => courseController.updateCourseShortcut(req, res));
 
 /**
  * @swagger
@@ -341,7 +341,7 @@ router.patch("/:courseID/update-level", courseValidator.updateCourseLevel, (req:
  *       400:
  *         description: Invalid course status or other error updating course status
  */
-router.patch("/:courseID/update-status", (req: Request, res: Response) => courseController.updateState(req, res));
+router.patch("/:courseID/update/status", (req: Request, res: Response) => courseController.updateState(req, res));
 
 /**
  * @swagger

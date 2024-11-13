@@ -20,7 +20,6 @@ const authService = {
   },
 
   login: async (userData) => {
-    console.log(userData);
     const { fcmToken } = userData;
     const user = await User.findByEmail(userData.email);
     if (!user) {

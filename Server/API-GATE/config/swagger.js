@@ -1,6 +1,6 @@
 // config/swaggerConfig.js
 const swaggerJsdoc = require('swagger-jsdoc');
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 2999;
 
 const swaggerOptions = {
   swaggerDefinition: {

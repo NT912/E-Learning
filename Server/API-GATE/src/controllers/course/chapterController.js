@@ -1,64 +1,67 @@
-const chapterService = require("../../services/course/chapterService");
+const axios = require("axios");
+const { request } = require("express");
 
-const chapterController = {
-  /**
-   * Xử lý yêu cầu tạo chapter mới cho khóa học.
-   */
-  create: async (req, res) => {
-    const { courseID} = req.params;
-    const user = req.user;
+const config = require("../../../config/index")
 
+const COURSE_SERVICE_URL = config.service_host.course; 
+
+console.log(COURSE_SERVICE_URL)
+const courseApiController = {
+  async createChapter(req, res) {
+    const { courseID } = req.params;
     try {
-      const result = await chapterService.createChapter(
-        user.id,
-        courseID,
+      const user = req.user;
+      const response = await axios.post(`${COURSE_SERVICE_URL}/course/chapter/create`, 
+        { 
+          courseID: courseID,
+          userID: user.id 
+        }
       );
-      res.status(201).json({
-        chapterID: result
-      });
-    } catch (err) {
-      console.error(err); // Ghi lại lỗi để kiểm tra
-
-      res.status(400).json({
-        error: err.message
+      res.status(response.status).json(response.data || { message: "Create chapter success." });
+    } catch (error) {
+      console.log(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error create chapter.",
       });
     }
   },
 
-  /**
-   * Xử lý yêu cầu cập nhật tên chapter.
-   */
-  updateChapterName: async (req, res) => {
-    const { chapterName } = req.body;
+  async updateChapter(req, res) {
     const { chapterID } = req.params;
-    const user = req.user;
-
+    const { title, description } = req.body;
     try {
-      await chapterService.updateChapterName(user.id, chapterID, chapterName);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      const user = req.user;
+      const response = await axios.post(`${COURSE_SERVICE_URL}/course/chapter/${chapterID}/update`, 
+        { 
+          userID: user.id,
+          title: title,
+          description: description
+        }
+      );
+      res.status(response.status).json(response.data || { message: "Update chapter success." });
+    } catch (error) {
+      console.log(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error update chapter.",
       });
     }
   },
 
-  /**
-   * Xử lý yêu cầu xóa chapter.
-   */
-  deleteChapter: async (req, res) => {
+  async deleteChapter(req, res) {
     const { chapterID } = req.params;
-    const user = req.user;
-
     try {
-      await chapterService.deleteChapter(user.id, chapterID);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      const user = req.user;
+      const response = await axios.delete(`${COURSE_SERVICE_URL}/course/chapter/${chapterID}/delete`, 
+        { data: { userID: user.id }}
+      );
+      res.status(response.status).json(response.data || { message: "Delete chapter success." });
+    } catch (error) {
+      console.log(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error create chapter.",
       });
     }
-  }
+  },
 };
 
-module.exports = chapterController;
+module.exports = courseApiController;

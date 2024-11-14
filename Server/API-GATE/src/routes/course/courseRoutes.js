@@ -1,24 +1,15 @@
 const express = require("express");
 const multer = require("multer");
-const Role = require("../../../config/data/role");
-const router = express.Router();
-
-const upload = multer({ dest: 'uploads/' });
-
 const courseController = require("../../controllers/course/courseController");
 const authMiddleware = require("../../middleware/authMiddleware");
-const roleMiddleware = require("../../middleware/roleMiddleware");
-const courseValidator = require("../../validation/courseValidation");
+const courseValidator = require("../../validation/course/courseValidator");
 
-// Import các route con
-const chapterRoutes = require("./chapterRoutes");
-const lessonRoutes = require("./lessonRoutes");
-const outcomeRoutes = require("./outcomeRoutes");
-const categoryRoutes = require("./categoryRoutes");
+const chapterRoutes = require("./chapterRoutes")
+const lessonRoutes = require("./lessonRoutes")
 
-/*
-Course
-*/
+const router = express.Router();
+const upload = multer(); 
+
 /**
  * @swagger
  * /course/create:
@@ -26,30 +17,46 @@ Course
  *     summary: Create a new course
  *     tags: [Course]
  *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
+ *       - bearerAuth: []
+ *     description: Endpoint to create a new course. Requires a valid user token.
  *     responses:
  *       201:
  *         description: Course created successfully
- *       400:
- *         description: Invalid input or missing fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Course created successfully."
+ *                 courseId:
+ *                   type: integer
+ *                   example: 1
  */
-router.post("/create", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseController.createCourse);
+
+router.post("/create", authMiddleware.techerRequire ,courseController.createCourse);
+
+router.get("/:courseID/details", courseController.getCourseDetails);
 
 /**
  * @swagger
  * /course/{courseID}/update/name:
- *   post:
+ *   patch:
  *     summary: Update the course name
  *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Update the name of a specific course. Requires teacher authentication.
  *     parameters:
  *       - in: path
  *         name: courseID
  *         required: true
- *         description: ID of the course to update
  *         schema:
  *           type: integer
+ *         description: ID of the course to update
  *     requestBody:
- *       description: The updated course name
+ *       description: New course name
  *       required: true
  *       content:
  *         application/json:
@@ -58,30 +65,69 @@ router.post("/create", authMiddleware.verifyToken, roleMiddleware.checkRole(Role
  *             properties:
  *               courseName:
  *                 type: string
- *                 description: The new name of the course
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
+ *                 description: The new name for the course
+ *                 example: "Advanced JavaScript Programming"
  *     responses:
  *       200:
  *         description: Course name updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Course name updated successfully."
+ *       400:
+ *         description: Invalid input or missing fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Course name is required and must not exceed 100 characters."
+ *       401:
+ *         description: Unauthorized - teacher access required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Unauthorized access - teacher role required."
+ *       403:
+ *         description: Forbidden - invalid or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Token is invalid or has expired. Please login again."
  */
-router.post("/:courseID/update/name", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseName, courseController.updateCourseName);
+router.patch("/:courseID/update/name", authMiddleware.techerRequire, courseValidator.updateCourseName, courseController.updateCourseName);
 
 /**
  * @swagger
  * /course/{courseID}/update/avatar:
- *   post:
+ *   patch:
  *     summary: Update the course avatar
  *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: courseID
  *         required: true
- *         description: ID of the course to update
  *         schema:
  *           type: integer
+ *         description: ID of the course to update
  *     requestBody:
- *       description: The new avatar for the course
+ *       description: New avatar file for the course
  *       required: true
  *       content:
  *         multipart/form-data:
@@ -91,20 +137,57 @@ router.post("/:courseID/update/name", authMiddleware.verifyToken, roleMiddleware
  *               file:
  *                 type: string
  *                 format: binary
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
+ *                 description: The new avatar file for the course
  *     responses:
  *       200:
  *         description: Course avatar updated successfully
+ *       400:
+ *         description: Error in updating course avatar
  */
-router.post("/:courseID/update/avatar", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), upload.single('file'), courseController.updateCourseAvatar);
+router.patch("/:courseID/update/avatar", authMiddleware.techerRequire, upload.single("file"), courseValidator.updateCourseAvatar, courseController.updateCourseAvatar);
+
+/**
+ * @swagger
+ * /course/{courseID}/update/shortcut:
+ *    patch:
+ *     summary: Update the course shortcut
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Updated shortcut content and user ID
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The new shortcut content for the course
+ *     responses:
+ *       200:
+ *         description: Course shortcut updated successfully
+ *       400:
+ *         description: Error in updating course shortcut
+ */
+router.patch("/:courseID/update/shortcut", authMiddleware.techerRequire, courseValidator.updateShortcut, courseController.updateCourseShortcut);
 
 /**
  * @swagger
  * /course/{courseID}/confirm:
- *   post:
- *     summary: Confirm the course
+ *   patch:
+ *     summary: Confirm course when creating a course
  *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: courseID
@@ -112,93 +195,146 @@ router.post("/:courseID/update/avatar", authMiddleware.verifyToken, roleMiddlewa
  *         description: ID of the course to confirm
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
  *     responses:
  *       200:
  *         description: Course confirmed successfully
+ *       400:
+ *         description: Error in confirming course
  */
-router.post("/:courseID/confirm", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseController.confirm);
+router.patch("/:courseID/confirm", authMiddleware.techerRequire, courseController.confirmCourse);
+
+// /**
+//  * @swagger
+//  * /course/{courseID}/rejected:
+//  *   patch:
+//  *     summary: Set course status to "rejected"
+//  *     tags: [Course]
+//  *     security:
+//  *       - bearerAuth: []
+//  *     parameters:
+//  *       - in: path
+//  *         name: courseID
+//  *         required: true
+//  *         description: ID of the course to update status
+//  *         schema:
+//  *           type: integer
+//  *     responses:
+//  *       200:
+//  *         description: Course status updated to "rejected" successfully
+//  *       400:
+//  *         description: Error in updating course status
+//  */
+// router.patch("/:courseID/rejected", authMiddleware.adminRequire, courseController.rejectCourse);
 
 /**
  * @swagger
- * /course/{courseID}/update/shortcut:
- *   post:
- *     summary: Update the course shortcut
+ * /course/{courseID}/reject:
+ *   patch:
+ *     summary: Set course status to "rejected"
  *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: courseID
  *         required: true
- *         description: ID of the course to update
+ *         description: ID of the course to update status
  *         schema:
  *           type: integer
- *     requestBody:
- *       description: The new shortcut for the course
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: The new shortcut for the course
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
  *     responses:
  *       200:
- *         description: Course shortcut updated successfully
+ *         description: Course status updated to "rejected" successfully
+ *       400:
+ *         description: Error in updating course status
  */
-router.post("/:courseID/update/shortcut", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseShortcut, courseController.updateCourseShortcut);
+router.patch("/:courseID/reject", authMiddleware.adminRequire, courseController.rejectCourse);
 
 /**
  * @swagger
- * /course/{courseID}/update/description:
- *   post:
- *     summary: Update the course description
+ * /course/{courseID}/approve:
+ *   patch:
+ *     summary: Set course status to "approval"
  *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: courseID
  *         required: true
- *         description: ID of the course to update
+ *         description: ID of the course to update status
  *         schema:
  *           type: integer
- *     requestBody:
- *       description: The updated description of the course
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: The new description of the course
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
  *     responses:
  *       200:
- *         description: Course description updated successfully
+ *         description: Course status updated to "rejected" successfully
+ *       400:
+ *         description: Error in updating course status
  */
-router.post("/:courseID/update/description", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseDescription, courseController.updateCourseDescription);
+router.patch("/:courseID/approve", authMiddleware.adminRequire, courseController.approveCourse);
+
+/**
+ * @swagger
+ * /course/{courseID}/active:
+ *   patch:
+ *     summary: Set course status to "active"
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update status
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Course status updated to "active" successfully
+ *       400:
+ *         description: Error in updating course status
+ */
+router.patch("/:courseID/active", authMiddleware.techerRequire, courseController.activeCourse);
+
+/**
+ * @swagger
+ * /course/{courseID}/block:
+ *   patch:
+ *     summary: Set course status to "block"
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update status
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Course status updated to "blocked" successfully
+ *       400:
+ *         description: Error in updating course status
+ */
+router.patch("/:courseID/block", authMiddleware.adminRequire, courseController.blockCourse);
 
 /**
  * @swagger
  * /course/{courseID}/update/cost:
- *   post:
- *     summary: Update the cost of the course
+ *   patch:
+ *     summary: Update the cost of a course
  *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: courseID
  *         required: true
- *         description: ID of the course to update
+ *         description: ID of the course to update cost
  *         schema:
  *           type: integer
  *     requestBody:
- *       description: The updated cost of the course
+ *       description: Updated cost for the course
  *       required: true
  *       content:
  *         application/json:
@@ -207,19 +343,91 @@ router.post("/:courseID/update/description", authMiddleware.verifyToken, roleMid
  *             properties:
  *               amount:
  *                 type: number
- *                 description: The new cost of the course
- *     security:
- *       - bearerAuth: []  # Yêu cầu token trong header Authorization
+ *                 description: The new cost for the course
+ *                 example: 100.0
  *     responses:
  *       200:
  *         description: Course cost updated successfully
+ *       400:
+ *         description: Error in updating course cost
  */
-router.post("/:courseID/update/cost", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), courseValidator.updateCourseCost, courseController.updateCourseCost);
+router.patch("/:courseID/update/cost", authMiddleware.techerRequire, courseValidator.updateCost, courseController.updateCourseCost);
+
+/**
+ * @swagger
+ * /course/{courseID}/update/description:
+ *   patch:
+ *     summary: Update the description of a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update description
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Updated description for the course
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: The new description for the course
+ *                 example: "This is a detailed description of the course."
+ *     responses:
+ *       200:
+ *         description: Course description updated successfully
+ *       400:
+ *         description: Error in updating course description
+ */
+router.patch("/:courseID/update/description", authMiddleware.techerRequire, courseValidator.updateDescription, courseController.updateCourseDescription);
+
+/**
+ * @swagger
+ * /course/{courseID}/update/level:
+ *   patch:
+ *     summary: Update the level of a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update level
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Updated level for the course
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               level:
+ *                 type: string
+ *                 description: The new level for the course
+ *                 enum: [begin, intermediate, advanced, mix]
+ *                 example: "intermediate"
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Error in updating course level
+ */
+router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseValidator.updateLevel, courseController.updateCourseLevel);
+
+router.get("/getall", courseController.getAll);
 
 
-router.use("/chapter", chapterRoutes);  
-router.use("/lesson", lessonRoutes);    
-router.use("/outcome", outcomeRoutes); 
-router.use("/category", categoryRoutes);
+router.use("/chapter", chapterRoutes);
+router.use("/lesson", lessonRoutes);
 
 module.exports = router;

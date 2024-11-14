@@ -1,34 +1,26 @@
 const express = require("express");
-const router = express.Router();
 const multer = require("multer");
-
-const lessonController = require("../../controllers/course/lessonController");
 const authMiddleware = require("../../middleware/authMiddleware");
-const lessonValidator = require("../../validation/lessonValidation");
+const lessonController = require("../../controllers/course/lessonController")
 
-const roleMiddleware = require("../../middleware/roleMiddleware");
-const Role = require("../../../config/data/role");
+const router = express.Router();
+const upload = multer();
 
-const upload = multer({ dest: 'uploads/' });
-
-/*
-Lesson
-*/
 /**
  * @swagger
  * /course/lesson/create/{chapterID}:
  *   post:
  *     summary: Create a new lesson in a chapter
  *     tags: [Lesson]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: chapterID
  *         required: true
- *         description: The ID of the chapter to add the lesson to
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
+ *         description: The ID of the chapter where the lesson will be added
  *     responses:
  *       201:
  *         description: Lesson created successfully
@@ -40,95 +32,38 @@ Lesson
  *                 lessonID:
  *                   type: integer
  *                   description: The ID of the newly created lesson
+ *                   example: 1
  *       400:
  *         description: Error creating lesson
  */
-router.post("/create/:chapterID", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.create);
-/**
- * @swagger
- * /course/lesson/{lessonID}/update:
- *   post:
- *     summary: Update lesson details
- *     tags: [Lesson]
- *     parameters:
- *       - in: path
- *         name: lessonID
- *         required: true
- *         description: The ID of the lesson to update
- *         schema:
- *           type: integer
- *     requestBody:
- *       description: The updated lesson details, including file upload if necessary
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 required: true
- *                 description: The new title for the lesson
- *               description:
- *                 type: string
- *                 description: The new description for the lesson
- *               file:
- *                 type: string
- *                 required: true
- *                 format: binary
- *                 description: An optional file to upload for the lesson (video, pdf, zip, word)
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Lesson updated successfully
- *       400:
- *         description: Error updating lesson
- */
-router.post("/:lessonID/update", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), upload.single('file'), lessonValidator.update, lessonController.updateLesson);
-/**
- * @swagger
- * /course/lesson/{lessonID}/delete:
- *   post:
- *     summary: Delete a lesson
- *     tags: [Lesson]
- *     parameters:
- *       - in: path
- *         name: lessonID
- *         required: true
- *         description: The ID of the lesson to delete
- *         schema:
- *           type: integer
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Lesson deleted successfully
- *       400:
- *         description: Error deleting lesson
- */
-router.post("/:lessonID/delete", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.delete);
-/**
- * @swagger
- * /lesson/{lessonID}/update/allowDemo:
- *   post:
- *     summary: Update lesson to allow demo access
- *     tags: [Lesson]
- *     parameters:
- *       - in: path
- *         name: lessonID
- *         required: true
- *         description: The ID of the lesson to update demo access
- *         schema:
- *           type: integer
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Lesson demo access updated successfully
- *       400:
- *         description: Error updating lesson demo access
- */
-router.post("/:lessonID/update/allowDemo", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.updateLessonAllowDemo);
+router.post("/create/:chapterID", authMiddleware.techerRequire, lessonController.createLesson);
+
+router.post("/:lessonID/update", authMiddleware.techerRequire, upload.single("file"), lessonController.updateLesson);
+
+// // Xóa bài học
+// router.delete(
+//   "/:lessonID/delete",
+//   authMiddleware.teacherRequire,
+//   (req, res) => {
+//     // Controller gọi API xóa bài học của course-service.
+//   }
+// );
+
+// // Cập nhật quyền demo của bài học
+// router.post(
+//   "/:lessonID/update/allowDemo",
+//   authMiddleware.teacherRequire,
+//   (req, res) => {
+//     // Controller cập nhật quyền demo của bài học.
+//   }
+// );
+
+// // Lấy chi tiết bài học
+// router.get(
+//   "/:lessonID",
+//   authMiddleware.loginRequire,
+//   (req, res) => {
+//     // Controller lấy thông tin chi tiết bài học từ course-service.
+//   }
 
 module.exports = router;

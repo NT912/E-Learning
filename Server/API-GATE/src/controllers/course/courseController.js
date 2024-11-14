@@ -1,155 +1,190 @@
-const courseService = require("../../services/course/courseService");
-const CourseStatus = require("../../../config/");
+const axios = require("axios");
+const { request } = require("express");
+const FormData = require("form-data");
+const courseStatus = require("../../../config/data/courseState")
 
-const courseController = {
-  /**
-   * Tạo khóa học mới.
-   * Hàm này nhận yêu cầu tạo một khóa học mới từ người dùng. Nó gọi hàm `create` của `courseService`,
-   * truyền vào `user.id` từ đối tượng req. Nếu thành công, nó trả về `courseID` của khóa học mới tạo.
-   * Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
-  createCourse: async (req, res) => {
-    const user = req.user;
-    
+const config = require("../../../config/index")
+const COURSE_SERVICE_URL = config.service_host.course; 
+
+const courseApiController = {
+  async createCourse(req, res) {
     try {
-      const result = await courseService.create(user.id);
-      res.status(201).json({
-        courseID: result
+      const user = req.user;
+      const response = await axios.post(`${COURSE_SERVICE_URL}/course/create`, 
+        { 
+          userID: user.id 
+        }
+      );
+      res.status(response.status).json(response.data);
+    } catch (error) {
+      res.status(error.response?.status || 500).json({ error: error.message });
+    }
+  },
+
+  async getCourseDetails(req, res) {
+    const { courseID } = req.params;
+    const { userID } = req.query;
+    try {
+      const response = await axios.get(`${COURSE_SERVICE_URL}/course/${courseID}/details`, {
+        params: { userID }
       });
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      res.status(response.status).json(response.data);
+    } catch (error) {
+      res.status(error.response?.status || 500).json({ error: error.message });
+    }
+  },
+
+  async updateCourseName(req, res) {
+    const { courseID } = req.params;
+    try {
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/name`, {
+        userID: req.user.id, 
+        courseName: req.body.courseName,
+      });
+
+      res.status(response.status).json(response.data || { message: "Course name updated successfully." });
+    } catch (error) {
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error updating course name.",
       });
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
-  updateCourseName: async (req, res) => {
+  async updateCourseAvatar(req, res) {
     const { courseID } = req.params;
-    const name = req.body.courseName;
-    const user = req.user;
+    const userID = req.user.id; 
+
+    const formData = new FormData();
+    formData.append("userID", userID);
+    formData.append("file", req.file.buffer, {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+    });
 
     try {
-      // Cập nhật tên khóa học
-      await courseService.updateCourseName(user.id, courseID, name);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      const response = await axios.patch(
+        `${COURSE_SERVICE_URL}/course/${courseID}/update/avatar`,
+        formData,
+      );
+
+      res.status(response.status).json(response.data || { message: "Course avatar updated successfully." });
+    } catch (error) {
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error updating course avatar.",
       });
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
-  updateCourseAvatar: async (req, res) => {
+  async updateCourseShortcut(req, res) {
     const { courseID } = req.params;
-    const user = req.user;
-    const file = req.file;
-
     try {
-      // Cập nhật tên khóa học
-      await courseService.updateCourseAvatar(user.id, courseID, file);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/shortcut`, {
+        userID: req.user.id,
+        content: req.body.content
+      });
+      res.status(response.status).json(response.data || { message: "Course shortcut updated successfully." });
+    } catch (error) {
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error updating course shortcut.",
       });
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
-  updateCourseShortcut: async (req, res) => {
+  async updateCourseStatus(req, res, status) {
     const { courseID } = req.params;
-    const { content } = req.body;
-    const user = req.user;
 
     try {
-      // Cập nhật tên khóa học
-      await courseService.updateCourseShortcut(user.id, courseID, content);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/status`, {
+        userID: req.user.id,
+        state: status,
+      });
+      res.status(response.status).json(response.data || { message: `${status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()} course successfully.` });
+    } catch (error) {
+      console.error(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating course status to ${status}.`,
       });
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
-  updateCourseDescription: async (req, res) => {
-    const { courseID } = req.params;
-    const { content } = req.body;
-    const user = req.user;
+  confirmCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.CONFIRMED);
+  },
 
+  rejectCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.REJECTED);
+  },
+
+  approveCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.APPROVAL);
+  },
+
+  activeCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.ACTIVE);
+  },
+
+  blockCourse(req, res) {
+    return courseController.updateCourseStatus(req, res, courseStatus.BLOCKED);
+  },
+
+  async updateCourseDescription(req, res) {
+    const { courseID } = req.params;
     try {
-      // Cập nhật tên khóa học
-      await courseService.updateCourseDescription(user.id, courseID, content);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/description`, {
+        userID: req.user.id,
+        content: req.body.content
+      });
+      res.status(response.status).json(response.data || { message: "Updated description of course successfully." });
+    }  catch (error) {
+      console.error(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating description`,
       });
     }
   },
 
-  /**
-   * Cập nhật tên khóa học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
-  updateCourseCost: async (req, res) => {
+  async updateCourseCost(req, res) {
     const { courseID } = req.params;
-    const { amount } = req.body;
-    const user = req.user;
-
     try {
-      await courseService.updateCourseCost(user.id, courseID, amount);
-      res.status(200).json("Course cost updated successfully");
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/cost`,{
+        userID: req.user.id,
+        amount: req.body.amount
+      });
+      res.status(response.status).json(response.data || { message: "Updated cost of course successfully." });
+    } catch (error) {
+      console.error(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating cost`,
       });
     }
   },
 
-  /**
-   * Xác nhận đăng khoá học.
-   * Hàm này nhận yêu cầu cập nhật tên của khóa học dựa trên `courseID` và tên mới được cung cấp trong body.
-   * Nó gọi hàm `updateCourseName` của `courseService` để thực hiện việc cập nhật. Nếu thành công, trả về 
-   * trạng thái 200 mà không cần thêm thông tin gì. Nếu có lỗi xảy ra, trả về mã lỗi và thông tin lỗi.
-   */
-  confirm: async (req, res) => {
+  async updateCourseLevel(req, res) {
     const { courseID } = req.params;
-    const user = req.user;
     try {
-      await courseService.updateCourseStatus(user.id, courseID, CourseStatus.CONFIRMED);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/level`, {
+        userID: req.user.id,
+        level: req.body.level
       });
+      res.status(response.status).json(response.data || { message: "Updated level of course successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating level`,
+      });
+    }
+  },
+
+  async getAll(req, res) {
+    try {
+      const response = await axios.get(`${COURSE_SERVICE_URL}/course/getall`, {
+        params: req.query,
+      });
+      res.status(response.status).json(response.data);
+    } catch (error) {
+      res.status(error.response?.status || 500).json({ error: error.message });
     }
   },
 };
 
-module.exports = courseController;
+module.exports = courseApiController;

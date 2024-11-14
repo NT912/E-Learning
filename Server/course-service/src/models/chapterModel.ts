@@ -70,15 +70,15 @@ const ChapterModel = {
    * @param title - Tiêu đề mới của chapter.
    * @return Promise<void>
    */
-  updateTitle: (chapterID: number, title: string): Promise<void> => {
+  updateTitle: (chapterID: number, title: string, description: string): Promise<void> => {
     const query = `
       UPDATE chapter
-      SET Title = ?
+      SET Title = ?, Description = ?
       WHERE ChapterID = ?;
     `;
 
     return new Promise((resolve, reject) => {
-      connection.query(query, [title, chapterID], (err: Error | null) => {
+      connection.query(query, [title, description, chapterID], (err: Error | null) => {
         if (err) {
           console.error(`Fail to update chapter title: ${err}`);
           return reject(err);

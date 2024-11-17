@@ -4,6 +4,7 @@ import React from 'react';
 import { mockCourse } from './mockDatabase';
 import { useRouter } from 'next/navigation';  // Next 13 app router uses `next/navigation`
 
+
 const CourseDetailPage: React.FC = () => {
   const router = useRouter();
 

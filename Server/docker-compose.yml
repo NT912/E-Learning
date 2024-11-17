@@ -1,0 +1,40 @@
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+    image: auth-service:1.0.1
+    ports:
+      - "3001:3001"
+    networks:
+      - local
+
+  course-service:
+    build:
+      context: ./course-service
+    image: course-service:1.0.1
+    ports:
+      - "3004:3004"
+    networks:
+      - local
+
+  enrollment-service:
+    build:
+      context: ./enrollment-service
+    image: enrollment-service:1.0.1
+    ports:
+      - "3005:3005"
+    networks:
+      - local
+
+  payment-service:
+    build:
+      context: ./payment-service
+    image: payment-service:1.0.1
+    ports:
+      - "3006:3006"
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge

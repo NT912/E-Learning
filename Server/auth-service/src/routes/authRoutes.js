@@ -36,6 +36,10 @@ const router = express.Router();
  *                 format: password
  *                 description: Password for the new account
  *                 example: "password123"
+ *               role:
+ *                 type: string
+ *                 description: role
+ *                 example: "teacher"
  *     responses:
  *       201:
  *         description: User created successfully
@@ -191,5 +195,59 @@ router.post("/admin/login", validateLogin, authController.adminLogin);
  *                   example: "Fail decode Token."
  */
 router.post("/logout", authMiddleware.verifyToken, authController.logout);
+
+/**
+ * @swagger
+ * /auth/verify-token:
+ *   get:
+ *     summary: Verify the JWT token for authentication
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Validates if the provided JWT token is valid or expired. The token should be sent in the Authorization header as `Bearer <token>`.
+ *     responses:
+ *       200:
+ *         description: Token is valid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Token is valid
+ *                 user:
+ *                   type: object
+ *                   description: Decoded user information from the token
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     username:
+ *                       type: string
+ *                       example: "user"
+ *       401:
+ *         description: Missing or invalid token format
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Token is missing. Please provide a token to access this resource.
+ *       403:
+ *         description: Token is invalid or expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Token is invalid or has expired. Please login again.
+ */
+router.get("/verify-token", authController.verifyToken);
+
 
 module.exports = router;

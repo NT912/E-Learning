@@ -13,7 +13,7 @@ const upload = multer({ dest: "uploads/" });
 
 /**
  * @swagger
- * /course/lesson/create/{chapterID}:
+ * /course/lesson/create:
  *   post:
  *     summary: Create a new lesson in a chapter
  *     tags: [Lesson]
@@ -50,8 +50,7 @@ const upload = multer({ dest: "uploads/" });
  *         description: Error creating lesson
  */
 router.post(
-  "/create/:chapterID",
-  lessonValidator.create,
+  "/create",
   (req: Request, res: Response) => lessonController.create(req, res)
 );
 
@@ -103,7 +102,6 @@ router.post(
 router.post(
   "/:lessonID/update",
   upload.single("file"),
-  lessonValidator.update,
   (req: Request, res: Response) => lessonController.updateLesson(req, res)
 );
 
@@ -139,7 +137,6 @@ router.post(
  */
 router.delete(
   "/:lessonID/delete",
-  lessonValidator.deleteALesson,
   (req: Request, res: Response) => lessonController.delete(req, res)
 );
 
@@ -175,7 +172,6 @@ router.delete(
  */
 router.post(
   "/:lessonID/update/allowDemo",
-  lessonValidator.updateLessonAllowDemo,
   (req: Request, res: Response) => lessonController.updateLessonAllowDemo(req, res)
 );
 
@@ -202,7 +198,6 @@ router.post(
  */
 router.get(
   "/:lessonID",
-  lessonValidator.getLessonById,
   (req: Request, res: Response) => lessonController.getALesson(req, res)
 );
 

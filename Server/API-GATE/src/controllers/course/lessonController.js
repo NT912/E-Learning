@@ -1,87 +1,69 @@
-const lessonService = require("../../services/course/lessonService");
+const axios = require("axios");
 
-const lessonController = {
-  /**
-   * Tạo một bài học mới.
-   * @param {Object} req - Yêu cầu từ client. Chứa thông tin chapterID và user.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
-   */
-  create: async (req, res) => {
+const config = require("../../../config/index")
+const COURSE_SERVICE_URL = config.service_host.course; 
+
+const courseApiController = {
+  async createLesson(req, res) {
     const { chapterID } = req.params;
-    const user = req.user;
-
     try {
-      const result = await lessonService.createLesson(user.id, chapterID);
-      res.status(201).json({
-        lessonID: result
-      });
-    } catch (err) {
-      console.error("Error during lesson creation:", err);
-      // Phản hồi lỗi
-      res.status(400).json({
-        error: err.message
-      });
-    }
-  },
-
-  /**
-   * Cập nhật thông tin bài học.
-   * @param {Object} req - Yêu cầu từ client. Chứa lessonID trong params và thông tin cập nhật trong body.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
-   */
-  updateLesson: async (req, res) => {
-    const { lessonID } = req.params;
-    const { title, description } = req.body;
-    const user = req.user;
-    const file = req.file; 
-
-    try {
-      await lessonService.updateLesson(user.id, lessonID, title, description, file);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400) .json({
-        error: err.message
+      const user = req.user;
+      const response = await axios.post(`${COURSE_SERVICE_URL}/course/lesson/create`, 
+        { 
+          chapterID: chapterID,
+          userID: user.id 
+        }
+      );
+      res.status(response.status).json(response.data || { message: "Create chapter success." });
+    } catch (error) {
+      console.log(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error create chapter.",
       });
     }
   },
 
-  /**
-   * Cập nhật thông tin bài học.
-   * @param {Object} req - Yêu cầu từ client. Chứa lessonID trong params và thông tin cập nhật trong body.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
-   */
-  updateLessonAllowDemo: async (req, res) => {
+  async updateLesson(req, res) {
     const { lessonID } = req.params;
-    const user = req.user;
-
+    const userID = req.user.id;
+    
     try {
-      await lessonService.updateLessonAllowDemo(user.id, lessonID);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400) .json({
-        error: err.message
-      });
-    }
-  },
+      // Tạo form data để gửi tệp và các thông tin khác
+      const formData = new FormData();
+      formData.append("userID", userID);
+      formData.append("title", req.body.title);
+      formData.append("description", req.body.description || "");
 
-  /**
-   * Xóa bài học.
-   * @param {Object} req - Yêu cầu từ client. Chứa lessonID và userID trong body.
-   * @param {Object} res - Đối tượng response để gửi phản hồi về client.
-   */
-  delete: async (req, res) => {
-    const { lessonID } = req.params;
-    const user = req.user;
+      // Nếu có file, thêm file vào form data
+      if (req.file) {
+        formData.append("file", req.file.buffer, req.file.originalname);
+      }
 
-    try {
-      await lessonService.deleteLesson(user.id, lessonID);
-      res.status(200).json();
-    } catch (err) {
-      res.status(400).json({
-        error: err.message
+      // Nếu có link, thêm link vào form data
+      if (req.body.link) {
+        formData.append("link", req.body.link);
+      }
+
+      // Gửi yêu cầu tới course-service
+      const response = await axios.post(
+        `${COURSE_SERVICE_URL}/course/lesson/${lessonID}/update`,
+        formData,
+        {
+          headers: {
+            ...formData.getHeaders(),
+            Authorization: req.header("Authorization"),
+          },
+        }
+      );
+
+      res.status(response.status).json(response.data || { message: "Lesson updated successfully." });
+    } catch (error) {
+      console.error("Error updating lesson:", error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error updating lesson.",
       });
     }
   },
 };
 
-module.exports = lessonController;
+module.exports = courseApiController;

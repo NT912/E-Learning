@@ -1,3 +1,4 @@
+import 'package:app_learning/ui/homepage/Course_detail.dart';
 import 'package:app_learning/ui/homepage/HomePage.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +17,9 @@ class _MainPageState extends State<Mainpage> {
   void initState() {
     super.initState();
     pages = [
-      HomePage(),
+      const HomePage(),
       // const FreeCourse(),
-      Container(color: Colors.green),
+      const CourseDetail(),
       Container(color: Colors.black),
       Container(color: Colors.yellow),
     ];
@@ -29,7 +30,7 @@ class _MainPageState extends State<Mainpage> {
     return Scaffold(
       body: pages.elementAt(currentPage),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.green,
+        selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.black,
         currentIndex: currentPage,
         type: BottomNavigationBarType.fixed,
@@ -51,7 +52,7 @@ class _MainPageState extends State<Mainpage> {
                 width: 30,
                 height: 30,
                 fit: BoxFit.fill,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               label: "Home",
               backgroundColor: const Color(0xFFF5F9FF)),
@@ -67,7 +68,7 @@ class _MainPageState extends State<Mainpage> {
                 width: 30,
                 height: 30,
                 fit: BoxFit.fill,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               label: "Course",
               backgroundColor: const Color(0xFFF5F9FF)),
@@ -83,7 +84,7 @@ class _MainPageState extends State<Mainpage> {
                 width: 30,
                 height: 30,
                 fit: BoxFit.fill,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               label: "Inbox",
               backgroundColor: const Color(0xFFF5F9FF)),
@@ -99,7 +100,7 @@ class _MainPageState extends State<Mainpage> {
                 width: 30,
                 height: 30,
                 fit: BoxFit.fill,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               label: "Profile",
               backgroundColor: const Color(0xFFF5F9FF)),

@@ -5,12 +5,14 @@ class Course {
   final String price;
   final double rating;
   final bool isFree;
+  final String image; // Thêm trường image cho ảnh của khóa học
 
   Course({
     required this.title,
     required this.price,
     required this.rating,
     this.isFree = false,
+    required this.image, // Thêm tham số image vào constructor
   });
 }
 
@@ -23,32 +25,36 @@ class FreeCourse extends StatefulWidget {
 
 class _FreeCourseState extends State<FreeCourse> {
   int selectedCategoryIndex = 0;
-
   final List<Course> courses = [
     Course(
-      title: 'C++',
+      title: 'Khóa học C++',
       price: '0 VNĐ',
       rating: 4.2,
+      image: 'assets/images/C.jpg',
     ),
     Course(
-      title: 'HTML/CSS',
+      title: 'Khóa học HTML/CSS',
       price: '0 VNĐ',
       rating: 3.9,
+      image: 'assets/images/html_css.jpg',
     ),
     Course(
-      title: 'Graphic Design Advanced',
+      title: 'Khóa học Java',
       price: '0 VNĐ',
       rating: 4.2,
+      image: 'assets/images/java.jpg',
     ),
     Course(
       title: 'Web Developer',
       price: '0 VNĐ',
       rating: 4.9,
+      image: 'assets/images/web_dev.jpg',
     ),
     Course(
       title: 'Digital Marketing',
       price: '0 VNĐ',
       rating: 4.0,
+      image: 'assets/images/digital_marketing.jpg',
     ),
   ];
 
@@ -129,9 +135,15 @@ class _FreeCourseState extends State<FreeCourse> {
         children: [
           // Course Thumbnail
           Container(
-            width: 150,
+            width: 180,
             height: 150,
-            color: Colors.grey[300],
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(course.image),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           Expanded(
             child: Padding(
@@ -141,7 +153,7 @@ class _FreeCourseState extends State<FreeCourse> {
                 children: [
                   if (course.isFree)
                     const Text(
-                      'Programing',
+                      'Programming',
                       style: TextStyle(
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
@@ -151,7 +163,7 @@ class _FreeCourseState extends State<FreeCourse> {
                     course.title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 20,
                     ),
                   ),
                   Text(
@@ -159,11 +171,12 @@ class _FreeCourseState extends State<FreeCourse> {
                     style: const TextStyle(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
                   Row(
                     children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const Icon(Icons.star, color: Colors.amber, size: 30),
                       Text(' ${course.rating}    '),
                     ],
                   ),

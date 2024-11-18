@@ -17,9 +17,9 @@ class _LoginPageState extends State<Login> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    // Giả định tài khoản và mật khẩu đúng là:NN
+    // Giả định tài khoản và mật khẩu đúng là:
     String correctEmail = "bao@gmail.com";
-    String correctPassword = "bao123";
+    String correctPassword = "123456";
 
     if (email == correctEmail && password == correctPassword) {
       // Chuyển hướng đến trang HomePage
@@ -29,11 +29,7 @@ class _LoginPageState extends State<Login> {
       );
     } else {
       // Hiển thị thông báo lỗi nếu đăng nhập không thành công
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Tài khoản hoặc mật khẩu không đúng!'),
-        ),
-      );
+      showTopSnackBar(context, 'Tài khoản hoặc mật khẩu không đúng!');
     }
   }
 
@@ -47,9 +43,9 @@ class _LoginPageState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 50.0),
+                const SizedBox(height: 50.0),
                 _buildLogologin(),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 _buildOnboardingTitleAndContent(),
                 _buildEmail(),
                 _buildPassword(),
@@ -185,7 +181,7 @@ class _LoginPageState extends State<Login> {
 
   Widget _buildbtnLogin() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 30),
       child: ElevatedButton(
         onPressed: _login,
         style: ElevatedButton.styleFrom(
@@ -208,7 +204,7 @@ class _LoginPageState extends State<Login> {
 
   Widget _buildText() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 30),
       child: Column(
         children: [
           Text(
@@ -255,5 +251,34 @@ class _LoginPageState extends State<Login> {
         ),
       ],
     );
+  }
+
+  void showTopSnackBar(BuildContext context, String message) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + 16, // Vị trí trên cùng
+        left: 0,
+        right: 0,
+        child: Material(
+          child: Container(
+            color: Colors.red, // Màu nền của SnackBar
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    // Tự động xóa SnackBar sau 2 giây
+    Future.delayed(const Duration(seconds: 2), () {
+      overlayEntry.remove();
+    });
   }
 }

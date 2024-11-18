@@ -74,7 +74,7 @@ class _IntroChildPageState extends State<IntroChildPage> {
 
   Widget _buildOnboardingTitleAndContent() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10).copyWith(top: 50),
+      margin: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 50),
       child: Column(
         children: [
           Text(
@@ -101,7 +101,7 @@ class _IntroChildPageState extends State<IntroChildPage> {
   Widget _buildOnboardingNextAndPrevButton() {
     return Container(
       margin:
-          EdgeInsets.symmetric(horizontal: 30).copyWith(top: 230, bottom: 25),
+          const EdgeInsets.symmetric(horizontal: 30).copyWith(top: 230, bottom: 25),
       child: Row(
         children: [
           TextButton(

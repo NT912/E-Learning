@@ -10,11 +10,13 @@ class Category extends StatelessWidget {
     {'icon': 'assets/images/personal.png', 'title': 'Personal Development'},
   ];
 
+  Category({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tất cả khóa học'),
+        title: const Text('Tất cả khóa học'),
         centerTitle: true,
       ),
       body: Padding(
@@ -22,12 +24,12 @@ class Category extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: TextField(
+              child: const TextField(
                 decoration: InputDecoration(
                   hintText: 'Tìm kiếm...',
                   border: InputBorder.none,
@@ -35,10 +37,10 @@ class Category extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 16.0,
                   crossAxisSpacing: 16.0,
@@ -65,6 +67,7 @@ class CategoryItem extends StatelessWidget {
   final String title;
 
   const CategoryItem({
+    super.key,
     required this.iconPath,
     required this.title,
   });
@@ -80,11 +83,11 @@ class CategoryItem extends StatelessWidget {
           width: 50,
           fit: BoxFit.cover,
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         ),
       ],
     );

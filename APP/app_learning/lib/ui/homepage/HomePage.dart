@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:app_learning/ui/category/category.dart';
-import '../Course/FreeCourse.dart';
-import '../Course/ProCourse.dart';
+import 'package:app_learning/ui/homepage/Free_courses.dart';
+import 'package:app_learning/ui/homepage/course_search.dart';
+import 'package:flutter/material.dart';
+
+import 'Pro_courses.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,15 +24,16 @@ class _HomePageState extends State<HomePage> {
           children: [
             _buildGreetingSection(),
             const SizedBox(height: 40),
-            _buildSearchBar(),
+            // _buildSearchBar(),
+            const CourseSearch(),
             const SizedBox(height: 16),
             _buildBanner(),
             const SizedBox(height: 30),
             _buildCourseCategories(),
             const SizedBox(height: 30),
-            _buildFreeCourses(),
+            const FreeCoursesHome(),
             const SizedBox(height: 30),
-            _buildProCourses(),
+            const FroCoursesHome(),
           ],
         ),
       )),
@@ -58,18 +61,6 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ],
-    );
-  }
-
-  Widget _buildSearchBar() {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: 'Search for..',
-        prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
     );
   }
 
@@ -139,123 +130,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ],
-    );
-  }
-
-  Widget _buildFreeCourses() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Khóa học miễn phí',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FreeCourse(),
-                  ),
-                );
-              },
-              child: const Text(
-                'Xem thêm',
-                style: TextStyle(fontSize: 16, color: Colors.blue),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              _buildCourseCard('React', 'Miễn phí'),
-              const SizedBox(width: 8),
-              _buildCourseCard('PHP', 'Miễn phí'),
-              const SizedBox(width: 8),
-              _buildCourseCard('Java', 'Miễn phí'),
-              const SizedBox(width: 20),
-              _buildCourseCard('Flutter', 'Miễn phí'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProCourses() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Khóa học Pro',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FroCourse(),
-                  ),
-                );
-              },
-              child: const Text(
-                'Xem thêm',
-                style: TextStyle(fontSize: 16, color: Colors.blue),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              _buildCourseCard('React', '500,000 VND'),
-              const SizedBox(width: 8),
-              _buildCourseCard('PHP', '600,000 VND'),
-              const SizedBox(width: 8),
-              _buildCourseCard('Java', '700,000 VND'),
-              const SizedBox(width: 20),
-              _buildCourseCard('Flutter', '800,000 VND'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCourseCard(String title, String price) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset(
-            'assets/images/login.png',
-            height: 200,
-            width: 200,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(title,
-                style:
-                    const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-            child: Text(price, style: const TextStyle(fontSize: 18)),
-          ),
-        ],
-      ),
     );
   }
 }

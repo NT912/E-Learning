@@ -40,7 +40,7 @@ const auth = {
       );
     }
   },
-
+  //
   adminLogin: async (req, res) => {
     try {
       const result = await authService.adminLogin(req.body);

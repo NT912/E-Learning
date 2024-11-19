@@ -143,7 +143,7 @@ router.delete(
 /**
  * @swagger
  * /course/lesson/{lessonID}/update/allowDemo:
- *   post:
+ *   patch:
  *     summary: Update lesson to allow demo access
  *     tags: [Lesson]
  *     parameters:
@@ -170,7 +170,7 @@ router.delete(
  *       400:
  *         description: Error updating lesson demo access
  */
-router.post(
+router.patch(
   "/:lessonID/update/allowDemo",
   (req: Request, res: Response) => lessonController.updateLessonAllowDemo(req, res)
 );

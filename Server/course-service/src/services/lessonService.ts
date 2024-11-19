@@ -52,16 +52,18 @@ const lessonService = {
     if (!lesson) throw new Error("Lesson not found.");
 
     const course = await courseModel.findCourseByLessonID(lessonID);
-    if (!course || course.UserID !== userID) throw new Error("You do not have permission to update this lesson.");
+    if (!course || course.UserID != userID) throw new Error("You do not have permission to update this lesson.");
 
     let fileLink: string = lesson.FileLink? lesson.FileLink : '';
-    const fileType = file? file.mimetype : '';
     let duration: number = 0;
 
+    let fileType = 'link';
     if (file) {
       try {
         // Delete existing file, if any, before uploading a new one
         if (fileLink) await firebaseHelper.deleteFile(fileLink);
+
+        fileType = file.mimetype;
 
         // Get video duration if the file is a video
         if (fileType === "video/mp4") {
@@ -74,10 +76,11 @@ const lessonService = {
         console.error("File upload error:", err);
         throw new Error("Error uploading new file.");
       }
-    }
+    } 
 
+    console.log(link)
     // Update lesson with new information
-    await LessonModel.updateLesson(lessonID, title, description, fileLink, fileType, duration);
+    await LessonModel.updateLesson(lessonID, title, description, fileLink, fileType, duration, link);
   },
 
   /**
@@ -87,6 +90,8 @@ const lessonService = {
    * @return Promise<void>
    */
   updateLessonAllowDemo: async (userID: number, lessonID: number): Promise<void> => {
+    console.log(userID, lessonID)
+    
     const lesson = await LessonModel.findById(lessonID);
     if (!lesson) throw new Error("Lesson not found.");
 

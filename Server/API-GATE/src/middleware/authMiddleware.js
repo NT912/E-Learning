@@ -30,6 +30,7 @@ const authMiddleware = {
       req.user = response.data.user;
       next();
     } catch (error) {
+      console.log(error)
       const status = error.response?.status || 500;
       const message = error.response?.data?.message || "Error verifying token";
       return res.status(status).json({ message });
@@ -66,6 +67,7 @@ const authMiddleware = {
       req.user = response.data.user;
       next();
     } catch (error) {
+      console.log(error)
       const status = error.response?.status || 500;
       const message = error.response?.data?.message || "Error verifying token";
       return res.status(status).json({ message });
@@ -102,6 +104,7 @@ const authMiddleware = {
       req.user = response.data.user;
       next();
     } catch (error) {
+      console.log(error)
       const status = error.response?.status || 500;
       const message = error.response?.data?.message || "Error verifying token";
       return res.status(status).json({ message });

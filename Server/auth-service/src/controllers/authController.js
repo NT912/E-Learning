@@ -87,6 +87,8 @@ const auth = {
 
   verifyToken: (req, res) => {
     const token = req.header("Authorization");
+
+    console.log(token);
   
     if (!token) {
       return res.status(401).json({
@@ -110,6 +112,7 @@ const auth = {
         user: decoded,
       });
     } catch (err) {
+      console.log(err);
       return res.status(403).json({
         message: "Token is invalid or has expired. Please login again.",
       });

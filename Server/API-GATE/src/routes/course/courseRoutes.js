@@ -4,8 +4,9 @@ const courseController = require("../../controllers/course/courseController");
 const authMiddleware = require("../../middleware/authMiddleware");
 const courseValidator = require("../../validation/course/courseValidator");
 
-const chapterRoutes = require("./chapterRoutes")
-const lessonRoutes = require("./lessonRoutes")
+const chapterRoutes = require("./chapterRoutes");
+const lessonRoutes = require("./lessonRoutes");
+const dependRoutes = require("./dependRoutes");
 
 const router = express.Router();
 const upload = multer(); 
@@ -429,5 +430,6 @@ router.get("/getall", courseController.getAll);
 
 router.use("/chapter", chapterRoutes);
 router.use("/lesson", lessonRoutes);
+router.use("/course-depend", dependRoutes);
 
 module.exports = router;

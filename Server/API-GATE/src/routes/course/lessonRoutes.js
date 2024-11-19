@@ -1,34 +1,27 @@
 const express = require("express");
-const router = express.Router();
 const multer = require("multer");
-
-const lessonController = require("../../controllers/course/lessonController");
 const authMiddleware = require("../../middleware/authMiddleware");
-const lessonValidator = require("../../validation/lessonValidation");
+const lessonController = require("../../controllers/course/lessonController");
+const lessonValidator = require("../../validation/course/lessonValidator")
 
-const roleMiddleware = require("../../middleware/roleMiddleware");
-const Role = require("../../../config/data/role");
+const router = express.Router();
+const upload = multer();
 
-const upload = multer({ dest: 'uploads/' });
-
-/*
-Lesson
-*/
 /**
  * @swagger
  * /course/lesson/create/{chapterID}:
  *   post:
  *     summary: Create a new lesson in a chapter
  *     tags: [Lesson]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: chapterID
  *         required: true
- *         description: The ID of the chapter to add the lesson to
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
+ *         description: The ID of the chapter where the lesson will be added
  *     responses:
  *       201:
  *         description: Lesson created successfully
@@ -40,78 +33,120 @@ Lesson
  *                 lessonID:
  *                   type: integer
  *                   description: The ID of the newly created lesson
+ *                   example: 1
  *       400:
  *         description: Error creating lesson
  */
-router.post("/create/:chapterID", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.create);
+router.post("/create/:chapterID", authMiddleware.techerRequire, lessonController.createLesson);
+
 /**
  * @swagger
  * /course/lesson/{lessonID}/update:
  *   post:
- *     summary: Update lesson details
+ *     summary: Update a lesson
  *     tags: [Lesson]
  *     parameters:
  *       - in: path
  *         name: lessonID
  *         required: true
- *         description: The ID of the lesson to update
+ *         description: The ID of the lesson to be updated
  *         schema:
- *           type: integer
+ *           type: string
  *     requestBody:
- *       description: The updated lesson details, including file upload if necessary
  *       required: true
+ *       description: The updated lesson details
  *       content:
  *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               title:
  *                 type: string
- *                 required: true
- *                 description: The new title for the lesson
+ *                 require: true
+ *                 description: The new title of the lesson
  *               description:
  *                 type: string
- *                 description: The new description for the lesson
+ *                 description: The new description of the lesson
+ *               link:
+ *                 type: string
+ *                 description: An optional external link for the lesson
  *               file:
  *                 type: string
- *                 required: true
  *                 format: binary
- *                 description: An optional file to upload for the lesson (video, pdf, zip, word)
- *     security:
- *       - bearerAuth: []
+ *                 description: Optional file upload for the lesson (e.g., video, PDF, ZIP)
  *     responses:
  *       200:
  *         description: Lesson updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
  *       400:
- *         description: Error updating lesson
+ *         description: Invalid request data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
-router.post("/:lessonID/update", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), upload.single('file'), lessonValidator.update, lessonController.updateLesson);
+router.post("/:lessonID/update", authMiddleware.techerRequire, upload.single("file"), lessonValidator.updateLesson,  lessonController.updateLesson);
+
 /**
  * @swagger
- * /course/lesson/{lessonID}/delete:
- *   post:
- *     summary: Delete a lesson
+ * /course/lesson/{lessonID}/update/delete:
+ *   delete:
+ *     summary: Delete lesson
  *     tags: [Lesson]
  *     parameters:
  *       - in: path
  *         name: lessonID
  *         required: true
- *         description: The ID of the lesson to delete
+ *         description: The ID of the lesson to update demo access
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lesson deleted successfully
+ *         description: Lesson demo access updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
  *       400:
- *         description: Error deleting lesson
+ *         description: Error updating lesson demo access
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
-router.post("/:lessonID/delete", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.delete);
+router.delete("/:lessonID/delete", authMiddleware.techerRequire, lessonController.delete);
+
 /**
  * @swagger
- * /lesson/{lessonID}/update/allowDemo:
- *   post:
+ * /course/lesson/{lessonID}/update/allowDemo:
+ *   patch:
  *     summary: Update lesson to allow demo access
  *     tags: [Lesson]
  *     parameters:
@@ -121,14 +156,40 @@ router.post("/:lessonID/delete", authMiddleware.verifyToken, roleMiddleware.chec
  *         description: The ID of the lesson to update demo access
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lesson demo access updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
  *       400:
  *         description: Error updating lesson demo access
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
-router.post("/:lessonID/update/allowDemo", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), lessonController.updateLessonAllowDemo);
+router.patch("/:lessonID/update/allowDemo", authMiddleware.techerRequire, lessonController.allowDemo);
+
+// // Lấy chi tiết bài học
+// router.get(
+//   "/:lessonID",
+//   authMiddleware.loginRequire,
+//   (req, res) => {
+//     // Controller lấy thông tin chi tiết bài học từ course-service.
+//   }
 
 module.exports = router;

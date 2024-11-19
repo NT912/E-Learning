@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /course/chapter/create/{courseID}:
+ * /course/chapter/create:
  *   post:
  *     summary: Create a new chapter for a course
  *     tags: [Chapter]
@@ -25,6 +25,9 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
+ *               courseID:
+ *                 type: integer
+ *                 description: Course that chapter belong to
  *               userID:
  *                 type: integer
  *                 description: ID of the user creating the chapter
@@ -42,7 +45,7 @@ const router = express.Router();
  *       400:
  *         description: Error creating chapter
  */
-router.post("/create/:courseID", chapterValidator.create, (req: Request, res: Response) => chapterController.create(req, res));
+router.post("/create", (req: Request, res: Response) => chapterController.create(req, res));
 
 /**
  * @swagger
@@ -71,13 +74,16 @@ router.post("/create/:courseID", chapterValidator.create, (req: Request, res: Re
  *               chapterName:
  *                 type: string
  *                 description: The new name for the chapter
+ *               description:
+ *                 type: string
+ *                 description: The description for the chapter
  *     responses:
  *       200:
  *         description: Chapter name updated successfully
  *       400:
  *         description: Error updating chapter name
  */
-router.post("/:chapterID/update/name", chapterValidator.update, (req: Request, res: Response) => chapterController.updateChapterName(req, res));
+router.post("/:chapterID/update", (req: Request, res: Response) => chapterController.updateChapterName(req, res));
 
 /**
  * @swagger
@@ -109,6 +115,6 @@ router.post("/:chapterID/update/name", chapterValidator.update, (req: Request, r
  *       400:
  *         description: Error deleting chapter
  */
-router.delete("/:chapterID/delete", chapterValidator.delete, (req: Request, res: Response) => chapterController.deleteChapter(req, res));
+router.delete("/:chapterID/delete", (req: Request, res: Response) => chapterController.deleteChapter(req, res));
 
 export default router;

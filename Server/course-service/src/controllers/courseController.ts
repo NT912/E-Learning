@@ -52,7 +52,7 @@ class CourseController {
 
     try {
       await courseService.updateCourseName(Number(userID), courseID, name);
-      res.status(200).json();
+      res.status(200).json({ message: "Course avatar updated successfully." });
     } catch (err) {
       res.status(400).json({ error: (err as Error).message });
     }
@@ -73,6 +73,7 @@ class CourseController {
       await courseService.updateCourseAvatar(Number(userID), courseID, file);
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
 }
@@ -84,8 +85,9 @@ class CourseController {
 
     try {
       await courseService.updateCourseShortcut(Number(userID), courseID, content);
-      res.status(200).json();
+      res.status(200).json({ message: "Course shortcut updated successfully." });
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -98,6 +100,7 @@ class CourseController {
       await courseService.updateCourseDescription(Number(userID), courseID, content);
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -110,6 +113,7 @@ class CourseController {
       await courseService.updateCourseCost(Number(userID), courseID, Number(amount));
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -122,13 +126,14 @@ class CourseController {
       await courseService.confirmCourse(userID, courseID);
       res.status(200).json();
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
 
   async updateState(req: Request, res: Response): Promise<void> {
     const courseID = Number(req.params.courseID);
-    const { state } = req.query as { state?: string };
+    const { state, userID } = req.body;
 
     try {
       if (!state || !Object.values(CourseStatus).includes(state as typeof CourseStatus[keyof typeof CourseStatus])) {
@@ -136,9 +141,10 @@ class CourseController {
         return
       }
 
-      await courseService.updateCourseStatus(courseID, state as typeof CourseStatus[keyof typeof CourseStatus]);
+      await courseService.updateCourseStatus(courseID, userID, state as typeof CourseStatus[keyof typeof CourseStatus]);
       res.status(200).json({ message: `Course status updated to ${state}` });
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }
@@ -150,6 +156,7 @@ class CourseController {
       await courseService.updateCourseLevel(userID, parseInt(courseID), level);
       res.status(200).json({ message: "Course level updated successfully." });
     } catch (error) {
+      console.log(error)
       res.status(400).json({ error: (error as Error).message });
     }
   }
@@ -162,6 +169,7 @@ class CourseController {
       await courseService.deleteCourse(userID, courseID);
       res.status(200).json({ message: "Course deleted successfully" });
     } catch (err) {
+      console.log(err)
       res.status(400).json({ error: (err as Error).message });
     }
   }

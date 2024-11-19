@@ -1,16 +1,13 @@
 // src/app.ts
 import express from "express";
-import dotenv from "dotenv";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import enrollmentRoutes from "./routes/enrollmentRoutes";
 import swaggerDocs from "../config/swagger";
-
-// Load environment variables
-dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.development" });
+import config from "../config";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = config.port;
 
 // Middleware
 app.use(express.json());

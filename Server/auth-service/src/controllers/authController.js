@@ -2,6 +2,7 @@ const authService = require("../services/authService");
 const sendResponse = require("../helpers/sendResponse");
 const messages = require("../../config/message.json");
 const { addTokenToBlacklist } = require("../helpers/blacklist");
+const jwt = require("jsonwebtoken");
 
 const auth = {
   signup: async (req, res) => {
@@ -31,7 +32,7 @@ const auth = {
         token: result.token,
       });
     } catch (error) {
-      console.log(error);
+      console.log("Login error:", error);
       return sendResponse(
         res,
         false,
@@ -81,6 +82,40 @@ const auth = {
         messages.auth.logoutError.title,
         messages.auth.logoutError.description
       );
+    }
+  },
+
+  verifyToken: (req, res) => {
+    const token = req.header("Authorization");
+
+    console.log(token);
+  
+    if (!token) {
+      return res.status(401).json({
+        message: "Token is missing. Please provide a token to access this resource.",
+      });
+    }
+  
+    const tokenParts = token.split(" ");
+    if (tokenParts[0] !== "Bearer" || tokenParts.length !== 2) {
+      return res.status(401).json({
+        message: "Invalid token format. Token must be in the format 'Bearer <token>'.",
+      });
+    }
+  
+    const actualToken = tokenParts[1];
+  
+    try {
+      const decoded = jwt.verify(actualToken, process.env.JWT_SECRET);
+      res.status(200).json({
+        message: "Token is valid",
+        user: decoded,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(403).json({
+        message: "Token is invalid or has expired. Please login again.",
+      });
     }
   },
 };

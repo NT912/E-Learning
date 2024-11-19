@@ -1,13 +1,9 @@
 // src/app.ts
 import express, { Request, Response, NextFunction } from "express";
-import dotenv from "dotenv";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import courseRoutes from "./routes/courseRoutes";
-
-// Load config project
-const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
-dotenv.config({ path: envFile });
+import cors from 'cors'
 import config from "../config";
 
 import swaggerDocs from "../config/swagger"
@@ -17,6 +13,12 @@ const PORT = config.port;
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+
+app.use(cors({
+  origin: `http://localhost:2999`,  
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 // Routes
 app.use("/course", courseRoutes);

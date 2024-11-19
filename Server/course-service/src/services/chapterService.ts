@@ -30,7 +30,7 @@ const chapterService = {
    * @param name - Tên mới của chapter.
    * @return Promise<void> - Promise không trả về giá trị hoặc lỗi.
    */
-  updateChapterName: async (userID: number, chapterID: number, name: string): Promise<void> => {
+  updateChapterName: async (userID: number, chapterID: number, name: string, description: string): Promise<void> => {
     const chapter = await ChapterModel.findById(chapterID);
     if (!chapter) {
       throw new Error("Chapter not found.");
@@ -46,7 +46,8 @@ const chapterService = {
       throw new Error("You do not have permission to update this chapter.");
     }
 
-    await ChapterModel.updateTitle(chapterID, name);
+    console.log(description);
+    await ChapterModel.updateTitle(chapterID, name, description);
   },
 
   /**
@@ -67,7 +68,8 @@ const chapterService = {
       throw new Error("Course not found.");
     }
 
-    if (course.UserID !== userID) {
+    console.log(course,"  ",userID)
+    if (course.UserID != userID) {
       throw new Error("You do not have permission to delete this chapter.");
     }
 

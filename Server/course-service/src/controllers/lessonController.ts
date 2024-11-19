@@ -6,8 +6,7 @@ class LessonController {
    * Tạo một bài học mới.
    */
   async create(req: Request, res: Response): Promise<void> {
-    const { chapterID } = (req.params);
-    const { userID } = req.body;
+    const { userID, chapterID } = req.body;
 
     try {
       const result = await lessonService.createLesson(userID, parseInt(chapterID));
@@ -39,35 +38,20 @@ class LessonController {
    * Update a lesson.
    */
   async updateLesson(req: Request, res: Response): Promise<void> {
-    const lessonID = Number(req.params);
+    const { lessonID } = req.params;
     const { title, description, userID, link } = req.body;
     const file = req.file;
 
     try {
       if (file) {
         const fileType = file.mimetype;
-
-        const allowedTypes = [
-          "application/pdf",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          "video/mp4",
-          "image/jpeg",
-          "image/png",
-          "application/vnd.ms-excel",
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "application/zip"
-        ];
-
-        if (!allowedTypes.includes(fileType)) {
-          throw new Error("File type is not supported. Allowed types: PDF, Word, Video, Image, Excel.");
-        }
       }
 
       if ((!link && !file) || (link && file)) {
         throw new Error("Require either a link or a file, but not both.");
       }
 
-      await lessonService.updateLesson(userID, lessonID, title, description, file, link);
+      await lessonService.updateLesson(userID, Number(lessonID), title, description, file, link);
       res.status(200).json();
     } catch (err) {
       res.status(400).json({
@@ -80,11 +64,12 @@ class LessonController {
    * Update the "Allow Demo" status of a lesson.
    */
   async updateLessonAllowDemo(req: Request, res: Response): Promise<void> {
-    const lessonID = Number(req.params);
+    const { lessonID } = req.params;
     const { userID } = req.body;
 
     try {
-      await lessonService.updateLessonAllowDemo(userID, lessonID);
+      console.log()
+      await lessonService.updateLessonAllowDemo(userID, Number(lessonID));
       res.status(200).json();
     } catch (err) {
       res.status(400).json({

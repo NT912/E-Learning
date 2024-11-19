@@ -1,6 +1,6 @@
 // firebase.js
 const admin = require('firebase-admin');
-const serviceAccount = require('./messaging0service.json'); 
+const serviceAccount = require('./messagingservice.json'); 
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

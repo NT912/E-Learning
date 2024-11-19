@@ -1,31 +1,27 @@
 const express = require("express");
-const router = express.Router();
 
 const chapterController = require("../../controllers/course/chapterController");
 const authMiddleware = require("../../middleware/authMiddleware");
-const chapterValidator = require("../../validation/chapterValidation");
-const roleMiddleware = require("../../middleware/roleMiddleware");
-const Role = require("../../../config/data/role");
+const chapterValidator = require("../../validation/course/chapterValidator");
 
+const router = express.Router();
 
-/*
-Chapter
-*/
 /**
  * @swagger
  * /course/chapter/create/{courseID}:
  *   post:
  *     summary: Create a new chapter for a course
- *     tags: [Chapter]
+ *     tags: [Chapter of course]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Endpoint to create a new chapter for a course. Requires a valid teacher token.
  *     parameters:
  *       - in: path
  *         name: courseID
  *         required: true
- *         description: The ID of the course to add the chapter to
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
+ *         description: ID of the course to which the chapter will be added
  *     responses:
  *       201:
  *         description: Chapter created successfully
@@ -36,50 +32,59 @@ Chapter
  *               properties:
  *                 chapterID:
  *                   type: integer
- *                   description: The ID of the newly created chapter
+ *                   description: ID of the newly created chapter
+ *                   example: 1
  *       400:
- *         description: Error creating chapter
+ *         description: Error in creating chapter
  */
-router.post("/create/:courseID", roleMiddleware.checkRole(Role.TEACHER), authMiddleware.verifyToken, chapterController.create);
+router.post("/create/:courseID", authMiddleware.techerRequire, chapterController.createChapter);   
+
 /**
  * @swagger
- * /course/chapter/update/name/{chapterID}:
- *   post:
- *     summary: Update chapter name
- *     tags: [Chapter]
+ * /course/chapter/{chapterID}/update:
+ *   patch:
+ *     summary: Update an existing chapter of a course
+ *     tags: [Chapter of course]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Endpoint to update details of an existing chapter. Requires a valid teacher token.
  *     parameters:
  *       - in: path
  *         name: chapterID
  *         required: true
- *         description: The ID of the chapter to update
  *         schema:
  *           type: integer
+ *         description: ID of the chapter to update
  *     requestBody:
- *       description: The updated chapter name
+ *       description: Updated chapter information
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               chapterName:
+ *               title:
  *                 type: string
- *                 description: The new name for the chapter
- *     security:
- *       - bearerAuth: []
+ *                 description: Updated title of the chapter
+ *                 example: "Advanced Topics in Data Science"
+ *               description:
+ *                 type: string
+ *                 description: Updated description of the chapter
+ *                 example: "This chapter covers advanced topics in data science, including ML models..."
  *     responses:
  *       200:
- *         description: Chapter name updated successfully
+ *         description: Chapter updated successfully
  *       400:
- *         description: Error updating chapter name
+ *         description: Error in updating chapter
  */
-router.post("/:chapterID/update/name", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), chapterValidator.updateName, chapterController.updateChapterName);
+router.patch("/:chapterID/update", authMiddleware.techerRequire, chapterValidator.update, chapterController.updateChapter);
+
 /**
  * @swagger
- * /course/chapter/delete/{chapterID}:
- *   post:
+ * /course/chapter/{chapterID}/delete:
+ *   delete:
  *     summary: Delete a chapter from the course
- *     tags: [Chapter]
+ *     tags: [Chapter of course]
  *     parameters:
  *       - in: path
  *         name: chapterID
@@ -87,14 +92,12 @@ router.post("/:chapterID/update/name", authMiddleware.verifyToken, roleMiddlewar
  *         description: The ID of the chapter to delete
  *         schema:
  *           type: integer
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Chapter deleted successfully
  *       400:
  *         description: Error deleting chapter
  */
-router.post("/:chapterID/delete", authMiddleware.verifyToken, roleMiddleware.checkRole(Role.TEACHER), chapterController.deleteChapter);
+router.delete("/:chapterID/delete", authMiddleware.techerRequire, chapterController.deleteChapter);
 
 module.exports = router;

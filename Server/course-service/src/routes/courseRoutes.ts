@@ -36,7 +36,7 @@ const upload = multer({ dest: "uploads/" });
  *       400:
  *         description: Invalid input or missing fields
  */
-router.post("/create", courseValidator.createCourse, (req: Request, res: Response) => courseController.createCourse(req, res));
+router.post("/create", (req: Request, res: Response) => courseController.createCourse(req, res));
 
 /**
  * @swagger
@@ -98,7 +98,7 @@ router.get("/:courseID/details", (req: Request, res: Response) => courseControll
  *       400:
  *         description: Error in updating course name
  */
-router.patch("/:courseID/update/name", courseValidator.updateCourseName, (req: Request, res: Response) => courseController.updateCourseName(req, res));
+router.patch("/:courseID/update/name", (req: Request, res: Response) => courseController.updateCourseName(req, res));
 
 /**
  * @swagger
@@ -136,37 +136,37 @@ router.patch("/:courseID/update/name", courseValidator.updateCourseName, (req: R
  */
 router.patch("/:courseID/update/avatar", upload.single("file"), courseValidator.updateCourseAvatar, (req: Request, res: Response) => courseController.updateCourseAvatar(req, res));
 
-/**
- * @swagger
- * /course/{courseID}/confirm:
- *   patch:
- *     summary: Confirm the course
- *     tags: [Course]
- *     parameters:
- *       - in: path
- *         name: courseID
- *         required: true
- *         description: ID of the course to confirm
- *         schema:
- *           type: integer
- *     requestBody:
- *       description: User ID for confirmation
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userID:
- *                 type: integer
- *                 description: The ID of the user confirming the course
- *     responses:
- *       200:
- *         description: Course confirmed successfully
- *       400:
- *         description: Error in confirming course
- */
-router.patch("/:courseID/confirm", courseValidator.confirmCourse, (req: Request, res: Response) => courseController.confirm(req, res));
+// /**
+//  * @swagger
+//  * /course/{courseID}/confirm:
+//  *   patch:
+//  *     summary: Confirm the course
+//  *     tags: [Course]
+//  *     parameters:
+//  *       - in: path
+//  *         name: courseID
+//  *         required: true
+//  *         description: ID of the course to confirm
+//  *         schema:
+//  *           type: integer
+//  *     requestBody:
+//  *       description: User ID for confirmation
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object
+//  *             properties:
+//  *               userID:
+//  *                 type: integer
+//  *                 description: The ID of the user confirming the course
+//  *     responses:
+//  *       200:
+//  *         description: Course confirmed successfully
+//  *       400:
+//  *         description: Error in confirming course
+//  */
+// router.patch("/:courseID/confirm", courseValidator.confirmCourse, (req: Request, res: Response) => courseController.confirm(req, res));
 
 /**
  * @swagger
@@ -201,7 +201,7 @@ router.patch("/:courseID/confirm", courseValidator.confirmCourse, (req: Request,
  *       400:
  *         description: Error in updating course shortcut
  */
-router.patch("/:courseID/update/shortcut", courseValidator.updateCourseShortcut, (req: Request, res: Response) => courseController.updateCourseShortcut(req, res));
+router.patch("/:courseID/update/shortcut", (req: Request, res: Response) => courseController.updateCourseShortcut(req, res));
 
 /**
  * @swagger
@@ -236,7 +236,7 @@ router.patch("/:courseID/update/shortcut", courseValidator.updateCourseShortcut,
  *       400:
  *         description: Error in updating course description
  */
-router.patch("/:courseID/update/description", courseValidator.updateCourseDescription, (req: Request, res: Response) => courseController.updateCourseDescription(req, res));
+router.patch("/:courseID/update/description", (req: Request, res: Response) => courseController.updateCourseDescription(req, res));
 
 /**
  * @swagger
@@ -271,12 +271,11 @@ router.patch("/:courseID/update/description", courseValidator.updateCourseDescri
  *       400:
  *         description: Error in updating course cost
  */
-router.patch("/:courseID/update/cost", courseValidator.updateCourseCost, (req: Request, res: Response) => courseController.updateCourseCost(req, res));
-
+router.patch("/:courseID/update/cost", (req: Request, res: Response) => courseController.updateCourseCost(req, res));
 
 /**
  * @swagger
- * /course/{courseID}/update-level:
+ * /course/{courseID}/update/level:
  *   patch:
  *     summary: Update the level of a course
  *     tags: [Course]
@@ -311,9 +310,7 @@ router.patch("/:courseID/update/cost", courseValidator.updateCourseCost, (req: R
  *       400:
  *         description: Invalid level, course ID, or user ID; or other error updating course level
  */
-router.patch("/:courseID/update-level", courseValidator.updateCourseLevel, (req: Request, res: Response) =>
-    courseController.updateCourseLevel(req, res)
-  );
+router.patch("/:courseID/update/level", (req: Request, res: Response) =>courseController.updateCourseLevel(req, res));
 
 /**
  * @swagger
@@ -341,7 +338,7 @@ router.patch("/:courseID/update-level", courseValidator.updateCourseLevel, (req:
  *       400:
  *         description: Invalid course status or other error updating course status
  */
-router.patch("/:courseID/update-status", (req: Request, res: Response) => courseController.updateState(req, res));
+router.patch("/:courseID/update/status", (req: Request, res: Response) => courseController.updateState(req, res));
 
 /**
  * @swagger

@@ -95,16 +95,17 @@ const lessonModel = {
     description: string,
     fileLink: string,
     fileType: string,
-    duration: number
+    duration: number,
+    link: string | null
   ): Promise<void> => {
     const query = `
       UPDATE Lesson
-      SET Title = ?, Description = ?, FileLink = ?, Type = ?, Duration = ?
+      SET Title = ?, Description = ?, FileLink = ?, Type = ?, Duration = ?, Link = ?
       WHERE LessonID = ?;
     `;
 
     return new Promise((resolve, reject) => {
-      db.query(query, [title, description, fileLink, fileType, duration, lessonID], (err: Error | null) => {
+      db.query(query, [title, description, fileLink, fileType, duration, link, lessonID], (err: Error | null) => {
         if (err) {
           console.log(`Failed to update lesson: ${err}`);
           return reject(err);

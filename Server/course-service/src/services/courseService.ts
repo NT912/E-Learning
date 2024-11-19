@@ -4,6 +4,7 @@ import lessonModel from "../models/lessonModel";
 import firebaseHelper from "../helpers/firebaseHelper";
 import { Lesson } from "../types/models"; 
 import { CourseLevel } from "../../config/data/levelCoures";
+import { CourseStatus } from "../../config/data/courseStatus";
 
 const courseService = {
   /**
@@ -106,10 +107,12 @@ const courseService = {
    * @param courseID - ID của khóa học.
    * @param newStatus - Trạng thái mới của khóa học.
    */
-  updateCourseStatus: async (courseID: number, newStatus: string): Promise<void> => {
+  updateCourseStatus: async (courseID: number, userID: number, newStatus: string): Promise<void> => {
     try {
       const course = await courseModel.findById(courseID);
       if (!course) throw new Error("Course not found.");
+
+      if (newStatus == CourseStatus.CONFIRMED && course.UserID !== userID) throw new Error("You do not have permission to update this course.");
 
       await courseModel.updateStatus(courseID, newStatus);
     } catch (err) {

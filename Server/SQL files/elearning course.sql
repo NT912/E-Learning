@@ -88,5 +88,5 @@ CREATE TABLE ratecourse (
   CourseID INT UNSIGNED NOT NULL, -- Liên kết với Course Service
   StarNumber INT DEFAULT NULL,
   Comment TEXT DEFAULT NULL,
-  FOREIGN KEY (CourseID) REFERENCES course(CourseID) ON DELETE CASCADE );
+  FOREIGN KEY (CourseID) REFERENCES course(CourseID) ON DELETE CASCADE
 );

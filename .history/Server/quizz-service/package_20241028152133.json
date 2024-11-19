@@ -1,0 +1,8 @@
+{
+  "name": "quizz-service",
+  "version": "1.0.0",
+  "description": "This is service for quizz",
+  "main": "app.js",
+  "author": "NhaTruong",
+  "license": "NhaTruong"
+}

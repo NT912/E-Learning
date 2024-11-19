@@ -1,0 +1,32 @@
+{
+  "name": "quizz-service",
+  "version": "1.0.0",
+  "description": "This is service for quizz",
+  "main": "app.js",
+  "author": "NhaTruong",
+  "license": "NhaTruong",
+  "scripts": {
+    "prod": "cross-env NODE_ENV=production node -r module-alias/register src/app.js",
+    "dev": "cross-env NODE_ENV=development nodemon -r module-alias/register src/app.js"
+  },
+  "_moduleAliases": {
+    "~": "src"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.10.0",
+    "firebase": "^9.1.2",
+    "firebase-admin": "^9.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
+    "mysql2": "^2.3.2",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
+    "multer": "^1.4.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.7"
+  }
+}

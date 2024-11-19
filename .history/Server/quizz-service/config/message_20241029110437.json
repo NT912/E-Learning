@@ -1,0 +1,43 @@
+{
+  "quiz": {
+    "createSuccess": "Quiz created successfully.",
+    "createError": "Failed to create quiz.",
+    "questionAddSuccess": "Question added successfully.",
+    "questionAddError": "Failed to add question.",
+    "submitSuccess": "Quiz submitted successfully.",
+    "submitError": "Failed to submit quiz.",
+    "pass": "Quiz passed.",
+    "fail": "Quiz failed. Please try again.",
+    "scoreBelowMin": "Your score is below 6/10. You need to retry."
+  },
+
+  "exercise": {
+    "createSuccess": {
+      "title": "Exercise created successfully",
+      "description": "The exercise has been successfully created."
+    },
+
+    "createError": {
+      "title": "Failed to create exercise",
+      "description": {
+        "missingLessonId": "Lesson ID is required to create an exercise.",
+        "missingFields": "Title, description, and language are required fields.",
+        "databaseError": "There was an error saving the exercise to the database."
+      }
+    },
+
+    "submissionSuccess": {
+      "title": "Exercise submitted successfully",
+      "description": "Your code has been successfully submitted and evaluated."
+    },
+
+    "submissionError": {
+      "title": "Failed to submit exercise",
+      "description": {
+        "runtimeError": "There was a runtime error or syntax error in your code.",
+        "missingFields": "Exercise ID, User ID, Code, and Language are required fields.",
+        "invalidLanguage": "The provided programming language is not supported."
+      }
+    }
+  }
+}

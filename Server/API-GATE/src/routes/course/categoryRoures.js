@@ -1,6 +1,8 @@
-import express, { Request, Response } from "express";
-import CategoryController from "../controllers/categoryController";
-import categoryValidator from "../validation/categoryValidation";
+const express = require("express");
+const CategoryController = require("../../controllers/course/categoryController");
+const categoryValidator = require("../../validation/course/categoryValidator");
+
+const authMiddleware = require("../../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -36,7 +38,7 @@ Category Routes
  *       400:
  *         description: Error adding category
  */
-router.post("/add", (req: Request, res: Response) => CategoryController.create(req, res));
+router.post("/add", authMiddleware.adminRequire, categoryValidator.createCategory, (req, res) => CategoryController.create(req, res));
 
 /**
  * @swagger
@@ -73,7 +75,7 @@ router.post("/add", (req: Request, res: Response) => CategoryController.create(r
  *       400:
  *         description: Error updating category
  */
-router.post("/:categoryID/update", (req: Request, res: Response) => CategoryController.update(req, res));
+router.post("/:categoryID/update", authMiddleware.adminRequire, categoryValidator.updateCategory, (req, res) => CategoryController.update(req, res));
 
 /**
  * @swagger
@@ -96,16 +98,16 @@ router.post("/:categoryID/update", (req: Request, res: Response) => CategoryCont
  *       400:
  *         description: Error deleting category
  */
-router.delete("/:categoryID/delete", (req: Request, res: Response) => CategoryController.delete(req, res));
+router.delete("/:categoryID/delete", authMiddleware.adminRequire, (req, res) => CategoryController.delete(req, res));
 
 /**
  * @swagger
- * /course/category/getall:
+ * /course/category/:
  *   get:
  *     summary: Retrieve all categories
  *     tags: [Category]
  *     security:
- *       - bearerAuth: []
+ *       - bearerAuth: [] 
  *     responses:
  *       200:
  *         description: A list of all categories
@@ -128,7 +130,7 @@ router.delete("/:categoryID/delete", (req: Request, res: Response) => CategoryCo
  *       400:
  *         description: Error retrieving categories
  */
-router.get("/getall", (req: Request, res: Response) => CategoryController.getAll(req, res));
+router.get("/", (req, res) => CategoryController.getAll(req, res));
 
 /**
  * @swagger
@@ -138,6 +140,11 @@ router.get("/getall", (req: Request, res: Response) => CategoryController.getAll
  *     tags: [Category]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: categoryID
+ *         required: true
+ *         description: ID of the category
  *     responses:
  *       200:
  *         description: A list of all categories
@@ -160,6 +167,7 @@ router.get("/getall", (req: Request, res: Response) => CategoryController.getAll
  *       400:
  *         description: Error retrieving categories
  */
-router.get("/:categoryID", (req: Request, res: Response) => CategoryController.getCategoryDetail(req, res));
+router.get("/:categoryID", (req, res) => CategoryController.getID(req, res));
 
-export default router;
+
+module.exports = router;

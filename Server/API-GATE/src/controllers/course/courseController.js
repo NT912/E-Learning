@@ -175,6 +175,22 @@ const courseApiController = {
     }
   },
 
+  async updateCategory(req, res) {
+    const { courseID } = req.params;
+    try {
+      const response = await axios.patch(`${COURSE_SERVICE_URL}/course/${courseID}/update/category`, {
+        userID: req.user.id,
+        categoryID: req.body.categoryID
+      });
+      res.status(response.status).json(response.data || { message: "Updated category of course successfully." });
+    } catch (error) {
+        console.error(error.response?.data);
+        res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating lecategoryvel`,
+      });
+    }
+  },
+
   async getAll(req, res) {
     try {
       const response = await axios.get(`${COURSE_SERVICE_URL}/course/getall`, {

@@ -1,5 +1,5 @@
 import connection from "../../config/database/db";
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 interface Category {
   CategoryID: number;
@@ -76,7 +76,36 @@ const categoryModel = {
         resolve(results);
       });
     });
+  },
+
+  /**
+   * Lấy thông tin một danh mục theo ID.
+   * @param categoryID - ID của danh mục.
+   * @return Promise<Category | null> - Thông tin của danh mục hoặc null nếu không tìm thấy.
+   */
+  getCategoryById: (categoryID: number): Promise<Category | null> => {
+    const query = `SELECT * FROM category WHERE CategoryID = ?`;
+    return new Promise((resolve, reject) => {
+      // connection.query(query, [categoryID], (err: Error | null, results: Category[]) => {
+      //   if (err) {
+      //     return reject(err);
+      //   }
+      //   if (results.length > 0) {
+      //     resolve(results[0]);
+      //   } else {
+      //     resolve(null); // Không tìm thấy danh mục
+      //   }
+      connection.query(query, [categoryID], (err: Error | null, results: RowDataPacket[]) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        resolve(results[0] as Category);
+      });
+      
+    });
   }
+  
 };
 
 export default categoryModel;

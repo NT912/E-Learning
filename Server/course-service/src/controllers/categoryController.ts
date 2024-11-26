@@ -27,7 +27,8 @@ class CategoryController {
       await categoryService.updateCategory(Number(categoryID), name, description);
       res.status(200).json({ message: "Category updated successfully" });
     } catch (err) {
-      res.status(500).json({ error: (err as Error).message });
+      console.log(err);
+      res.status(404).json({ error: (err as Error).message });
     }
   }
 
@@ -51,8 +52,24 @@ class CategoryController {
   async getAll(req: Request, res: Response): Promise<void> {
     try {
       const categories = await categoryService.getAllCategories();
+      console.log(categories);
       res.status(200).json(categories);
     } catch (err) {
+      res.status(500).json({ error: (err as Error).message });
+    }
+  }
+
+  /**
+   * Lấy tất cả danh mục.
+   */
+  async getCategoryDetail(req: Request, res: Response): Promise<void> {
+    try {
+      const { categoryID } = req.params;
+
+      const categories = await categoryService.getCategoryDetails(Number(categoryID));
+      res.status(200).json(categories);
+    } catch (err) {
+      console.log(err);
       res.status(500).json({ error: (err as Error).message });
     }
   }

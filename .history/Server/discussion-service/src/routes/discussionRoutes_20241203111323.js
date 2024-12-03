@@ -277,7 +277,7 @@ router.put(
 
 /**
  * @swagger
- * /discussions/replies/{replyID}:
+ * /replies/{replyID}:
  *   delete:
  *     summary: Delete a reply to a discussion
  *     tags: [Replies]

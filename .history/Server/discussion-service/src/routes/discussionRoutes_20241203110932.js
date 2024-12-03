@@ -129,7 +129,7 @@ router.put(
 
 /**
  * @swagger
- * /discussions/discussions/{discussionID}:
+ * /discussions/{discussionID}:
  *   delete:
  *     summary: Delete a discussion
  *     description: Delete a specific discussion by its ID.
@@ -161,7 +161,7 @@ router.delete(
 // Routes for discussion replies
 /**
  * @swagger
- * /discussions/discussions/{discussionID}/replies:
+ * /discussions/{discussionID}/replies:
  *   post:
  *     summary: Create a reply to a discussion
  *     description: Add a reply to an existing discussion.
@@ -204,7 +204,7 @@ router.post(
 
 /**
  * @swagger
- * /discussions/discussions/{discussionID}/replies:
+ * /discussions/{discussionID}/replies:
  *   get:
  *     summary: Get all replies to a discussion
  *     description: Retrieve all replies for a specific discussion.
@@ -233,7 +233,7 @@ router.get(
 
 /**
  * @swagger
- * /discussions/replies/{replyID}:
+ * /replies/{replyID}:
  *   put:
  *     summary: Update a reply to a discussion
  *     description: Modify an existing reply to a discussion.
@@ -277,7 +277,7 @@ router.put(
 
 /**
  * @swagger
- * /discussions/replies/{replyID}:
+ * /replies/{replyID}:
  *   delete:
  *     summary: Delete a reply to a discussion
  *     tags: [Replies]

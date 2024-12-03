@@ -83,7 +83,7 @@ router.get(
 
 /**
  * @swagger
- * /discussions/discussions/{discussionID}:
+ * /discussions/{discussionID}:
  *   put:
  *     summary: Update an existing discussion
  *     description: Update the content of an existing discussion.
@@ -129,7 +129,7 @@ router.put(
 
 /**
  * @swagger
- * /discussions/discussions/{discussionID}:
+ * /discussions/{discussionID}:
  *   delete:
  *     summary: Delete a discussion
  *     description: Delete a specific discussion by its ID.
@@ -161,7 +161,7 @@ router.delete(
 // Routes for discussion replies
 /**
  * @swagger
- * /discussions/discussions/{discussionID}/replies:
+ * /discussions/{discussionID}/replies:
  *   post:
  *     summary: Create a reply to a discussion
  *     description: Add a reply to an existing discussion.
@@ -204,7 +204,7 @@ router.post(
 
 /**
  * @swagger
- * /discussions/discussions/{discussionID}/replies:
+ * /discussions/{discussionID}/replies:
  *   get:
  *     summary: Get all replies to a discussion
  *     description: Retrieve all replies for a specific discussion.
@@ -233,21 +233,22 @@ router.get(
 
 /**
  * @swagger
- * /discussions/replies/{replyID}:
+ * /replies/{replyID}:
  *   put:
- *     summary: Update a reply to a discussion
- *     description: Modify an existing reply to a discussion.
+ *     summary: Update a reply in a discussion
+ *     description: Allows authenticated users to update their reply content in a discussion.
  *     tags:
- *       - Replies
+ *       - Discussions
+ *     security:
+ *       - bearerAuth: []  # Requires JWT token in Authorization header
  *     parameters:
  *       - in: path
  *         name: replyID
  *         required: true
- *         description: The ID of the reply to update.
  *         schema:
  *           type: integer
+ *         description: ID of the reply to update
  *     requestBody:
- *       description: The updated content of the reply
  *       required: true
  *       content:
  *         application/json:
@@ -256,17 +257,73 @@ router.get(
  *             properties:
  *               content:
  *                 type: string
+ *                 description: New content for the reply
+ *                 example: "This is the updated content of the reply."
  *     responses:
  *       200:
- *         description: Successfully updated the reply
+ *         description: Reply updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 title:
+ *                   type: string
+ *                   example: "Reply Updated"
+ *                 description:
+ *                   type: string
+ *                   example: "The reply has been successfully updated."
  *       400:
- *         description: Bad request
+ *         description: Validation error for the input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Validation Error"
+ *                 description:
+ *                   type: string
+ *                   example: "Reply content cannot be empty."
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized - Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Token Error"
+ *                 description:
+ *                   type: string
+ *                   example: "Authorization token is required."
  *       404:
  *         description: Reply not found
- *       500:
- *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Not Found"
+ *                 description:
+ *                   type: string
+ *                   example: "Reply with the specified ID not found."
  */
 router.put(
   "/replies/:replyID",
@@ -277,24 +334,86 @@ router.put(
 
 /**
  * @swagger
- * /discussions/replies/{replyID}:
+ * /replies/{replyID}:
  *   delete:
- *     summary: Delete a reply to a discussion
- *     tags: [Replies]
+ *     summary: Delete a reply in a discussion
+ *     description: Allows authenticated users to delete their reply in a discussion.
+ *     tags:
+ *       - Discussions
+ *     security:
+ *       - bearerAuth: []  # Requires JWT token in Authorization header
  *     parameters:
- *       - name: replyID
- *         in: path
+ *       - in: path
+ *         name: replyID
  *         required: true
- *         description: The ID of the reply to be deleted
  *         schema:
  *           type: integer
+ *         description: ID of the reply to delete
  *     responses:
  *       200:
  *         description: Reply deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 title:
+ *                   type: string
+ *                   example: "Reply Deleted"
+ *                 description:
+ *                   type: string
+ *                   example: "The reply has been successfully deleted."
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Token Error"
+ *                 description:
+ *                   type: string
+ *                   example: "Authorization token is required."
+ *       403:
+ *         description: Forbidden - User does not have permission to delete this reply
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Permission Denied"
+ *                 description:
+ *                   type: string
+ *                   example: "You do not have permission to delete this reply."
  *       404:
  *         description: Reply not found
- *       401:
- *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Not Found"
+ *                 description:
+ *                   type: string
+ *                   example: "Reply with the specified ID not found."
  */
 router.delete(
   "/replies/:replyID",

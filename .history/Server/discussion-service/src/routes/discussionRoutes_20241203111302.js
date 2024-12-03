@@ -233,7 +233,7 @@ router.get(
 
 /**
  * @swagger
- * /discussions/replies/{replyID}:
+ * /replies/{replyID}:
  *   put:
  *     summary: Update a reply to a discussion
  *     description: Modify an existing reply to a discussion.
@@ -277,7 +277,7 @@ router.put(
 
 /**
  * @swagger
- * /discussions/replies/{replyID}:
+ * /replies/{replyID}:
  *   delete:
  *     summary: Delete a reply to a discussion
  *     tags: [Replies]

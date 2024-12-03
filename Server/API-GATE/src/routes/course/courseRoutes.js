@@ -7,6 +7,8 @@ const courseValidator = require("../../validation/course/courseValidator");
 const chapterRoutes = require("./chapterRoutes");
 const lessonRoutes = require("./lessonRoutes");
 const dependRoutes = require("./dependRoutes");
+const categoryRoute = require("./categoryRoures");
+const outcomeRoute = require("./outcomeRoutes");
 
 const router = express.Router();
 const upload = multer(); 
@@ -425,11 +427,48 @@ router.patch("/:courseID/update/description", authMiddleware.techerRequire, cour
  */
 router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseValidator.updateLevel, courseController.updateCourseLevel);
 
+/**
+ * @swagger
+ * /course/{courseID}/update/category:
+ *   patch:
+ *     summary: Update the level of a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update category
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Updated level for the course
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               categoryID:
+ *                 type: int
+ *                 description: The new category ID for the course
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Error in updating course level
+ */
+router.patch("/:courseID/update/category", authMiddleware.techerRequire, courseValidator.updateCategory, courseController.updateCategory);
+// router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseValidator.updateLevel, courseController.updateCourseLevel);
+
 router.get("/getall", courseController.getAll);
 
 
 router.use("/chapter", chapterRoutes);
 router.use("/lesson", lessonRoutes);
 router.use("/course-depend", dependRoutes);
+router.use("/category", categoryRoute);
+router.use("/outcome", outcomeRoute);
 
 module.exports = router;

@@ -65,6 +65,13 @@ const courseValidator = {
       .withMessage("Invalid level. Must be one of: begin, intermediate, advanced, mix."),
       handleValidationErrors,
     ],
+
+    updateCategory: [
+      check("categoryID")
+      .notEmpty()
+      .withMessage("categoryID is required."),
+      handleValidationErrors,
+    ]
 };
 
 module.exports = courseValidator;

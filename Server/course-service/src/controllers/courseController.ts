@@ -161,6 +161,20 @@ class CourseController {
     }
   }
 
+  async updateCourseCategory(req: Request, res: Response): Promise<void> {
+    const { courseID } = req.params;
+    const { categoryID, userID } = req.body;
+  
+    try {
+      await courseService.updateCourseCategory(userID, parseInt(courseID), parseInt(categoryID));
+      res.status(200).json({ message: "Course category updated successfully." });
+    } catch (error) {
+      console.error(error);
+      res.status(400).json({ error: (error as Error).message });
+    }
+  }
+  
+
   async deleteCourse(req: Request, res: Response): Promise<void> {
     const courseID = Number(req.params.courseID);
     const userID = Number(req.query.userID);

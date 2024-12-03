@@ -56,6 +56,7 @@ CREATE TABLE `coursedepend` (
 INSERT INTO `coursedepend` (`CourseDependID`, `CourseID`, `DependOnCourseID`, `IsRequire`) VALUES
 (2, 2, 1, b'1');
 
+<<<<<<< HEAD
 CREATE TABLE `courseoutcome` (
   `CourseOutcomeID` int(10) UNSIGNED NOT NULL,
   `CourseID` int(10) UNSIGNED NOT NULL,
@@ -179,3 +180,13 @@ ALTER TABLE `ratecourse`
   ADD CONSTRAINT `ratecourse_ibfk_1` FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`) ON DELETE CASCADE;
 
 COMMIT;
+=======
+CREATE TABLE ratecourse (
+  RateCourseID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  UserID INT UNSIGNED NOT NULL,
+  CourseID INT UNSIGNED NOT NULL, -- Liên kết với Course Service
+  StarNumber INT DEFAULT NULL,
+  Comment TEXT DEFAULT NULL,
+  FOREIGN KEY (CourseID) REFERENCES course(CourseID) ON DELETE CASCADE
+);
+>>>>>>> 551a307aa09fd0369fb41f714107c2d963b00964

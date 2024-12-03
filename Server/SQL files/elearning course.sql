@@ -1,26 +1,13 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- Database: course_db
+CREATE DATABASE IF NOT EXISTS course_db;
+USE course_db;
 
-CREATE TABLE `category` (
-  `CategoryID` int(10) UNSIGNED NOT NULL,
-  `Name` text DEFAULT NULL,
-  `Description` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE `categoryofcourse` (
-  `CategoryOfCourseID` int(10) UNSIGNED NOT NULL,
-  `CourseID` int(10) UNSIGNED NOT NULL,
-  `CategoryID` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE `chapter` (
-  `ChapterID` int(10) UNSIGNED NOT NULL,
-  `CourseID` int(10) UNSIGNED NOT NULL,
-  `OrderNumber` int(11) DEFAULT NULL,
-  `Title` text DEFAULT NULL,
-  `Description` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- Bảng Category (Danh mục khóa học)
+CREATE TABLE category (
+  CategoryID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  Name TEXT DEFAULT NULL,
+  Description TEXT DEFAULT NULL
+);
 
 INSERT INTO `chapter` (`ChapterID`, `CourseID`, `OrderNumber`, `Title`, `Description`) VALUES
 (1, 2, NULL, NULL, NULL),

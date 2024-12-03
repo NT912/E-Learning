@@ -12,7 +12,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
+        url: `https://18c3-118-71-220-31.ngrok-free.app/`,
         description: "Development server",
       },
     ],

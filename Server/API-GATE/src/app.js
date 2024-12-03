@@ -12,6 +12,8 @@ const cors = require("cors");
 //     ? ".env.production"
 //     : ".env.development";
 // dotenv.config({ path: envFile });
+
+
 const config = require("../config");
 
 // Import routes
@@ -22,7 +24,18 @@ const swaggerDocs = require("../config/swagger");
 
 const app = express();
 const PORT = config.PORT || 2999;
-app.use(cors());
+// app.use(cors());
+
+
+app.use(
+  cors({
+    origin: "*", // Cho phép tất cả nguồn truy cập
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  })
+);
+
 
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));

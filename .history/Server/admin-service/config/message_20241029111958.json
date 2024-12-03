@@ -1,0 +1,31 @@
+{
+  "admin": {
+    "viewUserSuccess": {
+      "title": "User Retrieved Successfully",
+      "description": "User information has been retrieved successfully."
+    },
+    "viewUserError": {
+      "title": "User Retrieval Failed",
+      "description": {
+        "userNotFound": "User not found.",
+        "errorFetchingUser": "An error occurred while fetching user information."
+      }
+    },
+    "updateUserRoleSuccess": {
+      "title": "User Role Updated",
+      "description": "The user role has been successfully updated."
+    },
+    "updateUserRoleError": {
+      "title": "Role Update Failed",
+      "description": "An error occurred while updating the user role."
+    },
+    "deleteUserSuccess": {
+      "title": "User Deleted",
+      "description": "The user has been successfully deleted."
+    },
+    "deleteUserError": {
+      "title": "User Deletion Failed",
+      "description": "An error occurred while deleting the user."
+    }
+  }
+}

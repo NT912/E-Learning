@@ -1,0 +1,105 @@
+{
+  "auth": {
+    "signupSuccess": {
+      "title": "Successful Account Creation",
+      "description": "Your account has been successfully created."
+    },
+    "signupError": {
+      "title": "Signup Failed",
+      "description": {
+        "emailExists": "Email already exists. Please use a different email.",
+        "signupFailed": "User registration failed. Please try again later.",
+        "emptyEmail": "Email cannot be empty.",
+        "invalidEmail": "Invalid email format.",
+        "emptyPassword": "Password cannot be empty.",
+        "passwordTooShort": "Password must be at least 6 characters long."
+      }
+    },
+    "loginSuccess": {
+      "title": "Login Successful",
+      "description": "You have successfully logged in."
+    },
+    "loginError": {
+      "title": "Login Failed",
+      "description": {
+        "invalidCredentials": "Incorrect email or password. Please try again.",
+        "unauthorized": "You do not have permission to perform this action.",
+        "emptyEmail": "Email cannot be empty.",
+        "emptyPassword": "Password cannot be empty.",
+        "invalidEmail": "Invalid email format."
+      }
+    },
+    "logoutSuccess": {
+      "title": "Logout Successful",
+      "description": "You have been successfully logged out."
+    },
+    "token": {
+      "title": "Token Error",
+      "description": {
+        "missToken": "Authorization token is required.",
+        "failDecodeToken": "Failed to decode token.",
+        "userNotFound": "User not found."
+      }
+    }
+  },
+  "discussion": {
+    "createSuccess": {
+      "title": "Discussion Created",
+      "description": "Your discussion has been successfully created."
+    },
+    "createError": {
+      "title": "Create Discussion Failed",
+      "description": "There was an error creating the discussion. Please try again."
+    },
+    "updateSuccess": {
+      "title": "Discussion Updated",
+      "description": "The discussion has been updated successfully."
+    },
+    "updateError": {
+      "title": "Update Discussion Failed",
+      "description": "There was an error updating the discussion. Please try again."
+    },
+    "deleteSuccess": {
+      "title": "Discussion Deleted",
+      "description": "The discussion has been successfully deleted."
+    },
+    "deleteError": {
+      "title": "Delete Discussion Failed",
+      "description": "There was an error deleting the discussion. Please try again."
+    },
+    "fetchSuccess": {
+      "title": "Discussions Fetched",
+      "description": "Discussions were fetched successfully."
+    },
+    "fetchError": {
+      "title": "Fetch Discussions Failed",
+      "description": "There was an error fetching discussions. Please try again."
+    }
+  },
+  "profile": {
+    "updateSuccess": {
+      "title": "Profile Updated",
+      "description": "Your profile has been successfully updated."
+    },
+    "updateError": {
+      "title": "Profile Update Failed",
+      "description": "There was an error updating your profile. Please try again."
+    }
+  },
+  "validation": {
+    "invalidInput": {
+      "title": "Validation Error",
+      "description": "Input data validation failed. Please check your input and try again."
+    },
+    "missingFields": {
+      "title": "Missing Required Fields",
+      "description": "Please provide all required fields."
+    }
+  },
+  "permission": {
+    "denied": {
+      "title": "Access Denied",
+      "description": "You do not have permission to perform this action."
+    }
+  }
+}

@@ -296,6 +296,26 @@ const courseModel = {
   },
 
   /**
+ * Cập nhật category của một khóa học.
+ * @param courseID - ID của khóa học cần cập nhật.
+ * @param categoryID - ID của category mới.
+ * @return Promise<void>
+ */
+  updateCategory: (courseID: number, categoryID: number): Promise<void> => {
+    const query = `UPDATE course SET CategoryID = ? WHERE CourseID = ?`;
+
+    return new Promise((resolve, reject) => {
+      db.query(query, [categoryID, courseID], (err: Error | null, result: ResultSetHeader) => {
+        if (err) {
+          console.error("Error updating course category:", err);
+          return reject("Failed to update course category.");
+        }
+        resolve();
+      });
+    });
+  },
+
+  /**
    * Delete a course by its ID.
    * @param courseID - The ID of the course to delete.
    * @returns Promise<void>

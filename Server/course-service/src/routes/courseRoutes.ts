@@ -314,6 +314,45 @@ router.patch("/:courseID/update/level", (req: Request, res: Response) =>courseCo
 
 /**
  * @swagger
+ * /course/{courseID}/update/category:
+ *   patch:
+ *     summary: Update the category of a course
+ *     tags: [Course]
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Object containing new category and userID.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              type: object
+ *              required:
+ *                - categoryID
+ *                - userID
+ *              properties:
+ *                categoryID:
+ *                  type: integer
+ *                  description: New category ID for the course
+ *                userID:
+ *                  type: integer
+ *                  description: ID of the user making the update
+ *     responses:
+ *       200:
+ *         description: Course category updated successfully
+ *       400:
+ *         description: Invalid category, course ID, or user ID; or other error updating course category
+ */
+router.patch("/:courseID/update/category", (req: Request, res: Response) => courseController.updateCourseCategory(req, res));
+
+
+/**
+ * @swagger
  * /course/{courseID}/update-status:
  *   patch:
  *     summary: Update the status of a course
@@ -339,6 +378,7 @@ router.patch("/:courseID/update/level", (req: Request, res: Response) =>courseCo
  *         description: Invalid course status or other error updating course status
  */
 router.patch("/:courseID/update/status", (req: Request, res: Response) => courseController.updateState(req, res));
+
 
 /**
  * @swagger

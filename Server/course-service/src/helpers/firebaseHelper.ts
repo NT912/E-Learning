@@ -1,4 +1,6 @@
+// import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+
 import app from "../../config/database/firsebase";
 
 const storage = getStorage(app);

@@ -1,8 +1,0 @@
-{
-  "name": "admin-service",
-  "version": "1.0.0",
-  "description": "This is service for admin. It can change role for accounts, and manage all accounts.",
-  "main": "app.js",
-  "author": "NhaTruong",
-  "license": "NhaTruong"
-}

@@ -211,6 +211,29 @@ const courseService = {
   },
 
   /**
+ * Cập nhật category của khóa học.
+ * @param userID - ID của người dùng yêu cầu cập nhật.
+ * @param courseID - ID của khóa học cần cập nhật.
+ * @param categoryID - ID của category mới.
+ * @return Promise<void>
+ */
+  updateCourseCategory: async (userID: number, courseID: number, categoryID: number): Promise<void> => {
+    try {
+      // Kiểm tra xem khóa học có tồn tại không
+      const course = await courseModel.findById(courseID);
+      if (!course) throw new Error("Course not found.");
+
+      // Kiểm tra quyền sở hữu khóa học
+      if (course.UserID != userID) throw new Error("You do not have permission to update this course.");
+
+      // Cập nhật category
+      await courseModel.updateCategory(courseID, categoryID);
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  /**
  * Confirm a course.
  * @param userID - The ID of the user requesting the confirmation.
  * @param courseID - The ID of the course to confirm.

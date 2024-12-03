@@ -1,8 +1,0 @@
-{
-  "name": "user-service",
-  "version": "1.0.0",
-  "description": "This is service for user",
-  "main": "app.js",
-  "author": "NhaTruong",
-  "license": "NhaTruong"
-}

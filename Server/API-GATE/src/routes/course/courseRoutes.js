@@ -462,13 +462,49 @@ router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseVali
 router.patch("/:courseID/update/category", authMiddleware.techerRequire, courseValidator.updateCategory, courseController.updateCategory);
 // router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseValidator.updateLevel, courseController.updateCourseLevel);
 
+/**
+ * @swagger
+ * /course/getall:
+ *   get:
+ *     summary: Update the level of a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Error in updating course level
+ */
 router.get("/getall", courseController.getAll);
 
+/**
+ * @swagger
+ * /course/{courseID}:
+ *   get:
+ *     summary: Detail a course
+ *     tags: [Course]
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update category
+ *         schema:
+ *           type: integer
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Error in updating course level
+ */
+router.get("/:courseID", courseController.getDetail);
 
 router.use("/chapter", chapterRoutes);
 router.use("/lesson", lessonRoutes);
 router.use("/course-depend", dependRoutes);
 router.use("/category", categoryRoute);
-router.use("/outcome", outcomeRoute);
+// router.use("/outcome", outcomeRoute);
 
 module.exports = router;

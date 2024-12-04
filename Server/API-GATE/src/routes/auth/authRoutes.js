@@ -44,7 +44,10 @@ const AUTH_SERVICE_URL = config.service_host.auth;
 // Route cho signup
 router.post("/signup", async (req, res) => {
   try {
-    console.log("Calling signup API with URL:", `${AUTH_SERVICE_URL}/signup`); // In URL để debug
+    console.log(
+      "Calling signup API with URL:",
+      `${AUTH_SERVICE_URL}/auth/signup`
+    );
     const response = await axios.post(
       `${AUTH_SERVICE_URL}/auth/signup`,
       req.body
@@ -115,6 +118,10 @@ router.post("/signup", async (req, res) => {
 // Route cho login
 router.post("/login", async (req, res) => {
   try {
+    console.log(
+      "Calling signup API with URL:",
+      `${AUTH_SERVICE_URL}/auth/login`
+    );
     const response = await axios.post(
       `${AUTH_SERVICE_URL}/auth/login`,
       req.body
@@ -184,6 +191,10 @@ router.post("/login", async (req, res) => {
 // Route cho admin login
 router.post("/admin/login", async (req, res) => {
   try {
+    console.log(
+      "Calling signup API with URL:",
+      `${AUTH_SERVICE_URL}/auth/admin/login`
+    );
     const response = await axios.post(
       `${AUTH_SERVICE_URL}/auth/admin/login`,
       req.body
@@ -262,7 +273,11 @@ router.post("/admin/login", async (req, res) => {
 // Route cho logout
 router.post("/logout", async (req, res) => {
   try {
-    const token = req.headers["authorization"]; // Lấy token từ header
+    console.log(
+      "Calling signup API with URL:",
+      `${AUTH_SERVICE_URL}/auth/logout`
+    );
+    const token = req.headers["authorization"];
     const response = await axios.post(
       `${AUTH_SERVICE_URL}/auth/logout`,
       {},

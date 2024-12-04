@@ -13,11 +13,11 @@ const cors = require("cors");
 //     : ".env.development";
 // dotenv.config({ path: envFile });
 
-
 const config = require("../config");
 
 // Import routes
 const courseRoutes = require("./routes/course/courseRoutes");
+const authRoutes = require("./routes/auth/authRoutes");
 
 // Import Swagger config
 const swaggerDocs = require("../config/swagger");
@@ -25,7 +25,6 @@ const swaggerDocs = require("../config/swagger");
 const app = express();
 const PORT = config.PORT || 2999;
 // app.use(cors());
-
 
 app.use(
   cors({
@@ -36,13 +35,13 @@ app.use(
   })
 );
 
-
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 // Routes
 app.use("/course", courseRoutes);
+app.use("/auth", authRoutes);
 
 // Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));

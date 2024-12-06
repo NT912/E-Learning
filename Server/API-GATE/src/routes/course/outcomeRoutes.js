@@ -9,9 +9,9 @@ const {
 
 const router = express.Router();
 
-/**
- * Outcome Routes
- */
+// /**
+//  * Outcome Routes
+//  */
 
 /**
  * @swagger

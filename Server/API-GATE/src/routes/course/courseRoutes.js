@@ -8,7 +8,6 @@ const chapterRoutes = require("./chapterRoutes");
 const lessonRoutes = require("./lessonRoutes");
 const dependRoutes = require("./dependRoutes");
 const categoryRoute = require("./categoryRoures");
-// const outcomeRoute = require("./outcomeRoutes");
 
 const router = express.Router();
 const upload = multer();

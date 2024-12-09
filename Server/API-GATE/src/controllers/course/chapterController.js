@@ -5,7 +5,6 @@ const config = require("../../../config/index")
 
 const COURSE_SERVICE_URL = config.service_host.course; 
 
-console.log(COURSE_SERVICE_URL)
 const courseApiController = {
   async createChapter(req, res) {
     const { courseID } = req.params;

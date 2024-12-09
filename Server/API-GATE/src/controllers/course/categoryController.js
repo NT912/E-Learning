@@ -58,6 +58,7 @@ class CategoryController {
    */
   async getAll(req, res) {
     try {
+      console.log("Get all category");
       const response = await axios.get(`${this.courseServiceBaseUrl}/course/category/getall`);
       res.status(response.status).json(response.data);
     } catch (err) {

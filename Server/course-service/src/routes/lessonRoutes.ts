@@ -201,4 +201,30 @@ router.get(
   (req: Request, res: Response) => lessonController.getALesson(req, res)
 );
 
+/**
+ * @swagger
+ * /course/lesson/{lessonID}:
+ *   get:
+ *     summary: Get detailed information of a lesson
+ *     tags: [Lesson]
+ *     parameters:
+ *       - in: path
+ *         name: lessonID
+ *         required: true
+ *         description: The ID of the lesson to retrieve
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lesson details retrieved successfully
+ *       400:
+ *         description: Error retrieving lesson details
+ *       404:
+ *         description: Lesson not found
+ */
+router.get(
+  "/all-lesson/:courseID",
+  (req: Request, res: Response) => lessonController.getALesson(req, res)
+);
+
 export default router;

@@ -1,6 +1,7 @@
 import courseModel from "../models/courseModel";
 import chapterModel from "../models/chapterModel";
 import lessonModel from "../models/lessonModel";
+import outcomeModel from "../models/outlineModel";
 import firebaseHelper from "../helpers/firebaseHelper";
 import { Lesson } from "../types/models"; 
 import { CourseLevel } from "../../config/data/levelCoures";
@@ -35,6 +36,7 @@ const courseService = {
     const chapters = await chapterModel.getChaptersByCourseID(courseID);
     const chapterIDs = chapters.map(chapter => chapter.ChapterID);
     const lessons = await lessonModel.getLessonsByChapterIDs(chapterIDs);
+    const outcome = await outcomeModel.findByCourseId(courseID);
 
     const lessonsByChapter = lessons.reduce((acc: { [key: number]: Lesson[] }, lesson: Lesson) => {
       if (!acc[lesson.ChapterID]) acc[lesson.ChapterID] = [];
@@ -47,7 +49,7 @@ const courseService = {
       lessons: lessonsByChapter[chapter.ChapterID] || [],
     }));
 
-    return { ...course, chapters: chaptersWithLessons };
+    return { ...course, chapters: chaptersWithLessons, outcome };
   },
 
   /**

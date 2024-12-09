@@ -32,6 +32,17 @@ const lessonService = {
   },
 
   /**
+   * Get detailed information of a lesson, verifying user's ownership or access rights.
+   * @param lessonID - ID of the lesson to retrieve.
+   * @return Promise<Object> - Returns lesson details or throws an error if access is denied.
+   */
+  getLessonByCourse: async (lessonID: number) => {
+    const lesson = await LessonModel.findById(lessonID);
+    if (!lesson) throw new Error("Lesson not found");
+    return lesson;
+  },
+
+  /**
    * Cập nhật bài học.
    * @param userID - ID của người dùng yêu cầu cập nhật bài học.
    * @param lessonID - ID của bài học cần cập nhật.

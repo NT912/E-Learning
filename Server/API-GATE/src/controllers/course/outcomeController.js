@@ -44,7 +44,7 @@ const OutcomeController = {
   async delete(req, res) {
     const { outcomeID } = req.params;
     try {
-      const response = await axios.delete(`${.courseServiceBaseURL}/outcome/${outcomeID}/delete`, 
+      const response = await axios.delete(`${courseServiceBaseURL}/outcome/${outcomeID}/delete`, 
         { userID: req.user.id }
     );
       res.status(response.status).json(response.data);

@@ -2,11 +2,12 @@
   "name": "flex_learning",
   "version": "1.0.0",
   "description": "A simple learning web app server",
+  "type": "commonjs",
   "main": "src/app.js",
   "license": "MIT",
   "scripts": {
-    "prod": "cross-env NODE_ENV=production node -r module-alias/register src/app.js",
-    "dev": "cross-env NODE_ENV=development nodemon -r module-alias/register src/app.js"
+    "prod": "cross-env NODE_ENV=production node src/app.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/app.js"
   },
   "_moduleAliases": {
     "~": "src"

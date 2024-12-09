@@ -62,6 +62,37 @@ const courseApiController = {
       });
     }
   },
+
+  async getChapter(req, res) {
+    const { chapterID } = req.params;
+
+    try {
+      const response = await axios.get(`${BASE_URL}/course/${chapterID}`);
+      res.status(200).json(response.data); // Trả lại dữ liệu từ backend
+    } catch (err) {
+      console.log(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error create chapter.",
+      });
+    }
+  },
+
+  /**
+   * Lấy tất cả các chapter của một khóa học từ backend API.
+   */
+  async getChapters(req, res) {
+    const { courseID } = req.params;
+
+    try {
+      const response = await axios.get(`${BASE_URL}/all/${courseID}`);
+      res.status(200).json(response.data); // Trả lại dữ liệu từ backend
+    } catch (err) {
+      console.log(error);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || "Error create chapter.",
+      });
+    }
+  }
 };
 
 module.exports = courseApiController;

@@ -8,10 +8,10 @@ const chapterRoutes = require("./chapterRoutes");
 const lessonRoutes = require("./lessonRoutes");
 const dependRoutes = require("./dependRoutes");
 const categoryRoute = require("./categoryRoures");
-const outcomeRoute = require("./outcomeRoutes");
+// const outcomeRoute = require("./outcomeRoutes");
 
 const router = express.Router();
-const upload = multer(); 
+const upload = multer();
 
 /**
  * @swagger
@@ -38,7 +38,11 @@ const upload = multer();
  *                   example: 1
  */
 
-router.post("/create", authMiddleware.techerRequire ,courseController.createCourse);
+router.post(
+  "/create",
+  authMiddleware.techerRequire,
+  courseController.createCourse
+);
 
 router.get("/:courseID/details", courseController.getCourseDetails);
 
@@ -112,7 +116,12 @@ router.get("/:courseID/details", courseController.getCourseDetails);
  *                   type: string
  *                   example: "Token is invalid or has expired. Please login again."
  */
-router.patch("/:courseID/update/name", authMiddleware.techerRequire, courseValidator.updateCourseName, courseController.updateCourseName);
+router.patch(
+  "/:courseID/update/name",
+  authMiddleware.techerRequire,
+  courseValidator.updateCourseName,
+  courseController.updateCourseName
+);
 
 /**
  * @swagger
@@ -147,7 +156,13 @@ router.patch("/:courseID/update/name", authMiddleware.techerRequire, courseValid
  *       400:
  *         description: Error in updating course avatar
  */
-router.patch("/:courseID/update/avatar", authMiddleware.techerRequire, upload.single("file"), courseValidator.updateCourseAvatar, courseController.updateCourseAvatar);
+router.patch(
+  "/:courseID/update/avatar",
+  authMiddleware.techerRequire,
+  upload.single("file"),
+  courseValidator.updateCourseAvatar,
+  courseController.updateCourseAvatar
+);
 
 /**
  * @swagger
@@ -181,7 +196,12 @@ router.patch("/:courseID/update/avatar", authMiddleware.techerRequire, upload.si
  *       400:
  *         description: Error in updating course shortcut
  */
-router.patch("/:courseID/update/shortcut", authMiddleware.techerRequire, courseValidator.updateShortcut, courseController.updateCourseShortcut);
+router.patch(
+  "/:courseID/update/shortcut",
+  authMiddleware.techerRequire,
+  courseValidator.updateShortcut,
+  courseController.updateCourseShortcut
+);
 
 /**
  * @swagger
@@ -204,7 +224,11 @@ router.patch("/:courseID/update/shortcut", authMiddleware.techerRequire, courseV
  *       400:
  *         description: Error in confirming course
  */
-router.patch("/:courseID/confirm", authMiddleware.techerRequire, courseController.confirmCourse);
+router.patch(
+  "/:courseID/confirm",
+  authMiddleware.techerRequire,
+  courseController.confirmCourse
+);
 
 // /**
 //  * @swagger
@@ -250,7 +274,11 @@ router.patch("/:courseID/confirm", authMiddleware.techerRequire, courseControlle
  *       400:
  *         description: Error in updating course status
  */
-router.patch("/:courseID/reject", authMiddleware.adminRequire, courseController.rejectCourse);
+router.patch(
+  "/:courseID/reject",
+  authMiddleware.adminRequire,
+  courseController.rejectCourse
+);
 
 /**
  * @swagger
@@ -273,7 +301,11 @@ router.patch("/:courseID/reject", authMiddleware.adminRequire, courseController.
  *       400:
  *         description: Error in updating course status
  */
-router.patch("/:courseID/approve", authMiddleware.adminRequire, courseController.approveCourse);
+router.patch(
+  "/:courseID/approve",
+  authMiddleware.adminRequire,
+  courseController.approveCourse
+);
 
 /**
  * @swagger
@@ -296,7 +328,11 @@ router.patch("/:courseID/approve", authMiddleware.adminRequire, courseController
  *       400:
  *         description: Error in updating course status
  */
-router.patch("/:courseID/active", authMiddleware.techerRequire, courseController.activeCourse);
+router.patch(
+  "/:courseID/active",
+  authMiddleware.techerRequire,
+  courseController.activeCourse
+);
 
 /**
  * @swagger
@@ -319,7 +355,11 @@ router.patch("/:courseID/active", authMiddleware.techerRequire, courseController
  *       400:
  *         description: Error in updating course status
  */
-router.patch("/:courseID/block", authMiddleware.adminRequire, courseController.blockCourse);
+router.patch(
+  "/:courseID/block",
+  authMiddleware.adminRequire,
+  courseController.blockCourse
+);
 
 /**
  * @swagger
@@ -354,7 +394,12 @@ router.patch("/:courseID/block", authMiddleware.adminRequire, courseController.b
  *       400:
  *         description: Error in updating course cost
  */
-router.patch("/:courseID/update/cost", authMiddleware.techerRequire, courseValidator.updateCost, courseController.updateCourseCost);
+router.patch(
+  "/:courseID/update/cost",
+  authMiddleware.techerRequire,
+  courseValidator.updateCost,
+  courseController.updateCourseCost
+);
 
 /**
  * @swagger
@@ -389,7 +434,12 @@ router.patch("/:courseID/update/cost", authMiddleware.techerRequire, courseValid
  *       400:
  *         description: Error in updating course description
  */
-router.patch("/:courseID/update/description", authMiddleware.techerRequire, courseValidator.updateDescription, courseController.updateCourseDescription);
+router.patch(
+  "/:courseID/update/description",
+  authMiddleware.techerRequire,
+  courseValidator.updateDescription,
+  courseController.updateCourseDescription
+);
 
 /**
  * @swagger
@@ -425,7 +475,12 @@ router.patch("/:courseID/update/description", authMiddleware.techerRequire, cour
  *       400:
  *         description: Error in updating course level
  */
-router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseValidator.updateLevel, courseController.updateCourseLevel);
+router.patch(
+  "/:courseID/update/level",
+  authMiddleware.techerRequire,
+  courseValidator.updateLevel,
+  courseController.updateCourseLevel
+);
 
 /**
  * @swagger
@@ -459,16 +514,58 @@ router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseVali
  *       400:
  *         description: Error in updating course level
  */
-router.patch("/:courseID/update/category", authMiddleware.techerRequire, courseValidator.updateCategory, courseController.updateCategory);
+router.patch(
+  "/:courseID/update/category",
+  authMiddleware.techerRequire,
+  courseValidator.updateCategory,
+  courseController.updateCategory
+);
 // router.patch("/:courseID/update/level", authMiddleware.techerRequire, courseValidator.updateLevel, courseController.updateCourseLevel);
 
+/**
+ * @swagger
+ * /course/getall:
+ *   get:
+ *     summary: Update the level of a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Error in updating course level
+ */
 router.get("/getall", courseController.getAll);
 
+/**
+ * @swagger
+ * /course/{courseID}:
+ *   get:
+ *     summary: Detail a course
+ *     tags: [Course]
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to update category
+ *         schema:
+ *           type: integer
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Error in updating course level
+ */
+router.get("/:courseID", courseController.getDetail);
 
 router.use("/chapter", chapterRoutes);
 router.use("/lesson", lessonRoutes);
 router.use("/course-depend", dependRoutes);
 router.use("/category", categoryRoute);
+// router.use("/outcome", outcomeRoute);
 // router.use("/outcome", outcomeRoute);
 
 module.exports = router;

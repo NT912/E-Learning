@@ -1,21 +1,31 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const path = require('path');
-const swaggerUi = require('swagger-ui-express');
-const cors = require('cors');
-const config = require('../config/index');
+// app.js
+require("module-alias/register.js");
+const express = require("express");
+const dotenv = require("dotenv");
+const path = require("path");
+const swaggerUi = require("swagger-ui-express");
+const cors = require("cors");
+
+// Load config project
+// const envFile =
+//   process.env.NODE_ENV === "production"
+//     ? ".env.production"
+//     : ".env.development";
+// dotenv.config({ path: envFile });
+
+const config = require("../config");
 
 // Import routes
-const courseRoutes = require('./routes/course/courseRoutes');
+const courseRoutes = require("./routes/course/courseRoutes");
+const authRoutes = require("./routes/auth/authRoutes");
+const profileRoutes = require("./routes/profile/profileRoutes");
 
 // Import Swagger config
 const swaggerDocs = require('../config/swagger');
 
 const app = express();
 const PORT = config.PORT || 2999;
-
-// Cấu hình môi trường
-dotenv.config();
+// app.use(cors());
 
 // Cấu hình CORS
 app.use(
@@ -27,13 +37,14 @@ app.use(
   })
 );
 
-// Cấu hình các middleware
-app.use(express.static(path.join(__dirname, 'public')));
+// Middleware
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-// Định tuyến
-app.use('/course', courseRoutes);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// Routes
+app.use("/course", courseRoutes);
+app.use("/auth", authRoutes);
+app.use("/profile", profileRoutes);
 
 // Khởi động server
 app.listen(PORT, () => {

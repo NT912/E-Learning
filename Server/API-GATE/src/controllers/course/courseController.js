@@ -198,9 +198,26 @@ const courseApiController = {
       });
       res.status(response.status).json(response.data);
     } catch (error) {
-      res.status(error.response?.status || 500).json({ error: error.message });
+      console.error(error.response?.data);
+      res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating lecategoryvel`,
+      });
     }
   },
+
+  async getDetail(req, res)
+  {
+    const { courseID } = req.params;
+    try {
+      const response = await axios.get(`${COURSE_SERVICE_URL}/course/${courseID}`);
+      res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error(error.response?.data);
+        res.status(error.response?.status || 500).json({
+        error: error.response?.data?.error || `Error updating lecategoryvel`,
+        });
+    }
+  }
 };
 
 module.exports = courseApiController;

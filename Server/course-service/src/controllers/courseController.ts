@@ -42,6 +42,7 @@ class CourseController {
       const courseDetails = await courseService.getCourseDetails(courseID, userID);
       res.status(200).json(courseDetails);
     } catch (error) {
+      console.log("Error fetching courses", error);
       res.status(400).json({ error: (error as Error).message });
     }
   }

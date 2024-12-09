@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import chapterController from "../controllers/chapterController";
-import chapterValidator from "../validation/chapterValidation";
 
 const router = express.Router();
 
@@ -116,5 +115,65 @@ router.post("/:chapterID/update", (req: Request, res: Response) => chapterContro
  *         description: Error deleting chapter
  */
 router.delete("/:chapterID/delete", (req: Request, res: Response) => chapterController.deleteChapter(req, res));
+
+/**
+ * @swagger
+ * /course/chapter/{chapterID}:
+ *   get:
+ *     summary: Get a single chapter by its ID
+ *     tags: [Chapter]
+ *     parameters:
+ *       - in: path
+ *         name: chapterID
+ *         required: true
+ *         description: ID of the chapter to retrieve
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Chapter retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 chapterID:
+ *                   type: integer
+ *                   description: ID of the chapter
+ *       400:
+ *         description: Error retrieving chapter
+ */
+router.get("/:chapterID", (req, res) => chapterController.getChapter(req, res));
+
+/**
+ * @swagger
+ * /course/chapter/all/{courseID}:
+ *   get:
+ *     summary: Get all chapters for a specific course
+ *     tags: [Chapter]
+ *     parameters:
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         description: ID of the course to retrieve chapters from
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Chapters retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   chapterID:
+ *                     type: integer
+ *                     description: ID of the chapter
+ *       400:
+ *         description: Error retrieving chapters
+ */
+router.get("/all/:courseID", (req, res) => chapterController.getChapters(req, res));
 
 export default router;

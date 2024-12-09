@@ -1,5 +1,6 @@
 import CourseModel from "../models/courseModel";
 import ChapterModel from "../models/chapterModel";
+import { Chapter } from "../types/models/Chapter";
 
 const chapterService = {
   /**
@@ -74,6 +75,34 @@ const chapterService = {
     }
 
     await ChapterModel.deleteChapter(chapterID);
+  },
+
+  /**
+   * Lấy một chapter theo ID.
+   * @param chapterID - ID của chapter cần lấy.
+   * @return Promise<Chapter | null> - Chapter nếu tìm thấy, null nếu không.
+   */
+  getChapter: async (chapterID: number): Promise<Chapter | null> => {
+    try {
+      const chapter = await ChapterModel.findById(chapterID);
+      return chapter;
+    } catch (err) {
+      throw new Error("Failed to retrieve chapter: ");
+    }
+  },
+
+  /**
+   * Lấy tất cả các chapter của một khóa học.
+   * @param courseID - ID của khóa học.
+   * @return Promise<Chapter[]> - Danh sách các chapter.
+   */
+  getChaptersByCourse: async (courseID: number): Promise<Chapter[]> => {
+    try {
+      const chapters = await ChapterModel.getChaptersByCourseID(courseID);
+      return chapters;
+    } catch (err) {
+      throw new Error("Failed to retrieve chapters: ");
+    }
   }
 };
 

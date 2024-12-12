@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Category extends StatelessWidget {
+class Category1 extends StatelessWidget {
   final List<Map<String, String>> categories = [
     {'icon': 'assets/images/3d_design.png', 'title': '3D Design'},
     {'icon': 'assets/images/graphic_design.png', 'title': 'Graphic Design'},
@@ -10,7 +10,7 @@ class Category extends StatelessWidget {
     {'icon': 'assets/images/personal.png', 'title': 'Personal Development'},
   ];
 
-  Category({super.key});
+  Category1({super.key});
 
   @override
   Widget build(BuildContext context) {

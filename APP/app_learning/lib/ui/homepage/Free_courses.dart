@@ -46,7 +46,7 @@ class FreeCoursesHome extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Khóa học Pree",
+                "Khóa học Free",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               InkWell(

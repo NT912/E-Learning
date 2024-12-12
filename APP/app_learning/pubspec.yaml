@@ -12,10 +12,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
+  http: ^0.13.5
   cupertino_icons: ^1.0.8
   readmore: ^3.0.0
+  video_player: ^2.5.0
+  youtube_player_flutter: ^9.1.0
+
 
 dev_dependencies:
   flutter_test:

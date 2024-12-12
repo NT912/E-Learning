@@ -1,8 +1,11 @@
 import 'package:app_learning/ui/category/category.dart';
 import 'package:app_learning/ui/homepage/Free_courses.dart';
 import 'package:app_learning/ui/homepage/course_search.dart';
+import 'package:app_learning/ui/homepage/search_result_page.dart';
 import 'package:flutter/material.dart';
 
+import '../../API/api_service.dart';
+import '../category/ListCategory.dart';
 import 'Pro_courses.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,30 +16,44 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ApiService apiService = ApiService(); // Khởi tạo ApiService
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildGreetingSection(),
-            const SizedBox(height: 40),
-            // _buildSearchBar(),
-            const CourseSearch(),
-            const SizedBox(height: 16),
-            _buildBanner(),
-            const SizedBox(height: 30),
-            _buildCourseCategories(),
-            const SizedBox(height: 30),
-            const FreeCoursesHome(),
-            const SizedBox(height: 30),
-            const FroCoursesHome(),
-          ],
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildGreetingSection(),
+              const SizedBox(height: 40),
+              CourseSearch(
+                onSearch: (query) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchResultPage(
+                        query: query,
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 16),
+              _buildBanner(),
+              const SizedBox(height: 30),
+              const FreeCoursesHome(),
+              const SizedBox(height: 30),
+              const FroCoursesHome(),
+              const SizedBox(height: 30),
+              _buildCourseCategories(), // Truyền dữ liệu vào hàm
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 
@@ -109,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Category(),
+                    builder: (context) => Category1(),
                   ),
                 );
               },
@@ -121,13 +138,34 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         const SizedBox(height: 8),
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text('3D Design'),
-            Text('Arts & Humanities'),
-            Text('Graphic Design'),
-          ],
+        // Sử dụng FutureBuilder để hiển thị danh sách thể loại
+        FutureBuilder<List<ListCategory>>(
+          future: apiService.getCategoryIDs([1, 2, 3, 4, 5]),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No categories available.'));
+            } else {
+              final categoryList = snapshot.data!;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(
+                  categoryList.length,
+                  (index) => Text(
+                    categoryList[index].name,
+                    style: const TextStyle(
+                        fontSize: 20,
+                        // Kích thước chữ
+                        color: Colors.black // Màu chữ
+                        ),
+                  ),
+                ),
+              );
+            }
+          },
         ),
       ],
     );

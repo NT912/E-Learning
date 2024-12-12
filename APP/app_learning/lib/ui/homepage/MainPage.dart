@@ -1,3 +1,4 @@
+import 'package:app_learning/chat/ChatListScreen.dart';
 import 'package:app_learning/ui/homepage/Course_detail.dart';
 import 'package:app_learning/ui/homepage/HomePage.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _MainPageState extends State<Mainpage> {
       const HomePage(),
       // const FreeCourse(),
       const CourseDetail(),
-      Container(color: Colors.black),
+      ChatListScreen(),
       Container(color: Colors.yellow),
     ];
   }

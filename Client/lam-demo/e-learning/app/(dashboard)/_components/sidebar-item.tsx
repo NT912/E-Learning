@@ -5,7 +5,7 @@ import { LucideIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 interface SidebarItemProps {
-  icon: LucideIcon;
+  icon: LucideIcon; // Kiểu icon cần phải là một component icon hợp lệ
   label: string;
   href: string;
 }
@@ -14,13 +14,14 @@ export const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
+  // Kiểm tra nếu đường dẫn hiện tại đang trùng với href
   const isActive =
-    (pathname === "/" && href === "/") ||
-    pathname === href ||
-    pathname?.startsWith(`${href}/`); // Sửa lại template string
+    (pathname === "/" && href === "/") || // Nếu cả hai đều là trang chủ
+    pathname === href || // Nếu pathname bằng href
+    pathname?.startsWith(`${href}/`); // Nếu pathname là subpath của href
 
   const onClick = () => {
-    router.push(href);
+    router.push(href); // Điều hướng đến đường dẫn mới
   };
 
   return (
@@ -42,7 +43,7 @@ export const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
       </div>
       <div
         className={cn(
-          "ml-auto opacity-0 border-2 border-sky-700 h-full transition-all", // Sửa class "bolder-2" và "border-sky-70"
+          "ml-auto opacity-0 border-2 border-sky-700 h-full transition-all",
           isActive && "opacity-100"
         )}
       />

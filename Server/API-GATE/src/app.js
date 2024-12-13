@@ -19,7 +19,7 @@ const config = require("../config");
 const courseRoutes = require("./routes/course/courseRoutes");
 const authRoutes = require("./routes/auth/authRoutes");
 const profileRoutes = require("./routes/profile/profileRoutes");
-const enrollmentRoute = require("./routes/enrollment/enrollmentRoute");
+// const enrollmentRoute = require("./routes/enrollment/enrollmentRoute");
 
 // Import Swagger config
 const swaggerDocs = require('../config/swagger');
@@ -45,7 +45,7 @@ app.use(express.json());
 // Routes
 app.use("/course", courseRoutes);
 app.use("/auth", authRoutes);
-app.use("/enrollment", enrollmentRoute);
+// app.use("/enrollment", enrollmentRoute);
 app.use("/profile", profileRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

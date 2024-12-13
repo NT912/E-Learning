@@ -18,16 +18,17 @@ const Login = () => {
     try {
       // Gửi yêu cầu đăng nhập đến API
       const response = await axios.post(
-        "https://96de-2405-4802-b545-af0-fdbc-df39-8ad1-fb93.ngrok-free.app/auth/login", // Thay bằng API đăng nhập thực tế
+        "https://97b6-118-71-221-87.ngrok-free.app/auth/login", // Thay bằng API đăng nhập thực tế
         { email, password }
       );
 
+      console.log(response);
       // Kiểm tra token trả về
-      if (response.data && response.data.token) {
+      if (response.data) {
         // Lưu token vào localStorage
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.description.token);
         // Chuyển hướng đến trang Dashboard
-        router.push("/dashboard");
+        router.push("/");
       } else {
         setError("Đăng nhập không thành công. Vui lòng thử lại.");
       }

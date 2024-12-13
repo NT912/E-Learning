@@ -17,10 +17,9 @@ import { ImageForm } from "../_components/image-form";
 export const CourseIdPage = async ({
   params,
 }: {
-  params: { courseld: string; title: string };
+  params: { courseld: string };
 }) => {
-  const { courseld, title } = params;
-  // console.log(courseld);
+  const { courseld } = params;
   // const url = `/api/courses/${courseld}`;
   // console.log(url);
   // const response = await axios.get(url);
@@ -48,7 +47,7 @@ export const CourseIdPage = async ({
             <IconBadge size="sm" icon={LayoutDashboard} />
             <h2 className="text-xl">Customize your course</h2>
           </div>
-          <TitleForm initialData={{ title: title }} />
+          <TitleForm initialData={{ title: "",courseId: courseld }} />
           <DescriptionForm
             initialData={{
               description: "",
@@ -77,7 +76,7 @@ export const CourseIdPage = async ({
             <IconBadge icon={CircleDollarSign} />
             <h2 className="text-xl">Sell your course</h2>
           </div>
-          <PriceForm initialData={{ title: title }} courseId={courseld} />
+          <PriceForm initialData={{ title: "" }} courseId={courseld} />
         </div>
         <div>
           <div className="flex items-center gap-x-2">

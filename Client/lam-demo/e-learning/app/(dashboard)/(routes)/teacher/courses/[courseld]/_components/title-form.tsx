@@ -22,6 +22,7 @@ import toast from "react-hot-toast";
 interface TitleFormProps {
   initialData: {
     title: string;
+    courseId: string;
   };
 }
 
@@ -33,6 +34,7 @@ const formSchema = z.object({
 
 export const TitleForm = ({ initialData }: TitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState(initialData.title); // Local state for title
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -40,19 +42,39 @@ export const TitleForm = ({ initialData }: TitleFormProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: { title },
   });
 
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch("/api/courses/${courseId}", values);
-      toast.success("Course updated");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("No token found. Please log in.");
+        return;
+      }
+
+      const response = await axios.patch(
+        `https://97b6-118-71-221-87.ngrok-free.app/course/${initialData.courseId}/update/name`,
+        { courseName: values.title },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in headers
+          },
+        }
+      );
+
+      toast.success(response.data.message);
+
+      // Update the local title state
+      setTitle(values.title);
+
       toggleEdit();
       router.refresh();
-    } catch {
-      toast.error("loi504");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -71,7 +93,7 @@ export const TitleForm = ({ initialData }: TitleFormProps) => {
           )}
         </Button>
       </div>
-      {!isEditing && <p className="text-sm mt-2">{initialData.title}</p>}
+      {!isEditing && <p className="text-sm mt-2">{title}</p>} {/* Use local state */}
       {isEditing && (
         <Form {...form}>
           <form

@@ -41,7 +41,7 @@ const CreatePage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/courses/create", values);
+      const response = await axios.post("https://97b6-118-71-221-87.ngrok-free.app/course/create", values);
       router.push(
         `/teacher/courses/${response.data.course.id}/${values.title}`
       );

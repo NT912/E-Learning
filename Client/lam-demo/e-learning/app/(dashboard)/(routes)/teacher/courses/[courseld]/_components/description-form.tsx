@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
-import { TextArea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 interface DescriptionFormProps {
@@ -97,7 +97,7 @@ export const DescriptionForm = ({ initialData }: DescriptionFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <TextArea
+                    <Textarea
                       disabled={isSubmitting}
                       placeholder="e.g"
                       {...field}

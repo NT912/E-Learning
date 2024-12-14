@@ -1,9 +1,8 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { columns } from "./_components/columns";
+import { DataTable } from "./_components/data-table";
 
 const CoursePage = () => {
   const router = useRouter();
@@ -39,9 +38,7 @@ const CoursePage = () => {
 
   return (
     <div className="p-6">
-      <button onClick={Click} className="bg-blue-500 text-white px-4 py-2 rounded">
-        Create course
-      </button>
+      <DataTable columns={columns} data={courses} />
     </div>
   );
 };

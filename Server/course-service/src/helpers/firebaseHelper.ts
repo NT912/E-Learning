@@ -1,86 +1,89 @@
-// import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-
-import app from "../../config/database/firsebase";
-
-const storage = getStorage(app);
+import { promises as fs } from "fs";
+import path from "path";
 
 interface File {
   originalname: string;
-  buffer: Buffer;
+  buffer?: Buffer; // Buffer nếu được cung cấp
+  path?: string;   // Đường dẫn tạm thời nếu file được lưu trong hệ thống
 }
 
-const firebaseHelper = {
+const fileHelper = {
   /**
-   * Uploads a video to Firebase Storage.
+   * Uploads a video to the public/videos directory.
    * @param {File} videoFile - The video file to upload.
-   * @return {Promise<string>} - The download URL of the uploaded video.
+   * @return {Promise<string>} - The public path of the uploaded video.
    */
   uploadVideo: async (videoFile: File): Promise<string> => {
-    try {
-      const timestamp = Date.now();
-      const fileName = `${timestamp}_${videoFile.originalname}`;
-      const storageRef = ref(storage, `lesson/${fileName}`);
-      await uploadBytes(storageRef, videoFile.buffer);
-      const downloadURL = await getDownloadURL(storageRef);
-      return downloadURL;
-    } catch (error) {
-      console.error("Firebase Error uploading video:", error);
-      throw new Error("Server failed");
-    }
+    return await uploadFileToDirectory(videoFile, "videos");
   },
 
   /**
-   * Uploads a file to Firebase Storage.
+   * Uploads a file to the public/files directory.
    * @param {File} file - The file to upload.
-   * @return {Promise<string>} - The download URL of the uploaded file.
+   * @return {Promise<string>} - The public path of the uploaded file.
    */
   uploadFile: async (file: File): Promise<string> => {
-    try {
-      const timestamp = Date.now();
-      const fileName = `${timestamp}_${file.originalname}`;
-      const storageRef = ref(storage, `file/${fileName}`);
-      await uploadBytes(storageRef, file.buffer);
-      const downloadURL = await getDownloadURL(storageRef);
-      return downloadURL;
-    } catch (error) {
-      console.error("Firebase Error uploading file:", error);
-      throw new Error("Server failed");
-    }
+    return await uploadFileToDirectory(file, "files");
   },
 
   /**
-   * Deletes a file from Firebase Storage.
-   * @param {string} fileLink - The Firebase storage path to the file.
-   */
-  deleteFile: async (fileLink: string): Promise<void> => {
-    const fileRef = ref(storage, fileLink);
-    try {
-      await deleteObject(fileRef);
-      console.log(`Deleted file: ${fileLink}`);
-    } catch (error) {
-      console.error(`Failed to delete file from Firebase: ${(error as Error).message}`);
-    }
-  },
-
-  /**
-   * Uploads a course avatar to Firebase Storage.
+   * Uploads a course avatar to the public/avatars directory.
    * @param {File} pictureFile - The picture file to upload.
-   * @return {Promise<string>} - The download URL of the uploaded avatar.
+   * @return {Promise<string>} - The public path of the uploaded avatar.
    */
   uploadAvatarCourse: async (pictureFile: File): Promise<string> => {
+    return await uploadFileToDirectory(pictureFile, "avatars");
+  },
+
+  /**
+   * Deletes a file from the public directory.
+   * @param {string} fileLink - The public path to the file.
+   */
+  deleteFile: async (fileLink: string): Promise<void> => {
     try {
-      const timestamp = Date.now();
-      const fileName = `${timestamp}_${pictureFile.originalname}`;
-      const storageRef = ref(storage, `Course_Avatar/${fileName}`);
-      await uploadBytes(storageRef, pictureFile.buffer);
-      const downloadURL = await getDownloadURL(storageRef);
-      return downloadURL;
+      const filePath = path.resolve("public", fileLink);
+      await fs.unlink(filePath);
+      console.log(`Deleted file: ${fileLink}`);
     } catch (error) {
-      console.error("Firebase Error uploading avatar:", error);
-      throw new Error("Server failed");
+      console.error(`Failed to delete file: ${(error as Error).message}`);
     }
   },
 };
 
-export default firebaseHelper;
+/**
+ * Helper function to upload a file to a specific directory in the public folder.
+ * @param {File} file - The file to upload.
+ * @param {string} subDirectory - The subdirectory inside the public folder.
+ * @return {Promise<string>} - The public path of the uploaded file.
+ */
+const uploadFileToDirectory = async (file: File, subDirectory: string): Promise<string> => {
+  try {
+    const timestamp = Date.now();
+    const fileName = `${timestamp}_${file.originalname}`;
+    const uploadPath = path.resolve("../public", subDirectory, fileName);
+
+    // Ensure the directory exists
+    await fs.mkdir(path.dirname(uploadPath), { recursive: true });
+
+    // Read buffer from file.path if buffer is not provided
+    let fileContent: Buffer;
+    if (file.buffer) {
+      fileContent = file.buffer;
+    } else if (file.path) {
+      fileContent = await fs.readFile(file.path);
+    } else {
+      throw new Error("No valid file content to upload");
+    }
+
+    // Write the file to the public directory
+    await fs.writeFile(uploadPath, fileContent);
+
+    // Return the public URL
+    return `/public/${subDirectory}/${fileName}`;
+  } catch (error) {
+    console.error(`Error uploading file to /${subDirectory}:`, error);
+    throw new Error("Failed to upload file");
+  }
+};
+
+export default fileHelper;

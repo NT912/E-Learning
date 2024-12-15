@@ -146,7 +146,7 @@ const courseModel = {
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
-    const query = `SELECT name, avatar, cost FROM course ${whereClause} LIMIT ?, ?`;
+    const query = `SELECT courseID, name, avatar, cost FROM course ${whereClause} LIMIT ?, ?`;
     
     params.push(offset, limit);
 
@@ -208,7 +208,7 @@ const courseModel = {
    * @returns Promise<void>
    */
   updateAvatar: (courseID: number, linkFile: string): Promise<void> => {
-    const query = `UPDATE Course SET PictureLink = ? WHERE CourseID = ?;`;
+    const query = `UPDATE Course SET avatar = ? WHERE CourseID = ?;`;
 
     return new Promise((resolve, reject) => {
       db.query(query, [linkFile, courseID], (err: Error | null) => {

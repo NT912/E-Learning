@@ -11,16 +11,18 @@ const app = express();
 const PORT = config.port;
 
 // Middleware
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 
 app.use(
   cors({
-    origin: `http://localhost:2999`,
+    origin: `*`,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.use("/public", express.static(path.resolve("../public")));
 
 // Routes
 app.use("/course", courseRoutes);

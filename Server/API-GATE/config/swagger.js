@@ -12,7 +12,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'https://963b-2405-4802-9644-6b80-3d94-58b9-8f68-f17f.ngrok-free.app/',
+        url: 'https://6c01-2405-4802-6f09-1190-496-eb0f-16a2-b48a.ngrok-free.app',
         description: "Development server",
       },
     ],

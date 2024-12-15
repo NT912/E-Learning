@@ -38,7 +38,8 @@ app.use(
 );
 
 // Middleware
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.resolve("../public")));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());
 
 // Routes

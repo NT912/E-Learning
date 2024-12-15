@@ -95,7 +95,7 @@ router.delete("/:courseID/remove-depend/:dependOnCourseID", authMiddleware.teche
 
 /**
  * @swagger
- * /course/course-depend/{courseID}/dependencies:
+ * /course/course-depend/{courseID}:
  *   get:
  *     summary: Get dependencies of a course
  *     tags: [CourseDepend]
@@ -125,6 +125,6 @@ router.delete("/:courseID/remove-depend/:dependOnCourseID", authMiddleware.teche
  *       400:
  *         description: Error retrieving dependencies
  */
-router.get("/:courseID/dependencies", courseDependController.getCourseDependencies);
+router.get("/:courseID", courseDependController.getCourseDependencies);
 
 module.exports = router;

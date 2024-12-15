@@ -464,6 +464,22 @@ router.patch("/:courseID/update/status", (req: Request, res: Response) => course
 router.get("/getall", (req: Request, res: Response) => courseController.getAll(req, res));
 
 
+/**
+ * @swagger
+ * /course/{courseID}:
+ *   get:
+ *     summary: Detail a course
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Course level updated successfully
+ *       400:
+ *         description: Error in updating course level
+ */
+router.get("/:courseID", (req: Request, res: Response) => courseController.getCourseDetails(req, res))
+
 // Sub-routes
 router.use("/chapter", chapterRoutes);
 router.use("/lesson", lessonRoutes);

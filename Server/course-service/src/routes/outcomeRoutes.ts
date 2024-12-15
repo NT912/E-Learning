@@ -48,7 +48,6 @@ const router = express.Router();
  */
 router.post(
   "/create/:courseID",
-  outcomeValidator.updateOutcome,
   (req: Request, res: Response) => outcomeController.create(req, res)
 );
 
@@ -87,7 +86,6 @@ router.post(
  */
 router.post(
   "/:outcomeID/update/name",
-  outcomeValidator.createOutcome,
   (req: Request, res: Response) => outcomeController.update(req, res)
 );
 
@@ -123,7 +121,6 @@ router.post(
  */
 router.delete(
   "/:outcomeID/delete",
-  outcomeValidator.deleteOutCome,
   (req: Request, res: Response) => outcomeController.delete(req, res)
 );
 

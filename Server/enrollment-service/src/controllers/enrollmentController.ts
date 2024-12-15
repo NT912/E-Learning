@@ -7,9 +7,9 @@ class EnrollmentController {
    * Xử lý yêu cầu tạo bản ghi đăng ký mới cho khóa học.
    */
   async create(req: Request, res: Response): Promise<void> {
-    const { courseID, userID, status } = req.body;
+    const { courseID, userID, status, cost } = req.body;
     try {
-      const enrollmentID = await enrollmentService.createEnrollment(userID, courseID, status);
+      const enrollmentID = await enrollmentService.createEnrollment(userID, courseID, status, cost);
       res.status(201).json({ enrollmentID });
     } catch (err) {
       console.error(err);
@@ -121,6 +121,21 @@ class EnrollmentController {
   }
 
   /**
+   * Xử lý yêu cầu lấy tất cả các bản ghi đăng ký của một khóa học.
+   */
+  async getAllbyUserID(req: Request, res: Response): Promise<void> {
+    const userID = Number(req.params.userID);
+
+    try {
+      const enrollments = await enrollmentService.getEnrollmentsByUserID(userID);
+      res.status(200).json(enrollments);
+    } catch (err) {
+      console.error(err);
+      res.status(400).json({ error: (err as Error).message });
+    }
+  }
+
+  /**
    * Xử lý yêu cầu đánh giá bản ghi đăng ký bằng cách cập nhật rating và review.
    */
   async rate(req: Request, res: Response): Promise<void> {
@@ -129,6 +144,21 @@ class EnrollmentController {
 
     try {
       await enrollmentService.rateEnrollment(userID, parseInt(enrollmentID), rating, review);
+      res.status(200).json({ message: "Enrollment rated successfully" });
+    } catch (err) {
+      console.error(err);
+      res.status(400).json({ error: (err as Error).message });
+    }
+  }
+
+  /**
+   * Xử lý yêu cầu đánh giá bản ghi đăng ký bằng cách cập nhật rating và review.
+   */
+  async check_enroll(req: Request, res: Response): Promise<void> {
+    const { userID, courseID } = req.params;
+
+    try {
+      await enrollmentService.check_enroll(Number(userID), Number(courseID));
       res.status(200).json({ message: "Enrollment rated successfully" });
     } catch (err) {
       console.error(err);

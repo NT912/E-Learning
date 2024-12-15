@@ -12,11 +12,11 @@ const enrollmentModel = {
    * @param startDate - Ngày bắt đầu khóa học.
    * @return Promise<number> - ID của bản ghi đăng ký mới tạo.
    */
-  createEnrollment: (userID: number, courseID: number, status: EnrollmentStatus): Promise<number> => {
-    const query = `INSERT INTO enrollment (UserID, CourseID, StartDate, Status) VALUES (?, ?, ?, ?)`;
+  createEnrollment: (userID: number, courseID: number, status: EnrollmentStatus, cost: number): Promise<number> => {
+    const query = `INSERT INTO enrollment (UserID, CourseID, StartDate, Status, Cost) VALUES (?, ?, ?, ?, ?)`;
     const startDate: Date = new Date();
     return new Promise((resolve, reject) => {
-      connection.query(query, [userID, courseID, startDate, status], (err: Error | null, result: ResultSetHeader) => {
+      connection.query(query, [userID, courseID, startDate, status, cost], (err: Error | null, result: ResultSetHeader) => {
         if (err) {
           return reject(err);
         }
@@ -63,6 +63,24 @@ const enrollmentModel = {
     });
   },
 
+   /**
+ * Cập nhật chi phí của bản ghi đăng ký.
+ * @param enrollmentID - ID của bản ghi đăng ký cần cập nhật.
+ * @param cost - Chi phí mới.
+ * @return Promise<void>
+ */
+   getByUserAndCourse: (userID: number, courseID: number): Promise<Enrollment | null> => {
+    const query = `SELECT * FROM enrollment WHERE UserID = ? AND CourseID = ?`;
+    return new Promise((resolve, reject) => {
+      connection.query(query, [userID, courseID], (err: Error | null, results: RowDataPacket[]) => {
+        if (err) {
+          return reject(err);
+        }
+        const enrollment = results[0] as Enrollment;
+        resolve(enrollment);
+      });
+    });
+  },
   /**
    * Xóa một bản ghi đăng ký.
    * @param enrollmentID - ID của bản ghi đăng ký cần xóa.

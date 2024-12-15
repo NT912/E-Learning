@@ -1,12 +1,17 @@
-import express, { Request, Response } from "express";
-import outcomeController from "../../controllers/course/outcomeController";
-
+const express = require("express");
+const outcomeController = require("../../controllers/course/outcomeController");
 const authMiddleware = require("../../middleware/authMiddleware");
+const {
+  createOutcome,
+  updateOutcome,
+  deleteOutcome
+} = require("../../validation/course/outcomeValidator"); // Đảm bảo import đúng file validator
+
 const router = express.Router();
 
-/**
- * Outcome Routes
- */
+// /**
+//  * Outcome Routes
+//  */
 
 /**
  * @swagger
@@ -27,7 +32,11 @@ const router = express.Router();
  *       400:
  *         description: Error creating outcome
  */
-router.post("/create/:courseID", authMiddleware.techerRequire, outcomeController.create(req, res)
+router.post(
+  "/create/:courseID",
+  authMiddleware.techerRequire,
+  createOutcome,  // Thêm validator ở đây
+  (req, res) => outcomeController.create(req, res)
 );
 
 /**
@@ -60,7 +69,11 @@ router.post("/create/:courseID", authMiddleware.techerRequire, outcomeController
  *       400:
  *         description: Error updating outcome name
  */
-router.post("/:outcomeID/update",  authMiddleware.techerRequire, outcomeController.update(req, res)
+router.post(
+  "/:outcomeID/update",
+  authMiddleware.techerRequire,
+  updateOutcome,  // Thêm validator ở đây
+  (req, res) => outcomeController.update(req, res)
 );
 
 /**
@@ -93,7 +106,11 @@ router.post("/:outcomeID/update",  authMiddleware.techerRequire, outcomeControll
  *       400:
  *         description: Error deleting outcome
  */
-router.delete("/:outcomeID/delete",  authMiddleware.techerRequire, outcomeController.delete(req, res)
+router.delete(
+  "/:outcomeID/delete",
+  authMiddleware.techerRequire,
+  deleteOutcome,  // Thêm validator ở đây
+  (req, res) => outcomeController.delete(req, res)
 );
 
-export default router;
+module.exports = router;

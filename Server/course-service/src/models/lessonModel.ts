@@ -69,11 +69,17 @@ const lessonModel = {
    */
   getLessonsByChapterIDs: (chapterIDs: number[]): Promise<Lesson[]> => {
     const placeholders = chapterIDs.map(() => '?').join(',');
+    if (chapterIDs.length === 0) {
+      return Promise.resolve([]); // Return empty array if no chapterIDs
+    }
     const query = `SELECT * FROM Lesson WHERE ChapterID IN (${placeholders})`;
     
     return new Promise((resolve, reject) => {
       db.query(query, chapterIDs, (err: Error | null, results: RowDataPacket[]) => {
-        if (err) return reject("Failed to fetch lessons");
+        if (err) {
+          console.log(err);
+          return reject("Failed to fetch lessons");
+        }
         resolve(results as Lesson[]);
       });
     });

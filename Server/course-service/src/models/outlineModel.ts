@@ -29,6 +29,26 @@ const outlineModel = {
   },
 
   /**
+   * Tìm kiếm mục tiêu học tập theo ID.
+   * @param courseOutcomeID - ID của mục tiêu học tập.
+   * @return Promise chứa mục tiêu học tập hoặc null nếu không tìm thấy.
+   */
+  findByCourseId: (courseOutcomeID: number): Promise<CourseOutcome[] | null> => {
+    const query = `SELECT * FROM courseoutcome WHERE CourseID = ?`;
+
+    return new Promise((resolve, reject) => {
+      db.query(query, [courseOutcomeID], (err: Error | null, results: RowDataPacket[]) => {
+        if (err) {
+          console.error(`Failed to find learning outcome by ID: ${err}`);
+          return reject(err);
+        }
+        const outcome = results as CourseOutcome[] | null;
+        resolve(outcome);
+      });
+    });
+  },
+
+  /**
    * Thêm mục tiêu học tập mới cho khóa học.
    * @param courseID - ID của khóa học.
    * @return Promise chứa ID của mục tiêu học tập mới tạo.

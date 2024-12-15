@@ -251,6 +251,27 @@ router.get("/get-by-course/:courseID", enrollmentController.getAllByCourse);
 
 /**
  * @swagger
+ * /enrollment/get-by-user/{userID}:
+ *   get:
+ *     summary: Get all enrollments for a course
+ *     tags: [Enrollment]
+ *     parameters:
+ *       - in: path
+ *         name: userID
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the course
+ *     responses:
+ *       200:
+ *         description: Enrollments retrieved successfully
+ *       400:
+ *         description: Error retrieving enrollments
+ */
+router.get("/get-by-user/:userID", enrollmentController.getAllbyUserID);
+
+/**
+ * @swagger
  * /enrollment/{enrollmentID}/rate:
  *   patch:
  *     summary: Rate an enrollment
@@ -286,5 +307,32 @@ router.get("/get-by-course/:courseID", enrollmentController.getAllByCourse);
  *         description: Error rating enrollment
  */
 router.patch("/:enrollmentID/rate", enrollmentController.rate);
+
+/**
+ * @swagger
+ * /enrollment/check-enroll/{userID}/{courseID}:
+ *   get:
+ *     summary: Rate an enrollment
+ *     tags: [Enrollment]
+ *     parameters:
+ *       - in: path
+ *         name: userID
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the course
+ *       - in: path
+ *         name: courseID
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the course
+ *     responses:
+ *       200:
+ *         description: Enrollment rated successfully
+ *       400:
+ *         description: Error rating enrollment
+ */
+router.get("/check-enroll/:userID/:courseID", enrollmentController.check_enroll);
 
 export default router;

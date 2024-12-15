@@ -17,7 +17,7 @@ export const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
   const isActive =
     (pathname === "/" && href === "/") ||
     pathname === href ||
-    pathname?.startsWith("${href}/");
+    pathname?.startsWith(`${href}/`); // Sửa lại template string
 
   const onClick = () => {
     router.push(href);
@@ -42,7 +42,7 @@ export const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
       </div>
       <div
         className={cn(
-          "ml-auto opacity-0 bolder-2 border-sky-70 h-full transition-all",
+          "ml-auto opacity-0 border-2 border-sky-700 h-full transition-all", // Sửa class "bolder-2" và "border-sky-70"
           isActive && "opacity-100"
         )}
       />

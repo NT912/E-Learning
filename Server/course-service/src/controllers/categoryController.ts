@@ -51,10 +51,12 @@ class CategoryController {
    */
   async getAll(req: Request, res: Response): Promise<void> {
     try {
+      console.log("hhere");
       const categories = await categoryService.getAllCategories();
       console.log(categories);
       res.status(200).json(categories);
     } catch (err) {
+      console.log(err);
       res.status(500).json({ error: (err as Error).message });
     }
   }

@@ -1,11 +1,13 @@
+import 'package:app_learning/ui/Course/CourseListPage1.dart';
 import 'package:app_learning/ui/category/category.dart';
-import 'package:app_learning/ui/homepage/Free_courses.dart';
 import 'package:app_learning/ui/homepage/course_search.dart';
 import 'package:app_learning/ui/homepage/search_result_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../API/api_service.dart';
 import '../category/ListCategory.dart';
+import 'CourseListPage.dart';
+import 'Free_courses.dart';
 import 'Pro_courses.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ApiService apiService = ApiService(); // Khởi tạo ApiService
+  final ApiService apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +36,11 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SearchResultPage(
-                        query: query,
-                      ),
+                      builder: (context) => SearchResultPage(query: query),
                     ),
                   );
                 },
               ),
-
               const SizedBox(height: 16),
               _buildBanner(),
               const SizedBox(height: 30),
@@ -49,7 +48,9 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 30),
               const FroCoursesHome(),
               const SizedBox(height: 30),
-              _buildCourseCategories(), // Truyền dữ liệu vào hàm
+              _buildCourseCategories(),
+              const SizedBox(height: 30),
+              _buildCourseListPage(), // Add CourseListPage below "Thể loại"
             ],
           ),
         ),
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           icon: const Icon(Icons.notifications),
           onPressed: () {
-            // Hành động khi nhấn nút thông báo
+            // Handle notification click
           },
         ),
       ],
@@ -138,7 +139,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         const SizedBox(height: 8),
-        // Sử dụng FutureBuilder để hiển thị danh sách thể loại
         FutureBuilder<List<ListCategory>>(
           future: apiService.getCategoryIDs([1, 2, 3, 4, 5]),
           builder: (context, snapshot) {
@@ -156,16 +156,48 @@ class _HomePageState extends State<HomePage> {
                   categoryList.length,
                   (index) => Text(
                     categoryList[index].name,
-                    style: const TextStyle(
-                        fontSize: 20,
-                        // Kích thước chữ
-                        color: Colors.black // Màu chữ
-                        ),
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),
                 ),
               );
             }
           },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCourseListPage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Tất cả khóa học ",
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CourseListPage1(),
+                  ),
+                );
+              },
+              child: const Text(
+                'Xem thêm',
+                style: TextStyle(fontSize: 16, color: Colors.blue),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 600, // Adjust height to fit the grid properly
+          child: CourseListPage(),
         ),
       ],
     );

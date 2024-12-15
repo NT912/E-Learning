@@ -1,4 +1,4 @@
-import 'package:app_learning/ui/homepage/MainPage.dart';
+import 'package:app_learning/ui/Login/Login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Mainpage(),
+      home: Login(),
     );
   }
 }

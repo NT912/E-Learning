@@ -18,7 +18,7 @@ const quizzValidator = {
   create: [
     check("type")
       .notEmpty()
-      .withMessage(message.quizz.creationError.description.missingFields)
+      .withMessage(message.chapter.creationError.missNameChapter)
       .custom((value) => Object.values(typeQuizz).includes(value))
       .withMessage("Invalid type. Must be one of: Chapter, Lesson"),
     handleValidationErrors,

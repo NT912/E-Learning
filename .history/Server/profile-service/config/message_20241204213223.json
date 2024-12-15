@@ -1,0 +1,24 @@
+{
+  "profile": {
+    "updateSuccess": {
+      "title": "Profile Updated",
+      "description": "Your profile information has been successfully updated."
+    },
+    "updateError": {
+      "title": "Profile Update Failed",
+      "description": "There was an error updating your profile."
+    },
+    "fetchError": {
+      "title": "Error Fetching Profile",
+      "description": "There was an error fetching your profile information."
+    }
+  },
+  "auth": {
+    "token": {
+      "description": {
+        "missToken": "Authorization token is required.",
+        "failDecodeToken": "Failed to decode token or token is invalid."
+      }
+    }
+  }
+}

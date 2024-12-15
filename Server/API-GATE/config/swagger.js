@@ -1,5 +1,5 @@
 // config/swaggerConfig.js
-const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerJsdoc = require("swagger-jsdoc");
 const PORT = process.env.PORT || 2999;
 
 const swaggerOptions = {
@@ -31,7 +31,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./src/routes/**/*.js'], // Đường dẫn tới các file chứa mô tả Swagger
+  apis: ["./src/routes/**/*.js"], // Đường dẫn tới các file chứa mô tả Swagger
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);

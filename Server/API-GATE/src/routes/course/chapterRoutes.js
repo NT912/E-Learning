@@ -11,7 +11,7 @@ const router = express.Router();
  * /course/chapter/create/{courseID}:
  *   post:
  *     summary: Create a new chapter for a course
- *     tags: [Chapter of course]
+ *     tags: [Chapter]
  *     security:
  *       - bearerAuth: []
  *     description: Endpoint to create a new chapter for a course. Requires a valid teacher token.
@@ -44,7 +44,7 @@ router.post("/create/:courseID", authMiddleware.techerRequire, chapterController
  * /course/chapter/{chapterID}/update:
  *   patch:
  *     summary: Update an existing chapter of a course
- *     tags: [Chapter of course]
+ *     tags: [Chapter]
  *     security:
  *       - bearerAuth: []
  *     description: Endpoint to update details of an existing chapter. Requires a valid teacher token.
@@ -84,7 +84,7 @@ router.patch("/:chapterID/update", authMiddleware.techerRequire, chapterValidato
  * /course/chapter/{chapterID}/delete:
  *   delete:
  *     summary: Delete a chapter from the course
- *     tags: [Chapter of course]
+ *     tags: [Chapter]
  *     parameters:
  *       - in: path
  *         name: chapterID

@@ -22,16 +22,17 @@ const profileRoutes = require("./routes/profile/profileRoutes");
 const discussionRoutes = require("./routes/discussion/discussionRoutes");
 
 // Import Swagger config
-const swaggerDocs = require("../config/swagger");
+const swaggerDocs = require('../config/swagger');
 
 const app = express();
 const PORT = config.PORT || 2999;
 // app.use(cors());
 
+// Cấu hình CORS
 app.use(
   cors({
-    origin: "*", // Cho phép tất cả nguồn truy cập
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
   })
@@ -45,6 +46,7 @@ app.use(express.json());
 // Routes
 app.use("/course", courseRoutes);
 app.use("/auth", authRoutes);
+// app.use("/enrollment", enrollmentRoute);
 app.use("/profile", profileRoutes);
 app.use("/api/discussion", discussionRoutes);
 

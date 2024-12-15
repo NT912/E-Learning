@@ -9,8 +9,8 @@ const enrollmentService = {
    * @param courseID - ID của khóa học mà người dùng muốn đăng ký.
    * @return Promise<number> - ID của bản ghi đăng ký mới tạo hoặc lỗi.
    */
-  createEnrollment: async (userID: number, courseID: number, status: EnrollmentStatus): Promise<number> => {
-    const enrollmentID = await EnrollmentModel.createEnrollment(userID, courseID, status);
+  createEnrollment: async (userID: number, courseID: number, status: EnrollmentStatus, cost: number): Promise<number> => {
+    const enrollmentID = await EnrollmentModel.createEnrollment(userID, courseID, status, cost);
     return enrollmentID;
   },
 
@@ -82,6 +82,23 @@ const enrollmentService = {
   getEnrollmentById: async(enrollmentID: number): Promise<Enrollment> => {
     try {
       const enrollment = await EnrollmentModel.findById(enrollmentID);
+      if (!enrollment) {
+        throw new Error("Enrollment not found.");
+      }
+      return enrollment;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+   /**
+   * Lấy thông tin bản ghi đăng ký dựa trên EnrollmentID.
+   * @param enrollmentID - ID của bản ghi đăng ký.
+   * @returns Promise<Enrollment> - Trả về thông tin của bản ghi đăng ký nếu tìm thấy.
+   */
+   check_enroll: async(userID: number, courseID: number): Promise<Enrollment> => {
+    try {
+      const enrollment = await EnrollmentModel.getByUserAndCourse(userID, courseID);
       if (!enrollment) {
         throw new Error("Enrollment not found.");
       }

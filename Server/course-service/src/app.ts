@@ -3,22 +3,26 @@ import express, { Request, Response, NextFunction } from "express";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import courseRoutes from "./routes/courseRoutes";
-import cors from 'cors'
+import cors from "cors";
 import config from "../config";
 
-import swaggerDocs from "../config/swagger"
+import swaggerDocs from "../config/swagger";
 const app = express();
 const PORT = config.port;
 
 // Middleware
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 
-app.use(cors({
-  origin: `http://localhost:2999`,  
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(
+  cors({
+    origin: `*`,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.use("/public", express.static(path.resolve("../public")));
 
 // Routes
 app.use("/course", courseRoutes);

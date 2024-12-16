@@ -19,7 +19,7 @@ const config = require("../config");
 const courseRoutes = require("./routes/course/courseRoutes");
 const authRoutes = require("./routes/auth/authRoutes");
 const profileRoutes = require("./routes/profile/profileRoutes");
-// const enrollmentRoute = require("./routes/enrollment/enrollmentRoute");
+const discussionRoutes = require("./routes/discussion/discussionRoutes");
 
 // Import Swagger config
 const swaggerDocs = require('../config/swagger');
@@ -39,7 +39,8 @@ app.use(
 );
 
 // Middleware
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.resolve("../public")));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());
 
 // Routes
@@ -47,9 +48,12 @@ app.use("/course", courseRoutes);
 app.use("/auth", authRoutes);
 // app.use("/enrollment", enrollmentRoute);
 app.use("/profile", profileRoutes);
+app.use("/api/discussion", discussionRoutes);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-// Khởi động server
+// Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server running: http://localhost:${PORT}/`);
   console.log(`API DOC: http://localhost:${PORT}/api-docs`);

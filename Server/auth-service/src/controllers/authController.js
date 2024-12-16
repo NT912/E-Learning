@@ -25,6 +25,30 @@ const auth = {
     }
   },
 
+  signupAdmin: async (req, res) => {
+    try {
+      const requestData = {
+        ...req.body,
+        role: "admin",
+      };
+      const result = await authService.signupAdmin(req.body);
+      return sendResponse(
+        res,
+        true,
+        messages.auth.signupSuccess.title,
+        result.message,
+        result.user
+      );
+    } catch (error) {
+      return sendResponse(
+        res,
+        false,
+        messages.auth.signupError.title,
+        error.message || messages.auth.signupError.description.signupFailed
+      );
+    }
+  },
+
   login: async (req, res) => {
     try {
       const result = await authService.login(req.body);
@@ -89,22 +113,24 @@ const auth = {
     const token = req.header("Authorization");
 
     console.log(token);
-  
+
     if (!token) {
       return res.status(401).json({
-        message: "Token is missing. Please provide a token to access this resource.",
+        message:
+          "Token is missing. Please provide a token to access this resource.",
       });
     }
-  
+
     const tokenParts = token.split(" ");
     if (tokenParts[0] !== "Bearer" || tokenParts.length !== 2) {
       return res.status(401).json({
-        message: "Invalid token format. Token must be in the format 'Bearer <token>'.",
+        message:
+          "Invalid token format. Token must be in the format 'Bearer <token>'.",
       });
     }
-  
+
     const actualToken = tokenParts[1];
-  
+
     try {
       const decoded = jwt.verify(actualToken, process.env.JWT_SECRET);
       res.status(200).json({

@@ -33,7 +33,11 @@ const authService = {
 
     // Lưu FCM token cho người dùng vào bảng `user_tokens`
     if (fcmToken) {
-      await userTokenService.saveToken(user.UserID, fcmToken, userData.deviceType || "unknown");
+      await userTokenService.saveToken(
+        user.UserID,
+        fcmToken,
+        userData.deviceType || "unknown"
+      );
     }
     const token = jwt.sign(
       { id: user.UserID, role: user.Role },
@@ -70,6 +74,20 @@ const authService = {
     );
 
     return { token };
+  },
+
+  signupAdmin: async (userData) => {
+    const existingUser = await User.findByEmail(userData.email);
+    if (existingUser) {
+      throw new Error(messages.auth.signupError.description.emailExists);
+    }
+
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    userData.password = hashedPassword;
+    userData.role = "admin";
+
+    const user = await User.create(userData);
+    return { message: messages.auth.signupSuccess.title, user };
   },
 };
 

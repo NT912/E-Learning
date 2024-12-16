@@ -8,6 +8,99 @@ const router = express.Router();
 const upload = multer();
 
 /**
+ * @route GET /profile
+ * @desc Get current user profile information
+ * @access Private
+ */
+
+/**
+ * @swagger
+ * /profile:
+ *   get:
+ *     summary: Get current user profile information
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []  # This means the endpoint requires a Bearer token in the Authorization header
+ *     responses:
+ *       200:
+ *         description: Successfully fetched profile information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 title:
+ *                   type: string
+ *                   example: "Fetch Success"
+ *                 description:
+ *                   type: string
+ *                   example: "Fetched profile information successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                       description: User's email address
+ *                       example: "user@example.com"
+ *                     phoneNumber:
+ *                       type: string
+ *                       description: User's phone number
+ *                       example: "0000000000"
+ *                     about:
+ *                       type: string
+ *                       description: Information about the user
+ *                       example: "This is my bio"
+ *                     avatar:
+ *                       type: string
+ *                       description: URL of the user's avatar image
+ *                       example: "https://example.com/avatar.jpg"
+ *                     bankName:
+ *                       type: string
+ *                       description: User's bank name
+ *                       example: "Chưa có"
+ *                     bankAccountNumber:
+ *                       type: string
+ *                       description: User's bank account number
+ *                       example: "Chưa có"
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Authorization Error"
+ *                 description:
+ *                   type: string
+ *                   example: "Authorization token is required."
+ *       500:
+ *         description: Server error while fetching profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 title:
+ *                   type: string
+ *                   example: "Server Error"
+ *                 description:
+ *                   type: string
+ *                   example: "There was an error fetching your profile information."
+ */
+router.get("/", authMiddleware.verifyToken, profileController.getProfile);
+
+/**
  * @route PUT /profile
  * @desc Update user profile
  * @access Private
@@ -17,10 +110,10 @@ const upload = multer();
  * @swagger
  * /profile:
  *   put:
- *     summary: Update user profile
+ *     summary: Update user profile information and return the updated profile
  *     tags: [Profile]
  *     security:
- *       - bearerAuth: []  # Require Bearer Token in Authorization header
+ *       - bearerAuth: []  # This means the endpoint requires a Bearer token in the Authorization header
  *     requestBody:
  *       description: Update profile information including optional avatar upload
  *       required: true
@@ -48,7 +141,7 @@ const upload = multer();
  *                 description: Upload avatar image file
  *     responses:
  *       200:
- *         description: Profile updated successfully
+ *         description: Profile updated successfully and fetched with current information
  *         content:
  *           application/json:
  *             schema:
@@ -63,9 +156,44 @@ const upload = multer();
  *                 description:
  *                   type: string
  *                   example: "Your profile information has been updated."
- *                 data:
+ *                 updatedProfile:
  *                   type: object
- *                   description: Updated profile data
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                       description: User's email address
+ *                       example: "user@example.com"
+ *                     phoneNumber:
+ *                       type: string
+ *                       description: User's phone number
+ *                       example: "0000000000"
+ *                     about:
+ *                       type: string
+ *                       description: Information about the user
+ *                       example: "This is my bio"
+ *                     avatar:
+ *                       type: string
+ *                       description: URL of the user's avatar image
+ *                       example: "https://example.com/avatar.jpg"
+ *                 currentProfile:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                       description: User's email address
+ *                       example: "user@example.com"
+ *                     phoneNumber:
+ *                       type: string
+ *                       description: User's phone number
+ *                       example: "0000000000"
+ *                     about:
+ *                       type: string
+ *                       description: Information about the user
+ *                       example: "Chưa có"
+ *                     avatar:
+ *                       type: string
+ *                       description: URL of the user's avatar image
+ *                       example: "https://example.com/avatar.jpg"
  *       400:
  *         description: Validation error or failed update
  *         content:

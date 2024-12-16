@@ -125,46 +125,74 @@
   },
   "auth": {
     "signupSuccess": {
-      "title": "Successful to create Account"
+      "title": "Registration Successful",
+      "description": "Your account has been successfully registered!"
     },
-
     "signupError": {
-      "title": "Unable to signup. Please Try Again",
+      "title": "Registration Error",
       "description": {
-        "emailExists": "Email already exists. Please use a different email.",
-        "signupFailed": "User registration failed. Please try again later.",
-        "emptyEmail": "Email is not empty",
-        "invalidEmail": "Invalid email format. Please enter a valid email.",
-        "emptyPassword": "Password cannot be empty. Please enter a password.",
-        "passwordTooShort": "Password must be at least 6 characters long."
+        "signupFailed": "An error occurred during registration.",
+        "emailExists": "An account with this email already exists!",
+        "invalidEmail": "Invalid email format!"
       }
     },
-
     "loginSuccess": {
-      "title": "Login successful",
-      "description": "You have successfully logged in."
+      "title": "Login Successful",
+      "description": "You have successfully logged in!"
     },
-
     "loginError": {
-      "title": "Unable to login. Please Try Again",
+      "title": "Login Error",
       "description": {
-        "loginFailed": "Login unsuccessful. Please check your credentials and try again.",
-        "unauthorized": "You do not have permission to perform this action.",
-        "emptyEmail": "Email cannot be empty. Please enter your email.",
-        "emptyPassword": "Password cannot be empty. Please enter your password.",
-        "invalidEmail": "Invalid email format. Please enter a valid email.",
-        "invalidCredentials": "Incorrect email or password. Please try again."
+        "loginFailed": "Login failed. Please try again.",
+        "invalidEmail": "Email does not exist!",
+        "invalidPassword": "Incorrect password!"
       }
     },
-    "token": {
-      "title": "Token fail",
+    "adminSignupSuccess": {
+      "title": "Admin Registration Successful",
+      "description": "Your admin account has been successfully registered!"
+    },
+    "adminSignupError": {
+      "title": "Admin Registration Error",
       "description": {
-        "missToken": "Require Token.",
-        "failDecodeToken": "Fail decode Token.",
-        "userNotFound": "User not found."
+        "signupFailed": "An error occurred during admin registration.",
+        "emailExists": "An admin account with this email already exists!"
+      }
+    },
+    "adminLoginSuccess": {
+      "title": "Admin Login Successful",
+      "description": "You have successfully logged into the admin account!"
+    },
+    "adminLoginError": {
+      "title": "Admin Login Error",
+      "description": {
+        "loginFailed": "Admin login failed.",
+        "invalidEmail": "Admin email does not exist!",
+        "invalidPassword": "Incorrect admin password!"
+      }
+    },
+    "logoutSuccess": {
+      "title": "Logout Successful",
+      "description": "You have successfully logged out!"
+    },
+    "logoutError": {
+      "title": "Logout Error",
+      "description": {
+        "missingToken": "No token provided for logout!"
+      }
+    },
+    "verifyTokenSuccess": {
+      "title": "Token Verification Successful",
+      "description": "Your token is valid."
+    },
+    "verifyTokenError": {
+      "title": "Token Verification Error",
+      "description": {
+        "missToken": "Token does not exist or has expired."
       }
     }
   },
+
   "permission": {
     "title": "Denied access",
     "description": {

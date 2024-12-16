@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const admin = require("../../config/database/firebaseAdmin");
-const userTokenModel = require("../models/userTokenModel"); 
+const userTokenModel = require("../models/userTokenModel");
 
 // Endpoint để gửi thông báo bằng email
 router.post("/send", async (req, res) => {
@@ -11,7 +11,12 @@ router.post("/send", async (req, res) => {
     // Tìm FCM token từ email của người dùng
     const fcmToken = await userTokenModel.findTokenByEmail(email);
     if (!fcmToken) {
-      return res.status(404).send({ success: false, message: "FCM token không tồn tại cho email này." });
+      return res
+        .status(404)
+        .send({
+          success: false,
+          message: "FCM token không tồn tại cho email này.",
+        });
     }
 
     // Cấu hình thông báo

@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
+
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+
+import { Pencil } from "lucide-react";
 
 import {
   Form,
@@ -15,17 +18,16 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
+
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Editor } from "@/components/editor";
 import { Preview } from "@/components/Preview";
 
 interface ChapterDescriptionFormProps {
-  initialData: {
-    description: string;
-  };
+  initialData: Chapter;
   courseId: string;
+  chapterId: string;
 }
 
 const formSchema = z.object({
@@ -34,6 +36,8 @@ const formSchema = z.object({
 
 export const ChapterDescriptionForm = ({
   initialData,
+  courseId,
+  chapterId,
 }: ChapterDescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -52,26 +56,30 @@ export const ChapterDescriptionForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch("/api/courses/${courseId}", values);
+      await axios.patch(
+        `/api/courses/${courseId}/chapters/${chapterId}`,
+        values
+      );
       toast.success("Chapter updated");
       toggleEdit();
+      // Refreshes the server component fetching the new data from the db
       router.refresh();
-    } catch {
-      toast.error("loi504");
+    } catch (error) {
+      toast.error("Something went wrong");
     }
   };
 
   return (
-    <div className="mt-6 border bg-salte-100 rounded-md p-4">
+    <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course description
+        Chapter description
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit decription
+              Edit description
             </>
           )}
         </Button>
@@ -83,7 +91,7 @@ export const ChapterDescriptionForm = ({
             !initialData.description && "text-slate-500 italic"
           )}
         >
-          {initialData.description && "ko co mok ta"}
+          {!initialData.description && "No description"}
           {initialData.description && (
             <Preview value={initialData.description} />
           )}

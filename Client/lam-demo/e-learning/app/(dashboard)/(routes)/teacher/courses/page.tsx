@@ -17,7 +17,7 @@ const CoursePage = () => {
       }
 
       const response = await axios.post(
-        "https://97b6-118-71-221-87.ngrok-free.app/course/create",
+        " https://2f5f-42-118-114-11.ngrok-free.app/course/create",
         {}, // Empty body (if needed, you can add data here)
         {
           headers: {
@@ -39,7 +39,13 @@ const CoursePage = () => {
 
   return (
     <div className="p-6">
-      {/* <DataTable columns={columns} data={courses} /> */}
+      <button
+        onClick={Click}
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+      >
+        Create Course
+      </button>
+      {/* <DataTable columns={columns} data={ course } } /> */}
     </div>
   );
 };

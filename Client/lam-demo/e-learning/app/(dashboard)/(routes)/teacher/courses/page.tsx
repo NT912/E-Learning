@@ -1,12 +1,12 @@
 "use client"
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { columns } from "./_components/columns";
 import { DataTable } from "./_components/data-table";
 
 const CoursePage = () => {
-  const router = useRouter();
+  // const router = useRouter();
 
   const Click = async () => {
     try {
@@ -28,7 +28,7 @@ const CoursePage = () => {
 
       console.log(response);
 
-      router.push(`/teacher/courses/${response.data.courseID}/create`);
+      // router.push(`/teacher/courses/${response.data.courseID}/create`);
 
       toast.success("Course created");
     } catch (error) {
@@ -39,13 +39,7 @@ const CoursePage = () => {
 
   return (
     <div className="p-6">
-      <button
-        onClick={Click}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-      >
-        Create Course
-      </button>
-      {/* <DataTable columns={columns} data={ course } } /> */}
+      <DataTable columns={[]} data={[]} />
     </div>
   );
 };

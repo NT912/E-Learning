@@ -11,12 +11,8 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "./search-input";
 
-/*
-    The SearchInput component will only appear if the
-    user is in the /search path 
-*/
 const NavbarRoutes = () => {
-  const { userId } = useAuth();
+  // const { userId } = useAuth();
 
   const pathname = usePathname();
 
@@ -39,14 +35,13 @@ const NavbarRoutes = () => {
               Exit
             </Button>
           </Link>
-        ) : isTeacher(userId) ? (
+        ) : (
           <Link href="/teacher/courses">
             <Button size="sm" variant="ghost">
               Teacher mode
             </Button>
           </Link>
-        ) : null}
-        <UserButton afterSignOutUrl="/" />
+        )}
       </div>
     </>
   );

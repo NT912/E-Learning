@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:app_learning/ui/homepage/MainPage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../API/api_service.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -11,26 +16,106 @@ class Login extends StatefulWidget {
 class _LoginPageState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isPasswordVisible = false; // Biến để kiểm soát hiển thị mật khẩu
+  bool _isPasswordVisible = false;
+  bool _isLoading = false;
 
-  void _login() {
-    String email = _emailController.text;
-    String password = _passwordController.text;
+  void _login() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
 
-    // Giả định tài khoản và mật khẩu đúng là:
-    String correctEmail = "bao@gmail.com";
-    String correctPassword = "123456";
-
-    if (email == correctEmail && password == correctPassword) {
-      // Chuyển hướng đến trang HomePage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Mainpage()),
-      );
-    } else {
-      // Hiển thị thông báo lỗi nếu đăng nhập không thành công
-      showTopSnackBar(context, 'Tài khoản hoặc mật khẩu không đúng!');
+    if (email.isEmpty || password.isEmpty) {
+      _showTopSnackBar('Vui lòng nhập đầy đủ thông tin!');
+      return;
     }
+
+    setState(() => _isLoading = true);
+
+    final apiService = ApiService();
+
+    try {
+      final response = await apiService.login(email, password);
+      // In lỗi ra tẻminal
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}'); // In ra body phản hồi
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+
+        if (data['data']['success']) {
+          String token = data['data']['description']['token'];
+          print('Login successful. Token: $token');
+          await _saveToken(token);
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Mainpage()),
+          );
+        } else {
+          _showTopSnackBar('Đăng nhập thất bại: ${data['message']}');
+        }
+      } else {
+        _showTopSnackBar(
+            'Lỗi đăng nhập. Mã trạng thái: ${response.statusCode}');
+      }
+    } catch (e) {
+      _showTopSnackBar('Lỗi: $e');
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _saveToken(String token) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool success = await prefs.setString('auth_token', token);
+
+      if (success) {
+        print('Token saved successfully');
+      } else {
+        _showTopSnackBar('Lỗi khi lưu token.');
+      }
+    } catch (e) {
+      print('Error saving token: $e');
+      _showTopSnackBar('Lỗi khi lưu token.');
+    }
+  }
+
+  Future<String?> _getToken() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getString('auth_token');
+    } catch (e) {
+      print('Error retrieving token: $e');
+      return null;
+    }
+  }
+
+  void _showTopSnackBar(String message) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + 16,
+        left: 0,
+        right: 0,
+        child: Material(
+          child: Container(
+            color: Colors.red,
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
   }
 
   @override
@@ -44,7 +129,7 @@ class _LoginPageState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 50.0),
-                _buildLogologin(),
+                _buildLogo(),
                 const SizedBox(height: 16.0),
                 _buildOnboardingTitleAndContent(),
                 _buildEmail(),
@@ -61,7 +146,7 @@ class _LoginPageState extends State<Login> {
     );
   }
 
-  Widget _buildLogologin() {
+  Widget _buildLogo() {
     return Image.asset(
       "assets/images/login.png",
       width: 95,
@@ -108,8 +193,8 @@ class _LoginPageState extends State<Login> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
             borderSide: const BorderSide(
-              color: Colors.black, // Màu sắc của viền
-              width: 2.0, // Độ dày của viền
+              color: Colors.black,
+              width: 2.0,
             ),
           ),
           prefixIcon: const Icon(Icons.email_outlined),
@@ -125,14 +210,14 @@ class _LoginPageState extends State<Login> {
       margin: const EdgeInsets.symmetric(horizontal: 30).copyWith(top: 20),
       child: TextField(
         controller: _passwordController,
-        obscureText: !_isPasswordVisible, // Ẩn/hiện mật khẩu
+        obscureText: !_isPasswordVisible,
         decoration: InputDecoration(
           hintText: 'Mật khẩu',
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
             borderSide: const BorderSide(
-              color: Colors.black, // Màu sắc của viền
-              width: 5.0, // Độ dày của viền
+              color: Colors.black,
+              width: 5.0,
             ),
           ),
           prefixIcon: const Icon(Icons.lock_outline),
@@ -161,13 +246,13 @@ class _LoginPageState extends State<Login> {
         children: [
           TextButton(
             onPressed: () {
-              // Thêm logic Quên mật khẩu
+              // Logic for forgot password
             },
             child: const Text('Quên mật khẩu?', style: TextStyle(fontSize: 16)),
           ),
           TextButton(
             onPressed: () {
-              // Thêm logic Đăng ký tài khoản
+              // Logic for register account
             },
             child: const Text(
               'Đăng kí tài khoản',
@@ -183,7 +268,7 @@ class _LoginPageState extends State<Login> {
     return Container(
       margin: const EdgeInsets.only(top: 30),
       child: ElevatedButton(
-        onPressed: _login,
+        onPressed: _isLoading ? null : _login,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
           shape: RoundedRectangleBorder(
@@ -194,10 +279,12 @@ class _LoginPageState extends State<Login> {
             vertical: 14.0,
           ),
         ),
-        child: const Text(
-          'Đăng Nhập',
-          style: TextStyle(fontSize: 20.0, color: Colors.white),
-        ),
+        child: _isLoading
+            ? CircularProgressIndicator()
+            : const Text(
+                'Đăng Nhập',
+                style: TextStyle(fontSize: 20.0, color: Colors.white),
+              ),
       ),
     );
   }
@@ -224,7 +311,7 @@ class _LoginPageState extends State<Login> {
       children: [
         IconButton(
           onPressed: () {
-            // Google login logic
+            // Logic for Google login
           },
           icon: Image.asset(
             "assets/images/gg_icon.png",
@@ -233,7 +320,7 @@ class _LoginPageState extends State<Login> {
         ),
         IconButton(
           onPressed: () {
-            // Facebook login logic
+            // Logic for Facebook login
           },
           icon: Image.asset(
             "assets/images/fb_icon.png",
@@ -242,7 +329,7 @@ class _LoginPageState extends State<Login> {
         ),
         IconButton(
           onPressed: () {
-            // Apple login logic
+            // Logic for Apple login
           },
           icon: Image.asset(
             "assets/images/ip_icon.png",
@@ -251,34 +338,5 @@ class _LoginPageState extends State<Login> {
         ),
       ],
     );
-  }
-
-  void showTopSnackBar(BuildContext context, String message) {
-    final overlay = Overlay.of(context);
-    final overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: MediaQuery.of(context).padding.top + 16, // Vị trí trên cùng
-        left: 0,
-        right: 0,
-        child: Material(
-          child: Container(
-            color: Colors.red, // Màu nền của SnackBar
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ),
-    );
-
-    overlay.insert(overlayEntry);
-
-    // Tự động xóa SnackBar sau 2 giây
-    Future.delayed(const Duration(seconds: 2), () {
-      overlayEntry.remove();
-    });
   }
 }

@@ -1,3 +1,4 @@
+"use client"
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -38,7 +39,7 @@ const CoursePage = () => {
 
   return (
     <div className="p-6">
-      <DataTable columns={columns} data={courses} />
+      {/* <DataTable columns={columns} data={courses} /> */}
     </div>
   );
 };

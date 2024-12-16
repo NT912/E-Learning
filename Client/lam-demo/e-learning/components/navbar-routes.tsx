@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-// import { UserButton, useAuth } from "@clerk/nextjs";
+import { UserButton, useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 
 // import { isTeacher } from "@/lib/teacher";
@@ -16,7 +16,7 @@ import { SearchInput } from "./search-input";
     user is in the /search path 
 */
 const NavbarRoutes = () => {
-  const { userId } = useAuth();
+  // const { userId } = useAuth();
 
   const pathname = usePathname();
 
@@ -32,7 +32,7 @@ const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex gap-x-2 ml-auto">
-        {isTeacherPage || isCoursePage ? (
+        {/* {isTeacherPage || isCoursePage ? (
           <Link href="/">
             <Button size="sm" variant="ghost">
               <LogOut className="h-4 w-4 mr-2" />
@@ -45,8 +45,13 @@ const NavbarRoutes = () => {
               Teacher mode
             </Button>
           </Link>
-        ) : null}
-        <UserButton afterSignOutUrl="/" />
+        ) : null} */}
+        <Link href="/teacher/courses">
+            <Button size="sm" variant="ghost">
+              Teacher mode
+            </Button>
+          </Link>
+        {/* <UserButton afterSignOutUrl="/" /> */}
       </div>
     </>
   );

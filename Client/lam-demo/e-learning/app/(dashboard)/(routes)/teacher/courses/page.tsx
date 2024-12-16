@@ -17,7 +17,7 @@ const CoursePage = () => {
       }
 
       const response = await axios.post(
-        " https://2f5f-42-118-114-11.ngrok-free.app/course/create",
+        `{}/course/create`,
         {}, // Empty body (if needed, you can add data here)
         {
           headers: {

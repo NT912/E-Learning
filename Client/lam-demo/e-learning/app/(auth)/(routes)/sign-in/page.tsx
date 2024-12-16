@@ -16,9 +16,10 @@ const Login = () => {
     setLoading(true); // Bật loading khi đang gửi yêu cầu
 
     try {
+      console.log(process.env.SERVER_URL);
       // Gửi yêu cầu đăng nhập đến API
       const response = await axios.post(
-        "https://97b6-118-71-221-87.ngrok-free.app/auth/login", // Thay bằng API đăng nhập thực tế
+        `${process.env.SERVER_URL}/auth/login`, // Thay bằng API đăng nhập thực tế
         { email, password }
       );
 

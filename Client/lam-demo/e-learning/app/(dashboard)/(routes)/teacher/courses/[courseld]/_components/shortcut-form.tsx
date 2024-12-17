@@ -19,10 +19,11 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { Description } from "@radix-ui/react-dialog";
 
-interface DescriptionFormProps {
+interface ShortCutFormProps {
   initialData: {
-    description: string;
+    shortcut: string;
     courseId: string;
   };
 }
@@ -33,7 +34,7 @@ const formSchema = z.object({
   }),
 });
 
-export const DescriptionForm = ({ initialData }: DescriptionFormProps) => {
+export const ShortCutForm = ({ initialData }: ShortCutFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -43,7 +44,7 @@ export const DescriptionForm = ({ initialData }: DescriptionFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || "",
+      description: initialData?.shortcut || "Chua co noi dung",
     },
   });
 
@@ -57,7 +58,7 @@ export const DescriptionForm = ({ initialData }: DescriptionFormProps) => {
         return;
       }
 
-      const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/course/${initialData.courseId}/update/description`;
+      const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/course/${initialData.courseId}/update/shortcut`;
       const response = await axios.patch(
         url,
         { content: values.description },
@@ -68,7 +69,7 @@ export const DescriptionForm = ({ initialData }: DescriptionFormProps) => {
         }
       );
       console.log(response.data);
-      toast.success("Course updated description successfully");
+      toast.success("Course updated shotcut successfully");
       toggleEdit();
       router.refresh();
     } catch {
@@ -79,7 +80,7 @@ export const DescriptionForm = ({ initialData }: DescriptionFormProps) => {
   return (
     <div className="mt-6 border bg-salte-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course description
+        Course shortcut
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
@@ -95,10 +96,10 @@ export const DescriptionForm = ({ initialData }: DescriptionFormProps) => {
         <p
           className={cn(
             "text-sm mt-2",
-            !initialData.description && "text-slate-500 italic"
+            !initialData.shortcut && "text-slate-500 italic"
           )}
         >
-          {initialData.description || "ko co mo ta"}
+          {initialData.shortcut || "ko co mo ta"}
         </p>
       )}
       {isEditing && (

@@ -56,16 +56,17 @@ class CategoryController {
   /**
    * Lấy tất cả danh mục.
    */
-  async getAll(req, res) {
-    try {
-      console.log("Get all category");
-      const response = await axios.get(`${this.courseServiceBaseUrl}/course/category/getall`);
-      res.status(response.status).json(response.data);
-    } catch (err) {
-      console.error("Error fetching categories:", err.message);
-      res.status(err.response?.status || 500).json({ error: err.message });
-    }
-  }
+  // async getAll(req, res) {
+  //   try {
+  //     console.log("Get all category");
+  //     console.log(this.courseServiceBaseUrl);
+  //     const response = await axios.get(`${this.courseServiceBaseUrl}/course/category/getall`);
+  //     res.status(response.status).json(response.data);
+  //   } catch (err) {
+  //     console.error("Error fetching categories:", err.message);
+  //     res.status(err.response?.status || 500).json({ error: err.message });
+  //   }
+  // }
 
   /**
    * Lấy tất cả danh mục.

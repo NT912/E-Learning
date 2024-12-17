@@ -27,6 +27,9 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -37,9 +40,38 @@ export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+    const router = useRouter();
+    
+    const Click = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                toast.error("No token found. Please log in.");
+                return;
+            }
+
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/course/create`,
+                {}, // Empty body (if needed, you can add data here)
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include token in headers
+                    },
+                }
+            );
+
+            router.push(`/teacher/courses/${response.data.courseID}/create`);
+
+            toast.success("Course created");
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong");
+        }
+    };
     const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] =
-        React.useState<ColumnFiltersState>([]);
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+        []
+    );
 
     const table = useReactTable({
         data,
@@ -61,24 +93,22 @@ export function DataTable<TData, TValue>({
             <div className="flex items-center py-4 justify-between">
                 <Input
                     placeholder="Filter courses..."
-                    value={
-                        (table
-                            .getColumn("title")
-                            ?.getFilterValue() as string) ?? ""
-                    }
+                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table
-                            .getColumn("title")
-                            ?.setFilterValue(event.target.value)
+                        table.getColumn("title")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
-                <Link href="/teacher/create">
+                {/* <Link href="/teacher/create">
                     <Button>
                         <PlusCircle className="h-4 w-4 mr-2" />
                         New course
                     </Button>
-                </Link>
+                </Link> */}
+                <Button onClick={Click}>
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    New course
+                </Button>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -91,10 +121,9 @@ export function DataTable<TData, TValue>({
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                      header.column.columnDef
-                                                          .header,
-                                                      header.getContext()
-                                                  )}
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
                                         </TableHead>
                                     );
                                 })}
@@ -106,9 +135,7 @@ export function DataTable<TData, TValue>({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && "selected"
-                                    }
+                                    data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

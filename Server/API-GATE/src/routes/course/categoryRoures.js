@@ -100,37 +100,37 @@ router.post("/:categoryID/update", authMiddleware.adminRequire, categoryValidato
  */
 router.delete("/:categoryID/delete", authMiddleware.adminRequire, (req, res) => CategoryController.delete(req, res));
 
-/**
- * @swagger
- * /course/category/:
- *   get:
- *     summary: Retrieve all categories
- *     tags: [Category]
- *     security:
- *       - bearerAuth: [] 
- *     responses:
- *       200:
- *         description: A list of all categories
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   categoryID:
- *                     type: integer
- *                     description: ID of the category
- *                   name:
- *                     type: string
- *                     description: Name of the category
- *                   description:
- *                     type: string
- *                     description: Description of the category
- *       400:
- *         description: Error retrieving categories
- */
-router.get("/", (req, res) => CategoryController.getAll(req, res));
+// /**
+//  * @swagger
+//  * /course/category/:
+//  *   get:
+//  *     summary: Retrieve all categories
+//  *     tags: [Category]
+//  *     security:
+//  *       - bearerAuth: [] 
+//  *     responses:
+//  *       200:
+//  *         description: A list of all categories
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: array
+//  *               items:
+//  *                 type: object
+//  *                 properties:
+//  *                   categoryID:
+//  *                     type: integer
+//  *                     description: ID of the category
+//  *                   name:
+//  *                     type: string
+//  *                     description: Name of the category
+//  *                   description:
+//  *                     type: string
+//  *                     description: Description of the category
+//  *       400:
+//  *         description: Error retrieving categories
+//  */
+// router.get("/", (req, res) => CategoryController.getAll(req, res));
 
 /**
  * @swagger
@@ -168,6 +168,37 @@ router.get("/", (req, res) => CategoryController.getAll(req, res));
  *         description: Error retrieving categories
  */
 router.get("/:categoryID", (req, res) => CategoryController.getID(req, res));
+/**
+ * @swagger
+ * /course/category/getall:
+ *   get:
+ *     summary: Retrieve all categories
+ *     tags: [Category]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of all categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   categoryID:
+ *                     type: integer
+ *                     description: ID of the category
+ *                   name:
+ *                     type: string
+ *                     description: Name of the category
+ *                   description:
+ *                     type: string
+ *                     description: Description of the category
+ *       400:
+ *         description: Error retrieving categories
+ */
+router.get("/getall", (req, res) => CategoryController.getID(req, res));
 
 
 module.exports = router;

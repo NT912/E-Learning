@@ -523,7 +523,108 @@ router.patch(
 
 /**
  * @swagger
- * /course/getall:
+ * /course:
+ *   get:
+ *     summary: Get a list of all courses
+ *     description: Retrieve all courses with optional filtering by category, price range, teacher ID, and state.
+ *     tags: [Course]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Filter courses by category
+ *       - in: query
+ *         name: free
+ *         schema:
+ *           type: boolean
+ *         description: Filter courses by free or paid
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *         description: Minimum price of courses
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *         description: Maximum price of courses
+ *       - in: query
+ *         name: start
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: Pagination start index
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *         description: Maximum number of courses to retrieve
+ *       - in: query
+ *         name: teacherID
+ *         schema:
+ *           type: integer
+ *         description: Filter courses by teacher ID
+ *       - in: query
+ *         name: state
+ *         schema:
+ *           type: string
+ *           enum: [Creating, Confirmed, Rejected, Approved]
+ *         description: Filter courses by state (e.g., Creating, Confirmed, Rejected, Approved)
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved list of courses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: The course ID
+ *                   title:
+ *                     type: string
+ *                     description: The course title
+ *                   category:
+ *                     type: string
+ *                     description: The course category
+ *                   price:
+ *                     type: number
+ *                     description: The course price
+ *                   isFree:
+ *                     type: boolean
+ *                     description: Indicates if the course is free
+ *                   teacherID:
+ *                     type: integer
+ *                     description: The ID of the course's teacher
+ *                   state:
+ *                     type: string
+ *                     description: The current state of the course
+ *                     enum: [Creating, Confirmed, Rejected, Approved]
+ *       400:
+ *         description: Error fetching courses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", courseController.getAll);
+
+
+/**
+ * @swagger
+ * /course/get-teacher:
  *   get:
  *     summary: Update the level of a course
  *     tags: [Course]
@@ -535,7 +636,7 @@ router.patch(
  *       400:
  *         description: Error in updating course level
  */
-router.get("/getall", courseController.getAll);
+router.get("/get-teacher/:teacherID", courseController.getAll);
 
 /**
  * @swagger

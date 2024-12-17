@@ -14,8 +14,8 @@ class CourseController {
     }
   }
 
-  async getAll (req: Request, res: Response): Promise<void> {
-    const { category, free, minPrice, maxPrice, start = 0, limit = 20 } = req.query;
+  async getAll(req: Request, res: Response): Promise<void> {
+    const { category, free, minPrice, maxPrice, start = 0, limit = 20, teacherID, state } = req.query;
     
     try {
       const courses = await courseService.getAllCourses(
@@ -24,7 +24,9 @@ class CourseController {
         minPrice ? Number(minPrice) : null,
         maxPrice ? Number(maxPrice) : null,
         Number(start),
-        Number(limit)
+        Number(limit),
+        teacherID ? Number(teacherID) : null,
+        state as string | null // Thêm state vào đây
       );
       
       res.status(200).json(courses);
@@ -33,6 +35,7 @@ class CourseController {
       res.status(400).json({ error: (error as Error).message });
     }
   }
+
 
   async getCourseDetails(req: Request, res: Response): Promise<void> {
     const courseID = Number(req.params.courseID);

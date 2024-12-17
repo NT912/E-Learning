@@ -121,7 +121,9 @@ const courseModel = {
     minPrice: number | null,
     maxPrice: number | null,
     offset: number,
-    limit: number
+    limit: number,
+    teacherID: number | null,
+    state: string | null // Thêm state vào đây
   ): Promise<Course[]> => {
     const conditions: string[] = [];
     const params: (string | number)[] = [];
@@ -145,8 +147,18 @@ const courseModel = {
       }
     }
 
+    if (teacherID != null) {
+      conditions.push("UserID = ?");
+      params.push(teacherID);
+    }
+
+    if (state) {
+      conditions.push("State = ?"); // Thêm điều kiện lọc State
+      params.push(state);
+    }
+
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
-    const query = `SELECT courseID, name, avatar, cost FROM course ${whereClause} LIMIT ?, ?`;
+    const query = `SELECT courseID, name, avatar, cost, State FROM course ${whereClause} LIMIT ?, ?`;
     
     params.push(offset, limit);
 
@@ -160,6 +172,7 @@ const courseModel = {
       });
     });
   },
+
 
   /**
   * Update the name of a course.

@@ -64,7 +64,9 @@ const courseService = {
     minPrice: number | null,
     maxPrice: number | null,
     offset: number = 0,
-    limit: number = 20
+    limit: number = 20,
+    teacherID: number | null,
+    state: string | null // Thêm state vào đây
   ) => {
     try {
       const courses = await courseModel.getFilteredCourses(
@@ -73,7 +75,9 @@ const courseService = {
         minPrice,
         maxPrice,
         offset,
-        limit
+        limit,
+        teacherID,
+        state // Truyền state xuống
       );
       return courses;
     } catch (error) {
@@ -81,6 +85,7 @@ const courseService = {
       throw new Error("Failed to retrieve courses.");
     }
   },
+
 
   /**
    * Cập nhật tên khóa học.

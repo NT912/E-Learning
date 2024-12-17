@@ -29,6 +29,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -39,6 +40,8 @@ export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+    const router = useRouter();
+    
     const Click = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -57,9 +60,7 @@ export function DataTable<TData, TValue>({
                 }
             );
 
-            console.log(response);
-
-            // router.push(`/teacher/courses/${response.data.courseID}/create`);
+            router.push(`/teacher/courses/${response.data.courseID}/create`);
 
             toast.success("Course created");
         } catch (error) {

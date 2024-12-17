@@ -8,23 +8,44 @@ import {
 import { TitleForm } from "../_components/title-form";
 import { CategoryForm } from "../_components/category-form";
 import { PriceForm } from "../_components/price-form";
-// import { ChaptersForm } from "../_components/chapters-form";
-// import { ImageForm } from "../_components/image-form";
 import { AttachmentForm } from "../_components/attachment-form";
 import { DescriptionForm } from "../_components/description-form";
 import { ImageForm } from "../_components/image-form";
+import { ChaptersForm } from "../_components/chapters-form";
 
-export const CourseIdPage = async ({
-  params,
-}: {
-  params: { courseld: string };
-}) => {
+const fetchCourseData = async (courseId: string) => {
+  try {
+    const url =  `${process.env.NEXT_PUBLIC_SERVER_URL}/course/${courseId}`;
+    console.log(url);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/course/${courseId}`
+    );
+    if (!response.ok) throw new Error("Failed to fetch course data");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching course data:", error);
+    return null;
+  }
+};
+
+
+
+const CourseIdPage = async ({ params }: { params: { courseld: string } }) => {
   const { courseld } = params;
-  // const url = `/api/courses/${courseld}`;
-  // console.log(url);
-  // const response = await axios.get(url);
 
-  // const course = response.data.course;
+  // Fetch dữ liệu course
+  const courseData = await fetchCourseData(courseld);
+  console.log(courseData);
+
+  if (!courseData) {
+    return (
+      <div className="p-6 text-center">
+        <h1 className="text-2xl font-medium text-red-500">
+          Failed to load course data.
+        </h1>
+      </div>
+    );
+  }
 
   const category = [
     { label: "Programming", value: "1" },
@@ -47,14 +68,14 @@ export const CourseIdPage = async ({
             <IconBadge size="sm" icon={LayoutDashboard} />
             <h2 className="text-xl">Customize your course</h2>
           </div>
-          <TitleForm initialData={{ title: "",courseId: courseld }} />
+          <TitleForm initialData={{ title: courseData.Name, courseId: courseld }} />
           <DescriptionForm
             initialData={{
-              description: "",
+              description: courseData.Description,
             }}
             courseId={""}
           />
-          {/* <ImageForm initialData={undefined} imageUrl={""} /> */}
+          <ImageForm initialData = { {id: courseld, imageUrl: courseData.avatar } } />
           <CategoryForm courseId={courseld} option={category} />
         </div>
         <div className="space-y-6">
@@ -64,12 +85,12 @@ export const CourseIdPage = async ({
               <h2 className="text-xl">Course Chapter</h2>
             </div>
           </div>
-          {/* <ChaptersForm
+          <ChaptersForm
             initialData={{
-              description: "",
+              chapters: courseData.chapters
             }}
-            courseId={""}
-          /> */}
+            courseId={courseld}
+          />
         </div>
         <div>
           <div className="flex items-center gap-x-2">

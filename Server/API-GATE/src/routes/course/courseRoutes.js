@@ -564,7 +564,5 @@ router.use("/chapter", chapterRoutes);
 router.use("/lesson", lessonRoutes);
 router.use("/course-depend", dependRoutes);
 router.use("/category", categoryRoute);
-// router.use("/outcome", outcomeRoute);
-// router.use("/outcome", outcomeRoute);
 
 module.exports = router;

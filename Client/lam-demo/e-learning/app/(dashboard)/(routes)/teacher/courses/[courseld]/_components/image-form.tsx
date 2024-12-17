@@ -16,12 +16,10 @@ interface ImageFormProps {
   initialData: { id: string; imageUrl: string }; // Thay thế 'course' bằng kiểu dữ liệu phù hợp
 }
 
-// Xác thực dữ liệu form
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
-  imageUrl: z.string().min(1, {
-    message: "Image URL cannot be empty",
-  }),
+  // imageUrl: z.string().min(1, {
+  //   message: "Image URL cannot be empty",
+  // }),
 });
 
 export const ImageForm = ({ initialData }: ImageFormProps) => {
@@ -76,7 +74,7 @@ export const ImageForm = ({ initialData }: ImageFormProps) => {
                 alt="Uploaded Image"
                 fill
                 className="object-cover rounded-md"
-                src={initialData.imageUrl}
+                src={ `${process.env.NEXT_PUBLIC_SERVER_URL}${initialData.imageUrl}` }
               />
               <p className="mt-2 text-sm">Current Image</p>
             </div>

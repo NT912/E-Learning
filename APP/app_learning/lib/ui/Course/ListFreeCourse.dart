@@ -68,7 +68,7 @@ class _FreeCourseState extends State<FreeCourse> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Khóa học Pro'),
+        title: const Text('Khóa học Free'),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -78,7 +78,7 @@ class _FreeCourseState extends State<FreeCourse> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                  const SearchPage(), // Thay SearchPage bằng trang của bạn
+                      const SearchPage(), // Thay SearchPage bằng trang của bạn
                 ),
               );
             },

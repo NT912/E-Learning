@@ -1,119 +1,175 @@
+import 'package:app_learning/ui/homepage/MainPage.dart';
 import 'package:flutter/material.dart';
 
 import '../../API/api_service.dart';
 import '../../model/Course.dart';
-import '../homepage/SingleCourseDetails.dart';
+import '../homepage/SearchPage.dart';
+import 'list.dart';
 
-class CoursePage extends StatefulWidget {
+class MyCourse extends StatefulWidget {
   @override
-  _CoursePageState createState() => _CoursePageState();
+  _CourseListPageState createState() => _CourseListPageState();
 }
 
-class _CoursePageState extends State<CoursePage> {
-  late Future<List<Course>> coursesFuture;
-  final ApiService apiService = ApiService(); // Assuming ApiService is defined
+class _CourseListPageState extends State<MyCourse>
+    with SingleTickerProviderStateMixin {
+  late Future<List<Course>> _courses;
+  late TabController _tabController;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   coursesFuture = apiService.getCourses(); // Fetch courses from API
-  // }
   @override
   void initState() {
     super.initState();
-    coursesFuture = apiService.getCourses().then((courses) {
-      print(courses); // In ra danh sách khóa học
-      return courses;
-    });
+    _courses = ApiService().getCourses();
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Khóa Học Của Tôi"),
-        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 27,
+          ),
+          onPressed: () {
+            // Điều hướng đến trang SearchPage
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Mainpage(),
+              ),
+            );
+          },
+        ),
+        title: const Text('Khóa Học Đã Mua',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(
+              Icons.search,
+              size: 27,
+            ),
             onPressed: () {
-              // Search functionality here
+              // Điều hướng đến trang SearchPage
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchPage(),
+                ),
+              );
             },
           ),
         ],
       ),
       body: FutureBuilder<List<Course>>(
-        future: coursesFuture,
+        future: _courses,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Lỗi: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No courses available"));
+            return const Center(child: Text('Không có khóa học nào.'));
           } else {
-            final courses = snapshot.data!;
-
+            List<Course> courses = snapshot.data!;
             return ListView.builder(
+              padding: const EdgeInsets.all(8.0),
               itemCount: courses.length,
               itemBuilder: (context, index) {
-                var course = courses[index];
-                return InkWell(
+                final course = courses[index];
+                return GestureDetector(
                   onTap: () {
-                    print(
-                        'Course ID: ${course.id}'); // Kiểm tra ID khi nhấn vào khóa học
-                    if (course.id != null && course.id != 0) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SingleCourseDetailsPage(
-                            courseId: course
-                                .id, // Truyền ID khóa học vào trang chi tiết
-                          ),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('ID khóa học không hợp lệ')),
-                      );
-                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            CourseContents(courseId: course.id),
+                      ),
+                    );
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    color: Colors.white,
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Course Name and Avatar
-                        Row(
-                          children: [
-                            // Handling nullable avatar safely
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundImage: course.avatar != null &&
-                                      course.avatar!.isNotEmpty
-                                  ? NetworkImage(course.avatar!)
-                                  : null,
-                              child: course.avatar == null ||
-                                      course.avatar!.isEmpty
-                                  ? const Icon(Icons.account_circle)
-                                  : null,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                course.name ?? 'Đang cập nhật',
-                                // Handling nullable name
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                          ),
+                          child: Image.network(
+                            course.avatar ?? '',
+                            fit: BoxFit.cover,
+                            height: 150,
+                            width: 150,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.error,
+                                  color: Colors.red, size: 50);
+                            },
+                          ),
                         ),
-                        const Divider(),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  course.name ?? 'Đang cập nhật',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Khóa học lập trình ${course.name}',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.star,
+                                        color: Colors.amber, size: 16),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      course.rating?.toString() ?? '0.0',
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                // const Text(
+                                //   'Vào Học',
+                                //   style: TextStyle(
+                                //       fontSize: 14,
+                                //       color: Colors.blue,
+                                //       fontWeight: FontWeight.bold),
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.bookmark_border),
+                          onPressed: () {},
+                        ),
                       ],
                     ),
                   ),

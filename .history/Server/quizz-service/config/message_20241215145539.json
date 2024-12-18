@@ -1,0 +1,103 @@
+{
+  "answer": {
+    "creationSuccess": {
+      "title": "Answer created successfully",
+      "description": "The answer has been successfully created."
+    },
+    "creationError": {
+      "title": "Failed to create answer",
+      "description": {
+        "invalidData": "The provided data for creating an answer is invalid.",
+        "missingFields": "Required fields for creating an answer are missing.",
+        "databaseError": "An error occurred while saving the answer to the database."
+      }
+    },
+    "retrievalSuccess": {
+      "title": "Answers retrieved successfully",
+      "description": "The answers for the given question have been retrieved."
+    },
+    "retrievalError": {
+      "title": "Failed to retrieve answers",
+      "description": {
+        "notFound": "No answers were found for the given question.",
+        "databaseError": "An error occurred while fetching answers from the database."
+      }
+    }
+  },
+  "question": {
+    "creationSuccess": {
+      "title": "Question created successfully",
+      "description": "The question has been successfully created."
+    },
+    "creationError": {
+      "title": "Failed to create question",
+      "description": {
+        "invalidData": "The provided data for creating a question is invalid.",
+        "missingFields": "Required fields for creating a question are missing.",
+        "uploadFailed": "An error occurred while uploading the question's image.",
+        "databaseError": "An error occurred while saving the question to the database."
+      }
+    },
+    "retrievalSuccess": {
+      "title": "Questions retrieved successfully",
+      "description": "The questions for the given quiz have been retrieved."
+    },
+    "retrievalError": {
+      "title": "Failed to retrieve questions",
+      "description": {
+        "notFound": "No questions were found for the given quiz.",
+        "databaseError": "An error occurred while fetching questions from the database."
+      }
+    }
+  },
+  "quizz": {
+    "creationSuccess": {
+      "title": "Quiz created successfully",
+      "description": "The quiz has been successfully created."
+    },
+    "creationError": {
+      "title": "Failed to create quiz",
+      "description": {
+        "invalidData": "The provided data for creating a quiz is invalid.",
+        "missingFields": "Required fields for creating a quiz are missing.",
+        "databaseError": "An error occurred while saving the quiz to the database."
+      }
+    },
+    "retrievalSuccess": {
+      "title": "Quiz retrieved successfully",
+      "description": "The quiz has been retrieved successfully."
+    },
+    "retrievalError": {
+      "title": "Failed to retrieve quiz",
+      "description": {
+        "notFound": "The quiz with the given ID was not found.",
+        "databaseError": "An error occurred while fetching the quiz from the database."
+      }
+    }
+  },
+  "userAnswer": {
+    "submissionSuccess": {
+      "title": "User answer submitted successfully",
+      "description": "The user's answer has been successfully recorded."
+    },
+    "submissionError": {
+      "title": "Failed to submit user answer",
+      "description": {
+        "invalidData": "The provided data for the user answer is invalid.",
+        "missingFields": "Required fields for submitting a user answer are missing.",
+        "databaseError": "An error occurred while saving the user answer to the database."
+      }
+    },
+    "retrievalSuccess": {
+      "title": "User answer retrieved successfully",
+      "description": "The user's answer for the given question has been retrieved."
+    },
+    "retrievalError": {
+      "title": "Failed to retrieve user answer",
+      "description": {
+        "notFound": "No user answer was found for the given question.",
+        "databaseError": "An error occurred while fetching the user answer from the database."
+      }
+    }
+  }
+}

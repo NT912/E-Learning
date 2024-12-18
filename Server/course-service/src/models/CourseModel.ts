@@ -158,7 +158,11 @@ const courseModel = {
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+<<<<<<< HEAD
     const query = `SELECT courseID, name, avatar, cost, State FROM course ${whereClause} LIMIT ?, ?`;
+=======
+    const query = `SELECT CourseID, name, avatar, cost, shortcut FROM course ${whereClause} LIMIT ?, ?`;
+>>>>>>> 70cb2360b0581bc1580f4c59f6494c7d22721aa3
     
     params.push(offset, limit);
 

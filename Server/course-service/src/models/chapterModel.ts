@@ -50,7 +50,7 @@ const ChapterModel = {
    * @param courseID - ID của khóa học.
    * @return Promise<Chapter[]> - Danh sách các chapter.
    */
-  getChaptersByCourseID: (courseID: number): Promise<Chapter[]> => {
+  getChaptersByCourseID: (courseID: number | undefined): Promise<Chapter[]> => {
     const query = `SELECT * FROM chapter WHERE CourseID = ?`;
 
     return new Promise((resolve, reject) => {

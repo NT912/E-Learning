@@ -12,11 +12,15 @@ import { AttachmentForm } from "../_components/attachment-form";
 import { DescriptionForm } from "../_components/description-form";
 import { ImageForm } from "../_components/image-form";
 import { ChaptersForm } from "../_components/chapters-form";
+import { ShortCutForm } from "../_components/shortcut-form";
+import toast from "react-hot-toast";
+
+
+
 
 const fetchCourseData = async (courseId: string) => {
   try {
     const url =  `${process.env.NEXT_PUBLIC_SERVER_URL}/course/${courseId}`;
-    console.log(url);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/course/${courseId}`
     );
@@ -29,13 +33,12 @@ const fetchCourseData = async (courseId: string) => {
 };
 
 
-
 const CourseIdPage = async ({ params }: { params: { courseld: string } }) => {
   const { courseld } = params;
 
   // Fetch dữ liệu course
   const courseData = await fetchCourseData(courseld);
-  console.log(courseData);
+  
 
   if (!courseData) {
     return (
@@ -69,14 +72,26 @@ const CourseIdPage = async ({ params }: { params: { courseld: string } }) => {
             <h2 className="text-xl">Customize your course</h2>
           </div>
           <TitleForm initialData={{ title: courseData.Name, courseId: courseld }} />
+
+          {/* Description */}
           <DescriptionForm
             initialData={{
               description: courseData.Description,
+              courseId:  courseld,
             }}
-            courseId={""}
           />
+
+          <ShortCutForm
+            initialData={{
+              shortcut: courseData.ShortCut,
+              courseId: courseld
+            }}
+          />
+
+          {/* Avata */}
           <ImageForm initialData = { {id: courseld, imageUrl: courseData.avatar } } />
-          <CategoryForm courseId={courseld} option={category} />
+
+          <CategoryForm courseId={courseld} categoryId={courseData.CategoryID} />
         </div>
         <div className="space-y-6">
           <div>

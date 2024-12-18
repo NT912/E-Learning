@@ -10,6 +10,8 @@ export interface Course {
     ShortCut?: string;
     Description?: string;
     Cost?: number;
+    Chapter?: number;
+    Lessons: number;
   }
   
   export interface Chapter {

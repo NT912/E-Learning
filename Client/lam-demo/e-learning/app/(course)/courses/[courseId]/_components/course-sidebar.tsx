@@ -1,16 +1,16 @@
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
+// import { db } from "@/lib/db";
+// import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { Chapter, Course, UserProgress } from "@prisma/client";
+// import { Chapter, Course, UserProgress } from "@prisma/client";
 
 import { CourseProgress } from "@/components/course-progress";
 import { CourseSidebarItem } from "./course-sidebar-item";
 
 interface CourseSidebarProps {
     course: Course & {
-        chapters: (Chapter & {
-            userProgress: UserProgress[] | null;
-        })[];
+        // chapters: (Chapter & {
+            // userProgress: UserProgress[] | null;
+        // })[];
     };
     progressCount: number;
 }

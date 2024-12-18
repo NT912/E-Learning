@@ -16,10 +16,15 @@ interface ImageFormProps {
   initialData: { id: string; imageUrl: string }; // Thay thế 'course' bằng kiểu dữ liệu phù hợp
 }
 
+interface Category {
+  label: string;
+  value: string;
+}
+
 const formSchema = z.object({
-  // imageUrl: z.string().min(1, {
-  //   message: "Image URL cannot be empty",
-  // }),
+  imageUrl: z.string().min(1, {
+    message: "Image URL cannot be empty",
+  }),
 });
 
 export const ImageForm = ({ initialData }: ImageFormProps) => {
@@ -32,7 +37,17 @@ export const ImageForm = ({ initialData }: ImageFormProps) => {
   // Gửi dữ liệu khi chỉnh sửa
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${initialData.id}`, values);
+      // await axios.patch(`/api/courses/${initialData.id}`, values);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("No token found. Please log in.");
+        return;
+      }
+
+      const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/course/${initialData.id}/update/avatar`;
+      // const response = await axios.patch(url,
+      //   { values }
+      // )
       toast.success("Course updated successfully");
       toggleEdit(); // Tắt chế độ chỉnh sửa
       router.refresh(); // Làm mới trang

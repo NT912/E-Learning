@@ -3,7 +3,7 @@ import chapterModel from "../models/chapterModel";
 import lessonModel from "../models/lessonModel";
 import outcomeModel from "../models/outlineModel";
 import firebaseHelper from "../helpers/firebaseHelper";
-import { Lesson } from "../types/models"; 
+import { Chapter, Course, Lesson } from "../types/models"; 
 import { CourseLevel } from "../../config/data/levelCoures";
 import { CourseStatus } from "../../config/data/courseStatus";
 
@@ -52,24 +52,24 @@ const courseService = {
     return { ...course, chapters: chaptersWithLessons, outcome };
   },
 
-  /**
-   * Lấy tất cả các khóa học với vị trí bắt đầu và số lượng.
-   * @param start - Vị trí bắt đầu (mặc định là 0).
-   * @param limit - Số lượng bản ghi cần lấy (mặc định là 20).
-   * @returns Promise<Course[]> - Danh sách các khóa học.
-   */
   getAllCourses: async (
     category: string | null,
     free: boolean | null,
     minPrice: number | null,
     maxPrice: number | null,
     offset: number = 0,
+<<<<<<< HEAD
     limit: number = 20,
     teacherID: number | null,
     state: string | null // Thêm state vào đây
   ) => {
+=======
+    limit: number = 20
+  ): Promise<Course[]> => {
+>>>>>>> 70cb2360b0581bc1580f4c59f6494c7d22721aa3
     try {
-      const courses = await courseModel.getFilteredCourses(
+      // Lấy các khóa học đã được lọc
+      const courses : Course[] = await courseModel.getFilteredCourses(
         category,
         free,
         minPrice,
@@ -79,12 +79,36 @@ const courseService = {
         teacherID,
         state // Truyền state xuống
       );
-      return courses;
+  
+      const enrichedCourses = await Promise.all(
+        courses.map(async (course) => {
+          console.log(course);
+          const chapters : Chapter[] = await chapterModel.getChaptersByCourseID(course.CourseID);
+          const chapterIDs = chapters.map((chapter) => chapter.ChapterID);
+          
+          console.log(chapterIDs.length);
+          let lessonsCount = 0;
+          if (chapterIDs.length > 0) {
+            const lessons = await lessonModel.getLessonCountByChapterIDs(chapterIDs);
+            lessonsCount = lessons.reduce((sum, lesson) => sum + lesson.LessonCount, 0);
+          }
+  
+          // Gán số lượng Chapter và Lessons vào mỗi khóa học
+          return {
+            ...course,
+            Chapter: chapters.length, // Số Chapter
+            Lessons: lessonsCount,    // Tổng số Lesson
+          };
+        })
+      );
+  
+      return enrichedCourses;
     } catch (error) {
       console.error("Error retrieving courses:", error);
       throw new Error("Failed to retrieve courses.");
     }
   },
+  
 
 
   /**

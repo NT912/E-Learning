@@ -523,7 +523,7 @@ router.patch(
 
 /**
  * @swagger
- * /course:
+ * /course: 
  *   get:
  *     summary: Get a list of all courses
  *     description: Retrieve all courses with optional filtering by category, price range, teacher ID, and state.
@@ -665,5 +665,7 @@ router.use("/chapter", chapterRoutes);
 router.use("/lesson", lessonRoutes);
 router.use("/course-depend", dependRoutes);
 router.use("/category", categoryRoute);
+// router.use("/outcome", outcomeRoute);
+// router.use("/outcome", outcomeRoute);
 
 module.exports = router;

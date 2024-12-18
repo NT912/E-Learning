@@ -86,6 +86,37 @@ const lessonModel = {
   },
 
   /**
+   * Đếm số lượng bài học theo nhiều ChapterID.
+   * @param chapterIDs - Array of chapter IDs.
+   * @return Promise containing the count of lessons for each chapter ID.
+   */
+  getLessonCountByChapterIDs: (chapterIDs: number[]): Promise<{ ChapterID: number; LessonCount: number }[]> => {
+    if (chapterIDs.length === 0) {
+      return Promise.resolve([]); // Return empty array if no chapterIDs
+    }
+
+    // Tạo placeholder cho query
+    const placeholders = chapterIDs.map(() => '?').join(',');
+    const query = `
+      SELECT ChapterID, COUNT(*) AS LessonCount 
+      FROM Lesson 
+      WHERE ChapterID IN (${placeholders}) 
+      GROUP BY ChapterID
+    `;
+
+    return new Promise((resolve, reject) => {
+      db.query(query, chapterIDs, (err: Error | null, results: RowDataPacket[]) => {
+        if (err) {
+          console.error("Error fetching lesson counts:", err);
+          return reject("Failed to fetch lesson counts");
+        }
+        resolve(results as { ChapterID: number; LessonCount: number }[]);
+      });
+    });
+  },
+
+
+  /**
    * Cập nhật bài học với các thông tin mới.
    * @param lessonID - ID của bài học.
    * @param title - New title of the lesson.

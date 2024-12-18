@@ -3,21 +3,25 @@ import { redirect } from "next/navigation";
 
 import { CheckCircle, Clock } from "lucide-react";
 
-// import { getDashboardCourses } from "@/actions/get-dashboard-courses";
-
 import { InfoCard } from "./_components/info-card";
 import { CoursesList } from "@/components/courses-list";
+import axios from "axios";
+import CourseList from "@/Model/CourseList";
+
+const getAlcourse = async () => {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/course/getall`
+
+  const respone = await axios.get(url);
+
+  return respone.data
+}
 
 export default async function Dashboard() {
-  // const { userId } = auth();
-
   // if (!userId) {
   //   return redirect("/");
   // }
 
-  // const { completedCourses, coursesInProgress } = await getDashboardCourses(
-  //   userId
-  // );
+  const courses : CourseList[] = await getAlcourse();
 
   return (
     <div className="p-6 space-y-4">
@@ -30,7 +34,7 @@ export default async function Dashboard() {
           variant="success"
         />
       </div>
-      <CoursesList items={[]} />
+      <CoursesList items={ courses } />
     </div>
   );
 }

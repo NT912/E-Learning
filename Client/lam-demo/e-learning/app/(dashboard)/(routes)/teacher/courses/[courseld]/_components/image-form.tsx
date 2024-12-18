@@ -16,6 +16,11 @@ interface ImageFormProps {
   initialData: { id: string; imageUrl: string }; // Thay thế 'course' bằng kiểu dữ liệu phù hợp
 }
 
+interface Category {
+  label: string;
+  value: string;
+}
+
 const formSchema = z.object({
   imageUrl: z.string().min(1, {
     message: "Image URL cannot be empty",
